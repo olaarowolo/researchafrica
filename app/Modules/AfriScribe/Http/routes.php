@@ -17,7 +17,9 @@ use App\Modules\AfriScribe\Http\Controllers\QuoteRequestController;
 // Public routes
 Route::prefix('afriscribe')->name('afriscribe.')->group(function () {
     Route::get('/home', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'welcome'])->name('welcome');
+    Route::get('/manuscripts', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'manuscripts'])->name('manuscripts');
     Route::get('/welcome-form', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'welcomeForm'])->name('welcome-form');
+    Route::post('/request', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'processRequest'])->name('request');
     Route::post('/process-request', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'processRequest'])->name('process-request');
     Route::get('/quote-request', [\App\Modules\AfriScribe\Http\Controllers\QuoteRequestController::class, 'create'])->name('quote-request.create');
     Route::post('/quote-request', [\App\Modules\AfriScribe\Http\Controllers\QuoteRequestController::class, 'store'])->name('quote-request.store');

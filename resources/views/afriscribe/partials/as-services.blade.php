@@ -5,6 +5,9 @@
             <h3>AfriScribe Manuscripts</h3>
             <p>SaaS-based platform for submission, peer review, and editorial management. Complete workflow automation
                 for academic journals.</p>
+            <a href="{{ route('afriscribe.manuscripts') }}" class="btn" style="background: #f9b233; color: #0c1e35; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 1rem;">
+                Get Started →
+            </a>
         </div>
         <div class="card">
             <div class="card-icon">✏️</div>

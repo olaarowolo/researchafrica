@@ -89,7 +89,7 @@
 <nav class="kb-bg-white kb-border-gray-200">
     <div class="kb-max-w-screen-xl kb-flex kb-flex-wrap kb-items-center kb-justify-between kb-mx-auto kb-p-4">
         <a href="/" class="kb-flex kb-items-center">
-            <img src="/images/logo.png" class="kb-mr-3 kb-h-16 md:kb-h-24" alt="Research  Logo" />
+            <img src="{{ asset('images/logo.png') }}" class="kb-mr-3 kb-h-16 md:kb-h-24" alt="Research  Logo" />
         </a>
         <button type="button"
             class="kb-inline-flex kb-items-center kb-p-2 kb-ml-3 kb-text-sm kb-text-black kb-rounded-lg md:kb-hidden btnBar close"
@@ -118,18 +118,18 @@
                                 <div class="col-md-3">
                                     <a href="/information/authors" class="dropdown-item"><h5>Authors</h5></a>
                                     <ul class="list-unstyled">
-                                        <li><a href="/infomation/authors" class="dropdown-item">Author's Guidelines</a></li>
+                                        <li><a href="/information/authors" class="dropdown-item">Author's Guidelines</a></li>
                                         <li><a href="/ethics" class="dropdown-item">Ethics Guidelines</a></li>
                                     </ul>
                                 </div>
                                 <div class="col-md-3">
-                                    <a href="/infomation/editors" class="dropdown-item"><h5>Editors</h5></a>
+                                    <a href="/information/editors" class="dropdown-item"><h5>Editors</h5></a>
                                 </div>
                                 <div class="col-md-3">
-                                    <a href="/infomation/researchers" class="dropdown-item"><h5>Researchers</h5></a>
+                                    <a href="/information/researchers" class="dropdown-item"><h5>Researchers</h5></a>
                                 </div>
                                 <div class="col-md-3">
-                                    <a href="/infomation/reviewers" class="dropdown-item"><h5>Reviewers</h5></a>
+                                    <a href="/information/reviewers" class="dropdown-item"><h5>Reviewers</h5></a>
                                 </div>
                             </div>
                         </div>

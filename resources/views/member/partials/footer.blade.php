@@ -41,10 +41,10 @@
                                     <strong>Information for</strong></h2>
 
                                 <ul>
-                                    <li><a href="/infomation/authors">Authors</a></li>
-                                    <li><a href="/infomation/editors">Editors</a></li>
-                                    <li><a href="/infomation/researchers">Reseachers</a></li>
-                                    <li><a href="/infomation/reviewers">Reviewers</a></li>
+                                    <li><a href="/information/authors">Authors</a></li>
+                                    <li><a href="/information/editors">Editors</a></li>
+                                    <li><a href="/information/researchers">Reseachers</a></li>
+                                    <li><a href="/information/reviewers">Reviewers</a></li>
                                     <li><a href="{{ route('member.faq') }}">Frequently Asked Questions</a></li>
                                 </ul>
                             </div>

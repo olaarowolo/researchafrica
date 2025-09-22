@@ -15,7 +15,12 @@ class AfriscribeController extends Controller
 {
     public function welcome()
     {
-        return view('afriscribe.welcome');
+        return view('afriscribe.pages.welcome');
+    }
+
+    public function manuscripts()
+    {
+        return view('afriscribe.pages.manuscripts');
     }
 
     public function welcomeForm()
@@ -26,21 +31,30 @@ class AfriscribeController extends Controller
     public function processRequest(Request $request)
     {
         try {
-            // Validate the request data
+            // Validate the request data (mapping form fields to expected fields)
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
-                'service_type' => 'required|string|in:' . implode(',', array_keys(AfriscribeRequest::getServiceTypes())),
-                'message' => 'required|string',
-                'document' => 'nullable|file|mimes:pdf,doc,docx|max:10240', // 10MB max
+                'service' => 'required|string|in:' . implode(',', array_keys(AfriscribeRequest::getServiceTypes())),
+                'details' => 'required|string',
+                'file' => 'nullable|file|mimes:pdf,doc,docx|max:10240', // 10MB max
             ]);
+
+            // Map form fields to expected field names
+            $processedData = [
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'service_type' => $validatedData['service'],
+                'message' => $validatedData['details'],
+                'document' => $validatedData['file'] ?? null,
+            ];
 
             $filePath = null;
             $originalFilename = null;
 
             // Handle file upload if present
-            if ($request->hasFile('document')) {
-                $file = $request->file('document');
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
                 $originalFilename = $file->getClientOriginalName();
 
                 // Create a unique filename
@@ -50,10 +64,10 @@ class AfriscribeController extends Controller
 
             // Save to database
             $afriscribeRequest = AfriscribeRequest::create([
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'service_type' => $validatedData['service_type'],
-                'message' => $validatedData['message'],
+                'name' => $processedData['name'],
+                'email' => $processedData['email'],
+                'service_type' => $processedData['service_type'],
+                'message' => $processedData['message'],
                 'file_path' => $filePath,
                 'original_filename' => $originalFilename,
                 'status' => AfriscribeRequest::STATUS_PENDING,
@@ -61,10 +75,10 @@ class AfriscribeController extends Controller
 
             // Prepare email data
             $emailData = [
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'service_type' => $validatedData['service_type'],
-                'message' => $validatedData['message'],
+                'name' => $processedData['name'],
+                'email' => $processedData['email'],
+                'service_type' => $processedData['service_type'],
+                'message' => $processedData['message'],
                 'file_path' => $filePath,
                 'original_filename' => $originalFilename,
                 'request_id' => $afriscribeRequest->id,
@@ -80,7 +94,7 @@ class AfriscribeController extends Controller
 
             // Send acknowledgment email to client
             try {
-                Mail::to($validatedData['email'])->send(new AfriscribeClientAcknowledgementMail($emailData));
+                Mail::to($processedData['email'])->send(new AfriscribeClientAcknowledgementMail($emailData));
             } catch (\Exception $e) {
                 // Log email error but don't fail the request
                 Log::error('Failed to send client acknowledgment email: ' . $e->getMessage());
@@ -91,9 +105,9 @@ class AfriscribeController extends Controller
                 'message' => 'Your request has been submitted successfully! An acknowledgment email has been sent to you, and our team will get back to you shortly.',
                 'data' => [
                     'request_id' => $afriscribeRequest->id,
-                    'name' => $validatedData['name'],
-                    'email' => $validatedData['email'],
-                    'service_type' => $validatedData['service_type'],
+                    'name' => $processedData['name'],
+                    'email' => $processedData['email'],
+                    'service_type' => $processedData['service_type'],
                     'status' => $afriscribeRequest->status,
                 ]
             ], 200);
