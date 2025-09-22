@@ -9,6 +9,7 @@
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
             <a href="#overview" class="btn" style="background: #f9b233; color: #0c1e35;">Learn More</a>
             <a href="#contact-form" class="btn" style="background: transparent; border: 2px solid #f9b233; color: #f9b233;">Get Started</a>
+            <a href="/afriscribe/quote-request" class="btn" style="background: #f9b233; color: #0c1e35;">Get a Quote</a>
         </div>
     </div>
 </section>
