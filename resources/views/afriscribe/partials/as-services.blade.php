@@ -12,8 +12,12 @@
         <div class="card">
             <div class="card-icon">✏️</div>
             <h3>AfriScribe Proofread</h3>
-            <p>Professional proofreading to prepare manuscripts for global standards. Expert editors ensure
+            <p>Professional proofreading to prepare manuscripts for global standards.
+                <br> Expert editors ensure
                 publication-ready quality.</p>
+                <a href="{{ route('afriscribe.proofreading') }}" class="btn" style="background: #f9b233; color: #0c1e35; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 1rem;">
+                    Get Started →
+                </a>
         </div>
         <div class="card">
             <div class="card-icon">📊</div>

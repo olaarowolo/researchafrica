@@ -5,8 +5,8 @@
     </a>
     <ul class="nav-links">
         <li><a href="{{ route('afriscribe.welcome') }}">Home</a></li>
-        <li><a href="#services">Products</a></li>
-        <li><a href="#features">Features</a></li>
+        <li><a href="/afriscribe/home/#services">Products</a></li>
+        <li><a href="/afriscribe/home/#features">Features</a></li>
         <li><a href="{{ route('afriscribe.quote-request.create') }}">Get Quote</a></li>
     </ul>
     <div class="hamburger" onclick="toggleMenu()">

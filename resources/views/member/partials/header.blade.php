@@ -145,9 +145,9 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-6">
-                    <a href="/afriscribe/home" class="dropdown-item"><h5 class="mega-menu-title">AfriScribe</h5></a>
+                    <a href="{{ route('afriscribe.welcome') }}" class="dropdown-item"><h5 class="mega-menu-title">AfriScribe</h5></a>
                     <ul class="list-unstyled">
-                        <li><a href="{{ route('afriscribe.welcome') }}" class="dropdown-item">AfriScribe Manuscripts Manager</a></li>
+                        <li><a href="{{ route('afriscribe.manuscripts') }}" class="dropdown-item">AfriScribe Manuscripts Manager</a></li>
                         <li><a href="{{ route('afriscribe.welcome') }}" class="dropdown-item">AfriScribe Proofread</a></li>
                         <li><a href="{{ route('afriscribe.welcome') }}" class="dropdown-item">AfriScribe Insights</a></li>
                         <li><a href="{{ route('afriscribe.welcome') }}" class="dropdown-item">AfriScribe Connect</a></li>

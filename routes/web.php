@@ -4,6 +4,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
+/*
+|--------------------------------------------------------------------------
+| AfriScribe Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/afriscribe/home', function () { return view('afriscribe.welcome-form'); })->name('afriscribe.welcome');
+Route::get('/afriscribe/manuscripts', function () { return view('afriscribe.manuscripts'); })->name('afriscribe.manuscripts');
 
 require 'user.php';
 

@@ -195,6 +195,8 @@
             color: #fff;
             padding: 4rem 2rem;
             text-align: center;
+            padding-top: 20rem;
+            margin-top: 20rem;
         }
 
         .features h2 {
@@ -750,6 +752,17 @@
           // optional: choose default location if you have analytics to pick region automatically
           // locationField.value = 'UK';
           // populateServices('UK');
+            // Pre-select product based on URL parameter
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const productParam = urlParams.get('product');
+                if (productParam) {
+                    const productDropdown = document.getElementById('product');
+                    if (productDropdown) {
+                        productDropdown.value = productParam;
+                    }
+                }
+            } catch (e) { console.error("Error reading URL params:", e); }
         })();
     </script>
 

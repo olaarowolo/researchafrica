@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>AfriScribe | Research Africa</title>
+    <title>AfriScribe Manuscripts | Research Africa</title>
     <style>
         * {
             margin: 0;
@@ -124,20 +124,6 @@
             margin-right: auto;
         }
 
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
         .btn {
             background: #f9b233;
             padding: 0.75rem 2rem;
@@ -156,61 +142,12 @@
             transform: translateY(-2px);
         }
 
-        /* Services Section */
-        .services {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .card {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            text-align: center;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card h3 {
-            margin-bottom: 1rem;
-            color: #0c1e35;
-            font-size: 1.5rem;
-        }
-
-        .card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .card-icon {
-            width: 60px;
-            height: 60px;
-            background: #f9b233;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.5rem;
-            color: #0c1e35;
-        }
-
         /* Features Section */
         .features {
             background: #0c1e35;
             color: #fff;
             padding: 4rem 2rem;
             text-align: center;
-            padding-top: 20rem;
-            margin-top: 20rem;
         }
 
         .features h2 {
@@ -233,46 +170,6 @@
         .feature-item h4 {
             margin-bottom: 0.5rem;
             color: #f9b233;
-        }
-
-        /* CTA Section */
-        .cta {
-            background: linear-gradient(135deg, #f9b233, #e6a029);
-            color: #0c1e35;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-
-        .cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .cta p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-btn {
-            background: #0c1e35;
-            color: #fff;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-
-        .cta-btn:hover {
-            background: #1a3a5c;
-            transform: translateY(-2px);
         }
 
         /* Footer */
@@ -306,26 +203,20 @@
                 font-size: 1.1rem;
             }
 
-            .services {
-                grid-template-columns: 1fr;
-                padding: 2rem 1rem;
-            }
-
             .features h2 {
-                font-size: 2rem;
-            }
-
-            .cta h2 {
                 font-size: 2rem;
             }
         }
 
         /* Form Section */
+        .form-section {
+            padding: 4rem 2rem;
+        }
 
         .form-container {
             max-width: 700px;
             margin: 0 auto;
-            background: #f8f9fb;
+            background: #fff;
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -503,10 +394,10 @@
             <img src="{{ asset('afriscribe/img/afriscribe-logo-white.png') }}" alt="AfriScribe Logo" style="height: 60px; width: auto;">
         </a>
         <ul class="nav-links">
-            <li><a href="{{ route('afriscribe.welcome') }}">Home</a></li>
-            <li><a href="#services">Products</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="{{ route('afriscribe.quote-request.create') }}">Get Quote</a></li>
+            <li><a href="{{ route('afriscribe.welcome') }}">AfriScribe Home</a></li>
+            <li><a href="{{ route('afriscribe.manuscripts') }}">Manuscripts</a></li>
+            <li><a href="{{ route('afriscribe.welcome') }}#services">Other Products</a></li>
+            <li><a href="#contact-form">Request a Demo</a></li>
         </ul>
         <div class="hamburger" onclick="toggleMenu()">
             <span></span>
@@ -515,103 +406,44 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Powering Africa's Academic Publishing</h1>
-        <p>Integrated solutions for manuscripts, proofreading, analytics, and beyond. Streamline your academic
-            publishing workflow with AfriScribe's comprehensive platform.</p>
-        <a href="#services" class="btn">Explore Our Products</a>
-    </section>
+    @include('afriscribe.partials.as-hero-manuscripts')
 
-    <!-- Services -->
-    <section id="services" class="services">
-        <div class="card">
-            <div class="card-icon">📝</div>
-            <h3>AfriScribe Manuscripts</h3>
-            <p>SaaS-based platform for submission, peer review, and editorial management. Complete workflow automation
-                for academic journals.</p>
-        </div>
-        <div class="card">
-            <div class="card-icon">✏️</div>
-            <h3>AfriScribe Proofread</h3>
-            <p>Professional proofreading to prepare manuscripts for global standards. Expert editors ensure
-                publication-ready quality.</p>
-        </div>
-        <div class="card">
-            <div class="card-icon">📊</div>
-            <h3>AfriScribe Insights</h3>
-            <p>Real-time analytics to guide editorial strategy and reviewer engagement. Data-driven insights for better
-                publishing decisions.</p>
-        </div>
-        <div class="card">
-            <div class="card-icon">🤝</div>
-            <h3>AfriScribe Connect</h3>
-            <p>Collaboration hub for authors, editors, and reviewers. Seamless communication and project management
-                tools.</p>
-        </div>
-        <div class="card">
-            <div class="card-icon">📚</div>
-            <h3>AfriScribe Archive</h3>
-            <p>Cloud-based repository for long-term preservation with DOIs. Secure, searchable, and permanently
-                accessible archives.</p>
-        </div>
-        <div class="card">
-            <div class="card-icon">⚙️</div>
-            <h3>AfriScribe Editor</h3>
-            <p>Editorial toolkit with configurable peer review workflows. Customizable processes to match your journal's
-                needs.</p>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <h2>Why Choose AfriScribe?</h2>
+    <!-- Overview Section -->
+    <section id="overview" class="features" style="background: #fff; color: #333; padding: 4rem 2rem;">
+        <h2 style="color: #0c1e35;">A Complete Journal Management Solution</h2>
         <div class="features-grid">
-            <div class="feature-item">
-                <h4>🔒 Secure & Compliant</h4>
-                <p>Enterprise-grade security with full compliance to academic publishing standards.</p>
+            <div class="feature-item" style="text-align: left;">
+                <h4 style="color: #0c1e35;">📝 Submission & Peer Review</h4>
+                <p>Intuitive portal for authors to submit manuscripts. Configurable, double-blind peer review workflows to ensure academic integrity.</p>
             </div>
-            <div class="feature-item">
-                <h4>🌍 Africa-Focused</h4>
-                <p>Designed specifically for African academic institutions and publishing needs.</p>
+            <div class="feature-item" style="text-align: left;">
+                <h4 style="color: #0c1e35;">⚙️ Editorial Workflow</h4>
+                <p>Automate assignments, reminders, and decision-making. A central dashboard for editors to manage the entire publication pipeline.</p>
             </div>
-            <div class="feature-item">
-                <h4>⚡ Fast & Efficient</h4>
-                <p>Streamlined workflows that reduce time-to-publication by up to 60%.</p>
+            <div class="feature-item" style="text-align: left;">
+                <h4 style="color: #0c1e35;">📊 Analytics & Reporting</h4>
+                <p>Track submission volumes, review times, and acceptance rates. Make data-driven decisions to improve your journal's performance.</p>
             </div>
-            <div class="feature-item">
-                <h4>💰 Cost-Effective</h4>
-                <p>Affordable pricing models designed for academic institutions and researchers.</p>
+            <div class="feature-item" style="text-align: left;">
+                <h4 style="color: #0c1e35;">🤝 Integrated Communication</h4>
+                <p>Built-in messaging between authors, reviewers, and editors. Reduce email clutter and keep all communication in one place.</p>
             </div>
-            <div class="feature-item">
-                <h4>📱 Mobile-Friendly</h4>
-                <p>Access your manuscripts and reviews anywhere, on any device.</p>
+            <div class="feature-item" style="text-align: left;">
+                <h4 style="color: #0c1e35;">🔒 Secure Archiving</h4>
+                <p>Ensure the long-term preservation of your published articles with integrated, secure cloud storage and DOI registration.</p>
             </div>
-            <div class="feature-item">
-                <h4>🎯 User-Friendly</h4>
-                <p>Intuitive interface designed by academics, for academics.</p>
+            <div class="feature-item" style="text-align: left;">
+                <h4 style="color: #0c1e35;">🌍 Built for Africa</h4>
+                <p>A cost-effective solution designed to meet the specific needs and challenges of African academic publishers.</p>
             </div>
         </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta">
-        <h2>Ready to Transform Your Academic Publishing?</h2>
-        <p>Join hundreds of African institutions already using AfriScribe to streamline their publishing workflow.</p>
-        <a href="{{ route('afriscribe.quote-request.create') }}" class="cta-btn">Get Started Today</a>
     </section>
 
     <!-- Form Section -->
-    <section id="request" class="form-section">
+    <section id="contact-form" class="form-section">
         <div class="form-container">
-            <h3 id="quote-form-title" style="margin:0 0 8px; text-align:left;">Request a Quote</h3>
-            <p class="small muted" style="margin:0 0 12px">Download the rate card first, then submit your document for
-                an email-only quote.</p>
-
-            <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-                <a class="btn secondary" href="{{ asset('files/AfriScribe-UK-RateCard.pdf') }}" target="_blank" rel="noopener">Download UK rate card</a>
-                <a class="btn secondary" href="{{ asset('files/Rate Card-AfriScribe-Proofreading-Service-NG.pdf') }}" target="_blank" rel="noopener">Download Nigeria rate card</a>
-            </div>
+            <h3 id="quote-form-title" style="margin:0 0 8px; text-align:left;">Request a Demo or Quote</h3>
+            <p class="small muted" style="margin:0 0 12px">Fill out the form below to get a personalized demo of AfriScribe Manuscripts or to request a quote for your institution.</p>
 
             <form id="quoteForm" class="quote-form" method="post" action="/afriscribe/request"
                 enctype="multipart/form-data" novalidate>
@@ -641,8 +473,8 @@
                     <div class="field half">
                         <label for="product">AfriScribe product</label>
                         <select id="product" name="product" required>
-                            <option value="proofread" selected>AfriScribe Proofread</option>
-                            <option value="manuscripts">AfriScribe Manuscripts</option>
+                            <option value="manuscripts" selected>AfriScribe Manuscripts</option>
+                            <option value="proofread">AfriScribe Proofread</option>
                             <option value="insights">AfriScribe Insights</option>
                             <option value="connect">AfriScribe Connect</option>
                             <option value="archive">AfriScribe Archive</option>
@@ -699,12 +531,12 @@
                 <!-- File drop -->
                 <div class="row" style="margin-top:10px">
                     <div class="field">
-                        <label for="fileInput">Upload document</label>
+                        <label for="fileInput">Upload document (optional for demo)</label>
                         <div id="drop" class="drop" tabindex="0" aria-label="File upload dropzone">
                             <div id="dropText">Drag & drop file here, or click to browse (DOC, DOCX, PDF, TXT — max
                                 10MB)</div>
                             <input id="fileInput" name="file" type="file" accept=".doc,.docx,.pdf,.txt"
-                                style="display:none" required>
+                                style="display:none">
                         </div>
                         <div id="fileHint" class="small muted" style="margin-top:8px">Your file will be attached to
                             the admin email only.</div>
@@ -981,15 +813,8 @@
                 e.preventDefault();
                 return;
             }
-            // Ensure file chosen
-            if (!fileInput.files.length) {
-                e.preventDefault();
-                alert('Please attach your document before submitting.');
-                return;
-            }
+
             // Optionally: set hidden fields for the server with calculated cost for record
-            // If you want to include estimated cost in the submission, create hidden inputs here:
-            // example:
             let existing = document.getElementById('estimated_cost_hidden');
             if (!existing) {
                 const input = document.createElement('input');
@@ -999,18 +824,8 @@
                 form.appendChild(input);
             }
             document.getElementById('estimated_cost_hidden').value = res.cost === null ? '' : res.cost;
-
-            // final confirmation — keep brief
-            // Note: do not rely on client-side confirmation for authoritative pricing.
-            // Server should recalculate identically before sending the admin email/invoice.
         });
 
-        // progressive enhancement: if js loads, pre-populate services for a default location
-        (function init() {
-            // optional: choose default location if you have analytics to pick region automatically
-            // locationField.value = 'UK';
-            // populateServices('UK');
-        })();
     </script>
 
 

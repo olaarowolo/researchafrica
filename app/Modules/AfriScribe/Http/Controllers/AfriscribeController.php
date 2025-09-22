@@ -22,6 +22,10 @@ class AfriscribeController extends Controller
     {
         return view('afriscribe.pages.manuscripts');
     }
+    public function proofreading()
+    {
+        return view('afriscribe.pages.proofreading');
+    }
 
     public function welcomeForm()
     {
