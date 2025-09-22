@@ -1,0 +1,51 @@
+/* ----------------------------------------------------------------
+	Custom CSS
+
+	Add all your Custom Styled CSS here for New Styles or
+	Overwriting Default Theme Styles for Better Handling Updates
+-----------------------------------------------------------------*/
+.em-btn{
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* padding: 6px; */
+    border-radius: 6px;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color:white !important;
+    border: none !important;
+    font-size: 16px;
+}
+
+.em-btn:hover{
+    color:white !important
+}
+
+.text-error {
+    color: red
+}
+
+.isInvalid {
+    border-color: red;
+    border-width: 2px;
+}
+
+.required::after{
+    content: " *";
+    color:red
+}
+
+.m-container-md {
+    max-width: 768px;
+}
+
+.bg-svg {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='100%' height='100%' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1062%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='rgba(0%2c 0%2c 0%2c 1)'%3e%3c/rect%3e%3cpath d='M -2285.847903605863%2c524 C -1997.85%2c469.4 -1421.85%2c292.4 -845.847903605863%2c251 C -269.85%2c209.6 136.98%2c322.6 594.152096394137%2c317 C 1051.32%2c311.4 1270.83%2c241.8 1440%2c223' stroke='rgba(241%2c 128%2c 82%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M -951.5149236818861%2c547 C -663.51%2c479 -87.51%2c207 488.48507631811384%2c207 C 1064.49%2c207 1738.18%2c548.8 1928.485076318114%2c547 C 2118.79%2c545.2 1537.7%2c267.8 1440%2c198' stroke='rgba(241%2c 128%2c 82%2c 1)' stroke-width='2'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1062'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+    /* background-attachment: fixed; */
+    background-attachment: darken;
+    background-color: rgba(0, 0, 0, 0.5)
+}

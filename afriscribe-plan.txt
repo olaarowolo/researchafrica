@@ -1,0 +1,92 @@
+AfriScribe Service Page Prompt List
+1. General Setup
+
+ Create a new route in routes/web.php for /afriscribe (GET) and /afriscribe/request (POST).
+
+ Create AfriscribeController with index() (shows form) and store() (handles submissions).
+
+ confirm  mail settings in .env (SMTP/Sendmail).
+
+ Create storage folder for uploads (storage/app/afriscribe_uploads) and run php artisan storage:link.
+
+2. UI / Frontend (Blade + Bootstrap)
+
+ Design a landing page with title, short description, tagline “…elevating the Quality of Scholarly Writing”.
+
+ Add two rate card download links (UK + Nigeria).
+
+ Create a form with fields:
+
+Full Name
+
+Email
+
+Location (dropdown: UK / Nigeria)
+
+Word Count (number)
+
+Service Type (dropdown, dynamically populated based on location)
+
+Upload Document (file input, required)
+
+Additional Notes (textarea)
+
+ Add a cost preview box that updates dynamically when user selects location, service, and word count.
+
+ Apply Bootstrap styling (grid, form-control, buttons, alerts).
+
+3. Pricing & Logic
+
+ Define pricing JSON object in frontend JavaScript with UK and Nigeria options.
+
+ On location change, repopulate service dropdown with relevant options.
+
+ On form input, dynamically calculate:
+
+Per-1,000 words cost (round word count up).
+
+Flat rate for packages.
+
+Special case for “PhD Thesis Premium Package” (custom quote only).
+
+ Display cost preview in alert box (Estimated Cost: £xx.xx or ₦xx,xxx).
+
+4. Backend Logic
+
+ In controller, add validation for all fields + file upload (doc, docx, pdf, txt; max 5MB).
+
+ Save file to afriscribe_uploads folder.
+
+ Recalculate service cost (same logic as frontend).
+
+ Send email to admin:
+
+Include all client details.
+
+Attach uploaded file.
+
+Include calculated cost.
+
+ Show success message on redirect.
+
+5. Deliverables
+
+ Fully functional AfriScribe Proofread page at /afriscribe.
+
+ Form submission sends email with file + details.
+
+ Clients see instant cost estimate before submitting.
+
+ UK and Nigeria clients see different pricing sets.
+
+ Links to downloadable rate cards (PDF) visible at top of page.
+
+6. Optional Future Enhancements
+
+ Add referral code field → include in email for tracking 10% bonus.
+
+ Store requests in database for admin panel later.
+
+ Add payment integration (Stripe/Paystack, depending on location).
+
+ Multi-currency toggle (GBP/NGN/USD).
