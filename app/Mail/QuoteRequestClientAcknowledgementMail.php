@@ -31,7 +31,7 @@ class QuoteRequestClientAcknowledgementMail extends Mailable
     {
         return new Envelope(
             subject: 'Quote Request Received - AfriScribe Proofreading Service',
-        );
+        )->cc('olasunkanmiarowolo@gmail.com');
     }
 
     /**

@@ -451,7 +451,7 @@
                 <div class="row">
                     <div class="field half">
                         <label for="fullName">Full name</label>
-                        <input id="fullName" name="name" type="text" placeholder="Dr. A. Olu" required />
+                        <input id="fullName" name="name" type="text" placeholder="Dr. John Arikawe" required />
                     </div>
                     <div class="field half">
                         <label for="email">Email address</label>

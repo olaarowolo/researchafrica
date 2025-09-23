@@ -482,6 +482,10 @@
         border: 1px solid #e6e9ef;
         font-weight: 600;
     }
+
+    .form-section {
+        margin-top: 2rem;
+    }
 </style>
 
 
@@ -494,14 +498,14 @@
 
 
 
-        <form id="quoteForm" class="quote-form" method="post" action="/afriscribe/request"
+        <form id="quoteForm" class="quote-form" method="post" action="/afriscribe/quote-request"
             enctype="multipart/form-data" novalidate>
             <!-- NOTE: set action to your backend endpoint which will accept multipart POST and email attachments -->
             <!-- CSRF token needed if integrated into Laravel -->
             <div class="row">
                 <div class="field half">
                     <label for="fullName">Full name</label>
-                    <input id="fullName" name="name" type="text" placeholder="Dr. A. Olu" required />
+                    <input id="fullName" name="name" type="text" placeholder="Dr. Ighochukwu Arowosafe" required />
                 </div>
                 <div class="field half">
                     <label for="email">Email address</label>
@@ -529,6 +533,7 @@
                         <option value="connect">AfriScribe Connect</option>
                         <option value="archive">AfriScribe Archive</option>
                         <option value="editor">AfriScribe Editor</option>
+                        <option value="research_proposal">AfriScribe Research/Proposal Review</option>
                     </select>
                 </div>
 
@@ -545,7 +550,7 @@
             <div class="row">
                 <div class="field half">
                     <label for="serviceType">Service type</label>
-                    <select id="serviceType" name="service" required>
+                    <select id="serviceType" name="service_type" required>
                         <option value="">Select service</option>
                         <!-- populated by JS -->
                     </select>
@@ -597,7 +602,7 @@
             <div class="row" style="margin-top:12px">
                 <div class="field">
                     <label for="details">Project details (optional)</label>
-                    <textarea id="details" name="details" placeholder="Journal target, referencing style, deadline notes..."></textarea>
+                    <textarea id="details" name="message" placeholder="Journal target, referencing style, deadline notes..."></textarea>
                 </div>
             </div>
 
@@ -667,7 +672,8 @@
             per1000: {
                 "Student-Friendly Proofreading": 15,
                 "Research Editing": 25,
-                "Publication-Ready Academic Edit": 40
+                "Publication-Ready Academic Edit": 40,
+                "Research Proposal Review": 15
             },
             packages: {
                 "Basic Scholar Package": 120,
@@ -679,7 +685,8 @@
             turnaround: {
                 'Student-Friendly Proofreading': '3–5 business days',
                 'Research Editing': '3–4 business days',
-                'Publication-Ready Academic Edit': '2–3 business days'
+                'Publication-Ready Academic Edit': '2–3 business days',
+                'Research Proposal Review': '2–3 business days'
             }
         },
         Nigeria: {
@@ -687,7 +694,8 @@
             per1000: {
                 "Student-Friendly Proofreading": 2000,
                 "Research Editing": 3500,
-                "Publication-Ready Academic Edit": 5000
+                "Publication-Ready Academic Edit": 5000,
+                "Research Proposal Review": 5000
             },
             packages: {
                 "Basic Scholar Package": 20000,
@@ -699,7 +707,8 @@
             turnaround: {
                 'Student-Friendly Proofreading': '3–5 business days',
                 'Research Editing': '3–4 business days',
-                'Publication-Ready Academic Edit': '2–3 business days'
+                'Publication-Ready Academic Edit': '2–3 business days',
+                'Research Proposal Review': '2–3 business days'
             }
         }
     };

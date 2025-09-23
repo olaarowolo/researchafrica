@@ -56,7 +56,8 @@ class QuoteRequestMail extends Mailable
         $attachments = [];
 
         if ($this->quoteRequest->file_path) {
-            $attachments[] = Attachment::fromStorage($this->quoteRequest->file_path)
+            // Explicitly use the 'public' disk where the file was stored.
+            $attachments[] = Attachment::fromStorageDisk('public', $this->quoteRequest->file_path)
                 ->as($this->quoteRequest->original_filename)
                 ->withMime('application/octet-stream');
         }

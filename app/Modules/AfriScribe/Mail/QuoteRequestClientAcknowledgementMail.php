@@ -2,7 +2,7 @@
 
 namespace App\Modules\AfriScribe\Mail;
 
-use App\Modules\AfriScribe\Models\QuoteRequest;
+use App\Models\QuoteRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;

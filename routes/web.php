@@ -12,12 +12,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/afriscribe/home', function () { return view('afriscribe.welcome-form'); })->name('afriscribe.welcome');
 Route::get('/afriscribe/manuscripts', function () { return view('afriscribe.manuscripts'); })->name('afriscribe.manuscripts');
 
+Route::redirect('/afriscribe', '/afriscribe/home');
+Route::get('/afriscribe/home', function () { return view('afriscribe.welcome-form'); })->name('afriscribe.welcome');
+ 
 require 'user.php';
 
 
 
 
-Route::redirect('/admin', '/admin/login');
+Route::get('/admin', function () {
+    return redirect('/admin/login');
+});
 Route::get('/admin/home', function () {
 
     if (session('status')) {

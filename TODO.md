@@ -1,28 +1,48 @@
-# AfriScribe Route Fix - Completed
+# AfriScribe Form Email and Redirect Implementation
 
-## Issue
-- 404 error when accessing `http://127.0.0.1:8000/afriscribe`
-- The requested resource `/afriscribe` was not found on the server
+## Completed Tasks
+- [x] Add CC to `olasunkanmiarowolo@gmail.com` in client acknowledgment email
+- [x] Enable email sending to `researchafripub@gmail.com` (admin)
+- [x] Enable email sending to client with CC
+- [x] Change redirect from back() to `/afriscribe/home`
+- [x] Update success message to "Request submitted successfully"
+- [x] Fix email sending error by using log driver temporarily
+- [x] Fix PHP syntax error in QuoteRequestController.php
+- [x] Remove non-existent StoreQuoteRequest class references
+- [x] Add "Research Proposal Review" to product options
+- [x] Add very affordable pricing for Research Proposal Review (UK: £0.015/word, NG: ₦5,000 flat rate)
+- [x] Add "Research Proposal Review" to Service type dropdown options
+- [x] Create success page with 5-second countdown and loading animation
+- [x] Show confirmation message telling user they are being redirected
 
-## Root Cause
-- The `RouteServiceProvider` was attempting to load AfriScribe routes directly
-- This conflicted with the proper `AfriScribeServiceProvider` route loading mechanism
-- The service provider was already registered in `config/app.php` but the direct loading was interfering
+## Files Modified
+- `app/Mail/QuoteRequestClientAcknowledgementMail.php` - Added CC recipient
+- `app/Modules/AfriScribe/Http/Controllers/QuoteRequestController.php` - Enabled emails, updated redirect/message, added better error logging, temporarily using log driver, fixed syntax errors, removed invalid class references, added affordable pricing for Research Proposal Review, changed to success page redirect
+- `resources/views/afriscribe/partials/as-pr-form.blade.php` - Added "Research Proposal Review" option to both product dropdown and service type dropdown with pricing configuration
+- `resources/views/afriscribe/success.blade.php` - Created new success page with countdown timer, loading animation, and redirect functionality
 
-## Solution Applied
-- ✅ Removed direct AfriScribe route loading from `app/Providers/RouteServiceProvider.php`
-- ✅ Cleared route cache: `php artisan route:clear`
-- ✅ Cleared config cache: `php artisan config:clear`
-- ✅ Verified route registration: `/afriscribe` now properly routes to `AfriscribeController@welcome`
-
-## Verification
-- Route listing confirms: `GET|HEAD afriscribe ....... afriscribe.welcome`
-- All AfriScribe routes (11 total) are now properly registered
-- The route should now be accessible at `http://127.0.0.1:8000/afriscribe`
+## Current Status
+- ✅ All syntax errors and class reference errors fixed
+- ✅ Form validation properly implemented
+- ✅ **"Research Proposal Review" fully integrated**:
+  - Added to product options dropdown
+  - Added to service type dropdown with pricing
+  - Very affordable pricing configured:
+    - UK: £0.015 per word (25% cheaper than proofreading)
+    - Nigeria: ₦5,000 flat rate (very affordable)
+- ✅ **Success page with countdown implemented**:
+  - Beautiful success page with checkmark icon and loading animation
+  - 5-second countdown timer with visual feedback
+  - Clear message telling user they are being redirected
+  - Option to go to home page immediately
+- Emails are now configured to be sent to:
+  - Admin: researchafripub@gmail.com
+  - Client: user's email (with CC to olasunkanmiarowolo@gmail.com)
+- Redirect: Now shows success page with countdown before redirecting to `/afriscribe/home`
+- Temporary fix: Using 'log' driver to prevent email sending errors. Emails will be logged instead of sent.
 
 ## Next Steps
-- ✅ Created new modern welcome page: `resources/views/afriscribe/welcome.blade.php`
-- ✅ Updated `AfriscribeController@welcome` to use the new view
-- ✅ Updated all navigation links to use proper Laravel routes
-- Test the route in browser to confirm the new welcome page loads
-- If view issues occur, check that `resources/views/afriscribe/welcome.blade.php` exists and is properly configured
+- Test the form submission to verify the success page and countdown work correctly
+- Check Laravel logs to see if emails are being generated correctly
+- Once mail configuration is fixed, change back from 'log' driver to 'smtp' driver
+- Configure proper mail settings in .env file (MAIL_MAILER=smtp, MAIL_HOST, etc.)

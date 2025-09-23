@@ -24,19 +24,23 @@ AfriScribe bridges the gap between academic research and professional publishing
 
 ### 💰 Pricing Structure
 
+The pricing is implemented directly in the frontend and may differ from the backend configuration. The user-facing rates are as follows:
+
 #### United Kingdom (GBP)
-- **Proofreading**: £0.02 per word
-- **Copy Editing**: £0.03 per word
-- **Substantive Editing**: £0.05 per word
-- **Rush Service**: 1.5x multiplier
-- **Plagiarism Check**: £50.00
+- **Student-Friendly Proofreading**: £15 per 1,000 words
+- **Research Editing**: £25 per 1,000 words
+- **Publication-Ready Academic Edit**: £40 per 1,000 words
+- **Packages**: Flat fees available (e.g., Basic Scholar Package: £120)
+- **Rush Service**: £150 flat fee
+- **Plagiarism Check**: Custom quote
 
 #### Nigeria (NGN)
-- **Proofreading**: ₦8 per word
-- **Copy Editing**: ₦12 per word
-- **Substantive Editing**: ₦20 per word
-- **Rush Service**: 1.5x multiplier
-- **Plagiarism Check**: ₦20,000
+- **Student-Friendly Proofreading**: ₦2,000 per 1,000 words
+- **Research Editing**: ₦3,500 per 1,000 words
+- **Publication-Ready Academic Edit**: ₦5,000 per 1,000 words
+- **Packages**: Flat fees available (e.g., Basic Scholar Package: ₦20,000)
+- **Rush Service**: ₦10,000 flat fee
+- **Plagiarism Check**: ₦5,000 flat fee
 
 ### 📧 Communication System
 - **Client Acknowledgment**: Automatic confirmation emails
@@ -139,7 +143,40 @@ return [
     ],
 
     'pricing' => [
-        // UK and Nigeria pricing as shown above
+        'UK' => [
+            'proofreading' => [
+                'rate' => 0.02, // £0.02 per word
+                'rush_multiplier' => 1.5,
+                'plagiarism_check' => 50.00
+            ],
+            'copy_editing' => [
+                'rate' => 0.03,
+                'rush_multiplier' => 1.5,
+                'plagiarism_check' => 50.00
+            ],
+            'substantive_editing' => [
+                'rate' => 0.05,
+                'rush_multiplier' => 1.5,
+                'plagiarism_check' => 50.00
+            ],
+        ],
+        'Nigeria' => [
+            'proofreading' => [
+                'rate' => 8.00, // ₦8 per word
+                'rush_multiplier' => 1.5,
+                'plagiarism_check' => 20000.00
+            ],
+            'copy_editing' => [
+                'rate' => 12.00,
+                'rush_multiplier' => 1.5,
+                'plagiarism_check' => 20000.00
+            ],
+            'substantive_editing' => [
+                'rate' => 20.00,
+                'rush_multiplier' => 1.5,
+                'plagiarism_check' => 20000.00
+            ],
+        ]
     ],
 
     'services' => [
@@ -153,6 +190,17 @@ return [
         'dynamic_pricing' => true,
         'email_notifications' => true,
         'admin_panel' => true,
+    ],
+
+    'notifications' => [
+        'admin' => [
+            'enabled' => true,
+            'email' => env('AFRISCRIBE_ADMIN_EMAIL', 'researchfripub@gmail.com'),
+        ],
+        'client' => [
+            'enabled' => true,
+            'acknowledgment' => true,
+        ],
     ],
 ];
 ```
@@ -208,7 +256,7 @@ return [
 ### Public Endpoints
 
 ```php
-GET    /afriscribe                    // Landing page
+GET    /afriscribe/home                    // Landing page
 GET    /afriscribe/quote-request      // Quote request form
 POST   /afriscribe/quote-request      // Submit quote request
 GET    /afriscribe/pricing-data       // Get pricing information

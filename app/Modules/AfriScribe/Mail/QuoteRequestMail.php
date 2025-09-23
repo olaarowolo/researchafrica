@@ -2,7 +2,7 @@
 
 namespace App\Modules\AfriScribe\Mail;
 
-use App\Modules\AfriScribe\Models\QuoteRequest;
+use App\Models\QuoteRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -55,8 +55,8 @@ class QuoteRequestMail extends Mailable
     {
         $attachments = [];
 
-        if ($this->quoteRequest->file_path) {
-            $attachments[] = Attachment::fromStorage($this->quoteRequest->file_path)
+        if ($this->quoteRequest->file_path && \Storage::disk('public')->exists($this->quoteRequest->file_path)) {
+            $attachments[] = Attachment::fromStorageDisk('public', $this->quoteRequest->file_path)
                 ->as($this->quoteRequest->original_filename)
                 ->withMime('application/octet-stream');
         }

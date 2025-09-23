@@ -1,32 +1,46 @@
 # AfriScribe Extendable Layout System
 
-This directory contains a modular, extendable layout system for the AfriScribe application. The system is built using Laravel Blade templates and provides different layout types for various page needs.
+This directory contains the Blade views for the AfriScribe module. It includes a **proposed** modular, extendable layout system (`layouts/`, `partials/`) designed for consistency and maintainability.
+
+> **Important:** While this README describes a modular system, some key pages like `welcome-form.blade.php` are currently implemented as large, standalone files with inline CSS and JavaScript. They do not yet adhere to the layout system. The `partials/` are used in some places, but not universally. This documentation serves as both a guide to the existing structure and a blueprint for future refactoring.
 
 ## 📁 Current Directory Structure
 
-```
+```text
 resources/views/afriscribe/
-├── layouts/                    # Master layout templates
+├── layouts/                    # Master layout templates (Proposed)
 │   ├── app.blade.php          # Base layout with common elements
 │   ├── landing.blade.php      # Landing page layout
 │   ├── dashboard.blade.php    # Admin dashboard layout
 │   └── form.blade.php         # Form-focused layout
-├── pages/                     # Example page implementations
+├── pages/                     # Example page implementations (Proposed)
 │   ├── welcome.blade.php      # Landing page example
 │   ├── dashboard.blade.php    # Dashboard page example
 │   └── quote-request.blade.php # Form page example
-├── partials/                  # Reusable components
-│   ├── as-nav.blade.php       # Navigation component
-│   ├── as-hero.blade.php      # Hero section component
-│   ├── as-services.blade.php   # Services section component
-│   ├── as-features.blade.php   # Features section component
-│   ├── as-cta.blade.php        # Call-to-action component
-│   ├── as-footer.blade.php     # Footer component
-│   └── as-pr-form.blade.php    # Proofreading form component
-├── afriscribe-proofread-order-form.blade.php  # Order form page
-├── afriscribe-proofread-quote-form.blade.php  # Quote form page
-├── welcome-form.blade.php     # Welcome form page
-├── welcome.blade.php          # Welcome page
+├── partials/                  # Reusable components (Partially implemented)
+│   ├── as-nav.blade.php       # General: Navigation component
+│   ├── as-footer.blade.php     # General: Footer component
+│   ├── as-hero.blade.php      # General: Hero section for main landing page
+│   ├── as-services.blade.php   # General: Services grid for main landing page
+│   ├── as-features.blade.php   # General: Features grid for main landing page
+│   ├── as-cta.blade.php        # General: Call-to-action for main landing page
+│   │
+│   ├── as-pr-form.blade.php    # Proofreading: The dynamic quote/order form component
+│   ├── as-hero-proofreading.blade.php   # Proofreading: Page-specific hero section
+│   ├── as-proofreading-overview.blade.php # Proofreading: Page-specific overview section
+│   ├── as-proofreading-pricing.blade.php  # Proofreading: Page-specific pricing section
+│   ├── as-proofreading-cta.blade.php      # Proofreading: Page-specific CTA section
+│   ├── as-proofreading-form.blade.php     # Proofreading: Page-specific simple interest form
+│   │
+│   ├── as-hero-manuscripts.blade.php    # Manuscripts: Page-specific hero section
+│   ├── as-manuscripts-overview.blade.php # Manuscripts: Page-specific overview section
+│   ├── as-manuscripts-features.blade.php # Manuscripts: Page-specific features section
+│   ├── as-manuscripts-pricing.blade.php  # Manuscripts: Page-specific pricing section
+│   ├── as-manuscripts-cta.blade.php      # Manuscripts: Page-specific CTA section
+│   └── as-manuscripts-form.blade.php     # Manuscripts: Page-specific simple interest form
+├── welcome-form.blade.php     # Main landing page with integrated quote form (monolithic)
+├── afriscribe-proofread-order-form.blade.php  # Standalone page for the dynamic order form
+├── afriscribe-proofread-quote-form.blade.php  # Legacy/simple quote form page
 └── README.md                  # This file
 ```
 
@@ -66,42 +80,67 @@ Specialized for forms and data entry:
 
 ## 🧩 Partials (Components)
 
-### Navigation (`partials/as-nav.blade.php`)
-- Responsive navigation bar
-- Logo and menu items
-- Mobile hamburger menu
-- Smooth scrolling for anchor links
+This section details the reusable Blade components. They are grouped into "General", "Proofreading", and "Manuscripts" categories.
 
-### Hero Section (`partials/as-hero.blade.php`)
-- Hero banner with title and description
-- Call-to-action button
-- Background image support
+### General Partials
 
-### Services (`partials/as-services.blade.php`)
-- Grid layout for service cards
-- Icons and descriptions
-- Hover effects
+These are used across multiple pages.
 
-### Features (`partials/as-features.blade.php`)
-- Feature highlights section
-- Grid layout with icons
-- Dark background styling
+- **`partials/as-nav.blade.php`**: Responsive navigation bar with logo, menu items, and mobile hamburger menu.
+- **`partials/as-footer.blade.php`**: Simple footer with copyright information.
+- **`partials/as-hero.blade.php`**: Main hero banner with title, description, and a primary call-to-action button.
+- **`partials/as-services.blade.php`**: Grid layout for displaying service cards with icons and descriptions.
+- **`partials/as-features.blade.php`**: A grid for highlighting key features, typically on a dark background.
+- **`partials/as-cta.blade.php`**: A prominent call-to-action section with a gradient background.
 
-### CTA Section (`partials/as-cta.blade.php`)
-- Call-to-action section
-- Primary button
-- Gradient background
+### Proofreading Partials
 
-### Footer (`partials/as-footer.blade.php`)
-- Simple footer with copyright
-- Contact information
-- Social links (can be added)
+These are specific to the "AfriScribe Proofread" product pages.
 
-### Proofreading Form (`partials/as-pr-form.blade.php`)
-- Specialized form for proofreading requests
-- File upload functionality
-- Service type selection
-- Contact information fields
+- **`partials/as-pr-form.blade.php`**: The core dynamic proofreading order form. Includes location-based pricing, service selection, word count input, file uploads, and real-time cost calculation.
+- **`partials/as-hero-proofreading.blade.php`**: A hero section tailored for the proofreading service page.
+- **`partials/as-proofreading-overview.blade.php`**: An overview section explaining the proofreading service.
+- **`partials/as-proofreading-pricing.blade.php`**: A section detailing the pricing tiers for proofreading.
+- **`partials/as-proofreading-cta.blade.php`**: A call-to-action specific to starting a proofreading request.
+- **`partials/as-proofreading-form.blade.php`**: A simple interest/contact form for the proofreading service.
+
+### Manuscripts Partials
+
+These are specific to the "AfriScribe Manuscripts" product pages.
+
+- **`partials/as-hero-manuscripts.blade.php`**: A hero section tailored for the manuscripts service page.
+- **`partials/as-manuscripts-overview.blade.php`**: An overview section explaining the manuscripts platform.
+- **`partials/as-manuscripts-features.blade.php`**: A section highlighting the features of the manuscripts platform.
+- **`partials/as-manuscripts-pricing.blade.php`**: A section detailing the pricing for the manuscripts service.
+- **`partials/as-manuscripts-cta.blade.php`**: A call-to-action specific to the manuscripts service.
+- **`partials/as-manuscripts-form.blade.php`**: A simple interest/contact form for the manuscripts service.
+
+## 🏗️ Recommended Structure & Workflow
+
+This project uses a modular structure to promote code reuse and maintainability. The goal is to move away from monolithic files (like `welcome-form.blade.php`) and towards a component-based architecture.
+
+### 1. **Layouts (`layouts/`)**
+- **Purpose**: These are the master templates. A layout defines the main HTML structure (like `<html>`, `<head>`, `<body>`, header, footer) and yields sections for content.
+- **Usage**: Every page should `@extends` a layout. Choose the one that best fits the page's purpose (e.g., `landing.blade.php` for a marketing page, `dashboard.blade.php` for an admin page).
+
+### 2. **Partials (`partials/`)**
+- **Purpose**: These are small, reusable pieces of UI. A partial could be a navigation bar, a footer, a specific card, or a form section. They should not contain any page-specific logic.
+- **Usage**: Partials are included within layouts or pages using `@include()`. They are the building blocks of your pages.
+
+### 3. **Pages (`pages/`)**
+- **Purpose**: These are the final views that a user sees. A page's primary job is to extend a layout and compose various partials to build the final UI.
+- **Usage**: Create a new file in this directory for each new page (e.g., `about-us.blade.php`). This file will contain `@section` directives to inject content into the chosen layout.
+
+### Workflow for Creating a New Page
+1.  **Define the Page**: Determine the page's purpose and what layout it should use (e.g., a new "Contact Us" page would use `layouts/landing.blade.php`).
+2.  **Create the Page File**: Create a new file in the `pages/` directory (e.g., `pages/contact.blade.php`).
+3.  **Extend the Layout**: In the new file, start by extending the chosen layout: `@extends('afriscribe.layouts.landing')`.
+4.  **Identify Reusable Components**: Look at the design and identify sections that already exist as partials (e.g., hero, CTA).
+5.  **Create New Partials (if needed)**: If a section is unique but might be reused later, create a new file in `partials/`.
+6.  **Compose the Page**: Use `@section` and `@include` to assemble the partials and add unique content to the page.
+7.  **Add Route**: Finally, add a route in your routes file to point to your new page view.
+
+This structure makes the codebase cleaner, easier to navigate, and faster to develop with over time.
 
 ## 🚀 How to Use
 

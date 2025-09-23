@@ -195,8 +195,7 @@
             color: #fff;
             padding: 4rem 2rem;
             text-align: center;
-            padding-top: 20rem;
-            margin-top: 20rem;
+            margin-top: 2rem;
         }
 
         .features h2 {
@@ -510,9 +509,7 @@
 
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 AfriScribe | Research Africa. All Rights Reserved.</p>
-    </footer>
+@include('afriscribe.partials.as-footer')
 
     <script>
         function toggleMenu() {

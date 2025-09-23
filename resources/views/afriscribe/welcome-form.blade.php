@@ -209,8 +209,8 @@
             color: #fff;
             padding: 4rem 2rem;
             text-align: center;
-            padding-top: 20rem;
-            margin-top: 20rem;
+            /* padding-top: 20rem;
+            margin-top: 20rem; */
         }
 
         .features h2 {
@@ -619,7 +619,7 @@
                 <div class="row">
                     <div class="field half">
                         <label for="fullName">Full name</label>
-                        <input id="fullName" name="name" type="text" placeholder="Dr. A. Olu" required />
+                        <input id="fullName" name="name" type="text" placeholder="Dr. John Arikaweu" required />
                     </div>
                     <div class="field half">
                         <label for="email">Email address</label>
