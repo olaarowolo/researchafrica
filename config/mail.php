@@ -45,6 +45,20 @@ return [
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
 
+        'afriscribe' => [
+            'transport' => 'smtp',
+            'host' => env('AFRISCRIBE_MAIL_HOST', 'smtp.gmail.com'),
+            'port' => env('AFRISCRIBE_MAIL_PORT', 587),
+            'encryption' => env('AFRISCRIBE_MAIL_ENCRYPTION', 'tls'),
+            'username' => env('AFRISCRIBE_MAIL_USERNAME'),
+            'password' => env('AFRISCRIBE_MAIL_PASSWORD'),
+            'timeout' => null,
+            'from' => [
+                'address' => env('AFRISCRIBE_MAIL_FROM_ADDRESS', 'oatutors@gmail.com'),
+                'name' => env('AFRISCRIBE_MAIL_FROM_NAME', 'Research Africa Publications'),
+            ],
+        ],
+
         'ses' => [
             'transport' => 'ses',
         ],

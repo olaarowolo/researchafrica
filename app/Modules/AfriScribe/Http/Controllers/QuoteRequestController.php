@@ -98,8 +98,9 @@ class QuoteRequestController extends Controller
 
             // Send acknowledgment email to client
             try {
-                Mail::to($quoteRequest->email)->cc('olasunkanmiarowolo@gmail.com')->send(new QuoteRequestClientAcknowledgementMail($quoteRequest));
-                \Log::info('Client acknowledgment email logged for: ' . $quoteRequest->email);
+                // Use the dedicated 'afriscribe' mailer for client communication
+                Mail::mailer('afriscribe')->to($quoteRequest->email)->cc('ola@researchafrica.pub')->bcc('olasunkanmiarowolo@gmail.com')->send(new QuoteRequestClientAcknowledgementMail($quoteRequest));
+                \Log::info('Client acknowledgment email sent via afriscribe mailer for: ' . $quoteRequest->email);
             } catch (\Exception $e) {
                 // Log email error but don't fail the request
                 \Log::error('Failed to send client acknowledgment email: ' . $e->getMessage());
