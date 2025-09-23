@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\AfriScribe\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\QuoteRequest;
-use App\Mail\QuoteRequestMail;
-use App\Mail\QuoteRequestClientAcknowledgementMail;
+use App\Modules\AfriScribe\Mail\QuoteRequestMail;
+use App\Modules\AfriScribe\Mail\QuoteRequestClientAcknowledgementMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
 
 class QuoteRequestController extends Controller
 {
@@ -25,6 +27,7 @@ class QuoteRequestController extends Controller
      */
     public function store(Request $request)
     {
+        try {
         // Validate the request
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -48,7 +51,7 @@ class QuoteRequestController extends Controller
                 ->with('error', 'Please check your form and try again.');
         }
 
-        try {
+            $validated = $validator->validated();
             // Handle file upload
             $filePath = null;
             $originalFilename = null;
@@ -62,43 +65,52 @@ class QuoteRequestController extends Controller
                 $filePath = $file->storeAs('quote-requests', $filename, 'public');
             }
 
-            // Prepare addons data
-            $addons = $request->addons ?? [];
+            // Map form values to database values
+            $addonMapping = [
+                'plag' => 'plagiarism_check',
+                'rush' => 'rush_service',
+            ];
+
+            $mappedAddons = collect($validated['addons'] ?? [])
+                ->map(fn ($addon) => $addonMapping[$addon] ?? null)
+                ->filter()->values()->all();
 
             // Create the quote request
-            $quoteRequest = QuoteRequest::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'ra_service' => $request->ra_service,
-                'product' => $request->product,
-                'location' => $request->location,
-                'service_type' => $request->service_type,
-                'word_count' => $request->word_count,
-                'addons' => !empty($addons) ? json_encode($addons) : null,
-                'referral' => $request->referral,
-                'message' => $request->message,
-                'original_filename' => $originalFilename,
-                'file_path' => $filePath,
-                'status' => 'pending',
-            ]);
+            $quoteRequest = QuoteRequest::create(array_merge(
+                Arr::except($validated, ['file', 'addons']), // The validated data without file and addons
+                [
+                    'addons' => !empty($mappedAddons) ? $mappedAddons : null,
+                    'original_filename' => $originalFilename,
+                    'file_path' => $filePath,
+                    'status' => 'pending',
+                ]
+            ));
 
             // Send email to admin
             try {
-                Mail::to('researchfripub@gmail.com')->send(new QuoteRequestMail($quoteRequest));
+                Mail::to('researchafripub@gmail.com')->send(new QuoteRequestMail($quoteRequest));
+                \Log::info('Admin email logged for: researchafripub@gmail.com');
             } catch (\Exception $e) {
                 // Log email error but don't fail the request
                 \Log::error('Failed to send admin notification email: ' . $e->getMessage());
+                \Log::error('Stack trace: ' . $e->getTraceAsString());
             }
 
             // Send acknowledgment email to client
             try {
-                Mail::to($quoteRequest->email)->send(new QuoteRequestClientAcknowledgementMail($quoteRequest));
+                Mail::to($quoteRequest->email)->cc('olasunkanmiarowolo@gmail.com')->send(new QuoteRequestClientAcknowledgementMail($quoteRequest));
+                \Log::info('Client acknowledgment email logged for: ' . $quoteRequest->email);
             } catch (\Exception $e) {
                 // Log email error but don't fail the request
                 \Log::error('Failed to send client acknowledgment email: ' . $e->getMessage());
+                \Log::error('Stack trace: ' . $e->getTraceAsString());
             }
 
-            return redirect()->back()->with('success', 'Your quote request has been submitted successfully! Please check your email for confirmation.');
+            return view('afriscribe.success', [
+                'message' => 'Request submitted successfully',
+                'redirectUrl' => '/afriscribe/home',
+                'countdown' => 5
+            ]);
 
         } catch (\Exception $e) {
             \Log::error('Quote request submission failed: ' . $e->getMessage());
@@ -209,6 +221,11 @@ class QuoteRequestController extends Controller
                     'rate' => 0.05,
                     'rush_multiplier' => 1.5,
                     'plagiarism_check' => 50.00
+                ],
+                'research_proposal' => [
+                    'rate' => 0.015, // £0.015 per word - Very affordable!
+                    'rush_multiplier' => 1.5,
+                    'plagiarism_check' => 50.00
                 ]
             ],
             'Nigeria' => [
@@ -224,6 +241,11 @@ class QuoteRequestController extends Controller
                 ],
                 'substantive_editing' => [
                     'rate' => 20.00,
+                    'rush_multiplier' => 1.5,
+                    'plagiarism_check' => 20000.00
+                ],
+                'research_proposal' => [
+                    'rate' => 5000.00, // ₦5,000 flat rate - Very affordable!
                     'rush_multiplier' => 1.5,
                     'plagiarism_check' => 20000.00
                 ]

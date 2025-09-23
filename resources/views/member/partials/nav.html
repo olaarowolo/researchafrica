@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Mega Menu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <!-- Fallback for FontAwesome if it doesn't load -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0BeIjyytfqxuMPsV0VDKY4GM2u07V7oxA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* Smooth mega-menu animation */
+    .mega-menu {
+      transform: translateY(-10px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+    .group:hover .mega-menu {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Ensure hamburger button is always visible */
+    #menu-toggle {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    /* Mobile menu styles */
+    @media (max-width: 768px) {
+      #menu-toggle {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+    }
+
+    /* Fallback hamburger icon if FontAwesome fails */
+    #menu-toggle .fas.fa-bars:before {
+      content: "☰";
+      font-size: 1.5rem;
+    }
+
+    #menu-toggle .fas.fa-times:before {
+      content: "✕";
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Debug info -->
+  <div id="debug-info" class="fixed top-0 left-0 bg-red-500 text-white p-2 text-xs z-50">
+    Screen width: <span id="screen-width"></span>px | Mobile menu visible: <span id="mobile-visible"></span>
+  </div>
+
+  <script>
+    // Debug script to run immediately
+    function updateDebugInfo() {
+      document.getElementById('screen-width').textContent = window.innerWidth;
+      document.getElementById('mobile-visible').textContent = window.innerWidth < 768 ? 'YES' : 'NO';
+
+      // Force hamburger button visibility
+      const hamburger = document.getElementById('menu-toggle');
+      if (hamburger) {
+        hamburger.style.display = 'block';
+        hamburger.style.visibility = 'visible';
+        hamburger.style.opacity = '1';
+        console.log('Hamburger button forced visible');
+      }
+    }
+
+    updateDebugInfo();
+    window.addEventListener('resize', updateDebugInfo);
+  </script>
+
+<!-- Navbar -->
+<nav class="bg-white/80 backdrop-blur shadow-sm sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      
+      <!-- Logo -->
+      <div class="flex-shrink-0 text-2xl font-semibold text-gray-900 tracking-tight">
+        <i class="fas fa-flask mr-2 text-blue-600"></i>ResearchAfrica
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden flex items-center" style="display: flex !important;">
+        <button id="menu-toggle" style="display: block !important; visibility: visible !important; opacity: 1 !important; color: black !important; font-size: 1.875rem !important; padding: 0.75rem !important; background: white !important; border: 2px solid #9CA3AF !important; border-radius: 0.5rem !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;" class="text-black hover:text-gray-800 focus:outline-none text-3xl transition-all duration-200 p-3 rounded-lg hover:bg-gray-200 bg-white shadow-md border-2 border-gray-400 hover:border-gray-600" onmouseover="this.style.backgroundColor='#F3F4F6'" onmouseout="this.style.backgroundColor='white'">
+          <i class="fas fa-bars" style="color: black !important;"></i>
+        </button>
+      </div>
+
+      <!-- Desktop Menu -->
+      <ul id="menu" class="hidden md:flex space-x-10 font-light text-gray-700">
+        <li><a href="#" class="hover:text-blue-600 transition flex items-center"><i class="fas fa-home mr-2"></i>Home</a></li>
+        
+        <!-- Mega Menu -->
+        <li class="relative group">
+          <button class="hover:text-blue-600 transition flex items-center">
+            <i class="fas fa-info-circle mr-1"></i>Information For <span class="ml-1">▾</span>
+          </button>
+
+          <div class="mega-menu absolute left-0 mt-3 w-[700px] bg-white shadow-xl rounded-xl p-6">
+            <div class="grid grid-cols-4 gap-6 text-sm text-gray-600">
+              <div>
+                <h5 class="font-semibold text-gray-900 mb-2">Authors</h5>
+                <ul class="space-y-2">
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-pen mr-2"></i>Author’s Guidelines</a></li>
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-balance-scale mr-2"></i>Ethics Guidelines</a></li>
+                </ul>
+              </div>
+              <div>
+                <h5 class="font-semibold text-gray-900 mb-2">Editors</h5>
+                <ul class="space-y-2">
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-edit mr-2"></i>Editorial Policy</a></li>
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-users-cog mr-2"></i>Responsibilities</a></li>
+                </ul>
+              </div>
+              <div>
+                <h5 class="font-semibold text-gray-900 mb-2">Researchers</h5>
+                <ul class="space-y-2">
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-file-upload mr-2"></i>Submit Paper</a></li>
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-hand-holding-dollar mr-2"></i>Funding Opportunities</a></li>
+                </ul>
+              </div>
+              <div>
+                <h5 class="font-semibold text-gray-900 mb-2">Reviewers</h5>
+                <ul class="space-y-2">
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-check-circle mr-2"></i>Review Guidelines</a></li>
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-user-plus mr-2"></i>Join as Reviewer</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Services Mega Menu -->
+        <li class="relative group">
+          <button class="hover:text-blue-600 transition flex items-center">
+            <i class="fas fa-cogs mr-1"></i>Services <span class="ml-1">▾</span>
+          </button>
+          <div class="mega-menu absolute left-0 mt-3 w-[600px] bg-white shadow-xl rounded-xl p-6">
+            <div class="grid grid-cols-2 gap-6 text-sm text-gray-600">
+              <div>
+                <h5 class="font-semibold text-gray-900 mb-2">AfriScribe</h5>
+                <ul class="space-y-2">
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-file-alt mr-2"></i>Manuscripts Manager</a></li>
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-check mr-2"></i>Proofread</a></li>
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-lightbulb mr-2"></i>Insights</a></li>
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-link mr-2"></i>Connect</a></li>
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-archive mr-2"></i>Archive</a></li>
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-user-edit mr-2"></i>Editor</a></li>
+                </ul>
+              </div>
+              <div>
+                <h5 class="font-semibold text-gray-900 mb-2">Research Africa Services</h5>
+                <ul class="space-y-2">
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-chalkboard-teacher mr-2"></i>Consulting (Coming Soon)</a></li>
+                  <li><a href="#" class="hover:text-blue-600 flex items-center"><i class="fas fa-school mr-2"></i>Training (Coming Soon)</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li><a href="#" class="hover:text-blue-600 transition flex items-center"><i class="fas fa-users mr-2"></i>About</a></li>
+        <li><a href="#" class="hover:text-blue-600 transition flex items-center"><i class="fas fa-question-circle mr-2"></i>FAQ</a></li>
+        <li><a href="#" class="hover:text-blue-600 transition flex items-center"><i class="fas fa-blog mr-2"></i>Blog</a></li>
+      </ul>
+    </div>
+  </div>
+
+  
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200 px-4 pb-3 pt-2">
+    <ul class="space-y-2 font-light text-gray-700">
+      <li><a href="#" class="block py-2 hover:text-blue-600 flex items-center"><i class="fas fa-home mr-2"></i>Home</a></li>
+
+      <!-- Mobile Dropdowns -->
+      <li>
+        <button class="w-full flex justify-between items-center py-2 hover:text-blue-600 focus:outline-none dropdown-toggle">
+          <span><i class="fas fa-info-circle mr-2"></i>Information</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <ul class="dropdown-menu hidden pl-6 space-y-1 text-gray-600">
+          <li><a href="#" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-pen mr-2"></i>Author’s Guidelines</a></li>
+          <li><a href="#" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-balance-scale mr-2"></i>Ethics Guidelines</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <button class="w-full flex justify-between items-center py-2 hover:text-blue-600 focus:outline-none dropdown-toggle">
+          <span><i class="fas fa-cogs mr-2"></i>Services</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <ul class="dropdown-menu hidden pl-6 space-y-1 text-gray-600">
+          <li><a href="#" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-file-alt mr-2"></i>Manuscripts Manager</a></li>
+          <li><a href="#" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-check mr-2"></i>Proofread</a></li>
+        </ul>
+      </li>
+
+      <li><a href="#" class="block py-2 hover:text-blue-600 flex items-center"><i class="fas fa-users mr-2"></i>About</a></li>
+      <li><a href="#" class="block py-2 hover:text-blue-600 flex items-center"><i class="fas fa-question-circle mr-2"></i>FAQ</a></li>
+      <li><a href="#" class="block py-2 hover:text-blue-600 flex items-center"><i class="fas fa-blog mr-2"></i>Blog</a></li>
+    </ul>
+  </div>
+</nav>
+
+<script>
+  // Mobile menu toggle with animation
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    console.log('Page loaded, looking for hamburger menu...');
+    console.log('Menu toggle element:', menuToggle);
+    console.log('Mobile menu element:', mobileMenu);
+
+    if (menuToggle && mobileMenu) {
+      console.log('Hamburger menu elements found successfully!');
+
+      menuToggle.addEventListener('click', () => {
+        console.log('Hamburger button clicked!');
+        mobileMenu.classList.toggle('hidden');
+
+        // Toggle hamburger icon animation
+        const icon = document.querySelector('#menu-toggle i');
+        if (mobileMenu.classList.contains('hidden')) {
+          icon.className = 'fas fa-bars';
+          console.log('Menu closed');
+        } else {
+          icon.className = 'fas fa-times';
+          console.log('Menu opened');
+        }
+      });
+
+      // Add visual feedback
+      menuToggle.addEventListener('mousedown', function() {
+        this.style.transform = 'scale(0.95)';
+      });
+
+      menuToggle.addEventListener('mouseup', function() {
+        this.style.transform = 'scale(1)';
+      });
+    } else {
+      console.error('Hamburger menu elements not found!');
+      console.log('Available elements with id containing "menu":');
+      const allElements = document.querySelectorAll('[id*="menu"]');
+      allElements.forEach(el => console.log(el.id, el));
+    }
+  });
+
+  // Mobile dropdown toggles
+  document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const submenu = btn.nextElementSibling;
+      submenu.classList.toggle('hidden');
+
+      // Toggle chevron icon
+      const chevron = btn.querySelector('.fas');
+      if (submenu.classList.contains('hidden')) {
+        chevron.className = 'fas fa-chevron-down';
+      } else {
+        chevron.className = 'fas fa-chevron-up';
+      }
+    });
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuToggle = document.getElementById('menu-toggle');
+
+    if (!mobileMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+      mobileMenu.classList.add('hidden');
+      document.querySelector('#menu-toggle i').className = 'fas fa-bars';
+    }
+  });
+</script>
+
+</body>
+</html>

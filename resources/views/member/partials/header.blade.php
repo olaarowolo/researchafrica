@@ -98,8 +98,7 @@
             <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
         </button>
         <div class="kb-hidden kb-w-full md:kb-block md:kb-w-auto" id="navbar-default">
-            <ul
-                class="kb-font-medium kb-flex kb-flex-col kb-items-center kb-p-4 md:kb-p-0 kb-mt-4 kb-border kb-border-gray-100 kb-rounded-lg kb-bg-gray-50 md:kb-flex-row md:kb-space-x-8 md:kb-mt-0 md:kb-border-0 md:kb-bg-white">
+            <ul class="kb-font-medium kb-flex kb-flex-col kb-items-center kb-p-4 md:kb-p-0 kb-mt-4 kb-border kb-border-gray-100 kb-rounded-lg kb-bg-gray-50 md:kb-flex-row md:kb-space-x-8 md:kb-mt-0 md:kb-border-0 md:kb-bg-white">
 
                 <li>
                     <a class="menu-link {{ request()->routeIs('home') ? 'active-a' : '' }}" href="{{ route('home') }}">
@@ -110,7 +109,7 @@
                 <li class="nav-item dropdown mega-menu-item">
                     <a class="menu-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                         data-mdb-toggle="dropdown" aria-expanded="false">
-                        Information for
+                        Information s for
                     </a>
                     <div class="dropdown-menu mega-menu" aria-labelledby="navbarDropdownMenuLink">
                         <div class="container">
@@ -284,6 +283,13 @@
                     width: max-content;
                 }
             }
+            .menu-link {
+  font-weight: 400; /* normal */
+}
+.menu-link div {
+  font-weight: 400; /* also apply to nested div text */
+}
+
         </style>
 
     </div>

@@ -613,7 +613,7 @@
                 <a class="btn secondary" href="{{ asset('files/Rate Card-AfriScribe-Proofreading-Service-NG.pdf') }}" target="_blank" rel="noopener">Download Nigeria rate card</a>
             </div>
 
-            <form id="quoteForm" class="quote-form" method="post" action="/afriscribe/request"
+            <form id="quoteForm" class="quote-form" method="post" action="{{ route('afriscribe.quote-request.store') }}"
                 enctype="multipart/form-data" novalidate>
                 @csrf
                 <div class="row">

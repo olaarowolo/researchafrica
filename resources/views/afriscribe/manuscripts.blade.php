@@ -445,7 +445,7 @@
             <h3 id="quote-form-title" style="margin:0 0 8px; text-align:left;">Request a Demo or Quote</h3>
             <p class="small muted" style="margin:0 0 12px">Fill out the form below to get a personalized demo of AfriScribe Manuscripts or to request a quote for your institution.</p>
 
-            <form id="quoteForm" class="quote-form" method="post" action="/afriscribe/request"
+            <form id="quoteForm" class="quote-form" method="post" action="{{ route('afriscribe.quote-request.store') }}"
                 enctype="multipart/form-data" novalidate>
                 @csrf
                 <div class="row">
