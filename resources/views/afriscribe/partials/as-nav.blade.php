@@ -1,10 +1,15 @@
 <!-- Navbar -->
 <nav class="navbar">
     <a href="{{ route('afriscribe.welcome') }}" class="logo">
-        <img src="{{ asset('afriscribe/img/afriscribe-logo-white.png') }}" alt="AfriScribe Logo">
+        @if(request()->routeIs('afriscribe.proofread*') || request()->routeIs('afriscribe.proofreading*'))
+            <img src="{{ asset('afriscribe/img/afriscribe_proofread-logo-white.png') }}" alt="AfriScribe Proofreading Logo">
+        @else
+            <img src="{{ asset('afriscribe/img/afriscribe-logo-main-logo-white.png') }}" alt="AfriScribe Logo">
+        @endif
     </a>
     <ul class="nav-links">
         <li><a href="{{ route('afriscribe.welcome') }}">Home</a></li>
+        <li><a href="{{ route('afriscribe.about') }}">About</a></li>
         <li><a href="/afriscribe/home/#services">Products</a></li>
         <li><a href="/afriscribe/home/#features">Features</a></li>
         <li><a href="{{ route('afriscribe.quote-request.create') }}">Get Quote</a></li>

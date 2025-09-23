@@ -27,6 +27,11 @@ class AfriscribeController extends Controller
         return view('afriscribe.pages.proofreading');
     }
 
+    public function about()
+    {
+        return view('afriscribe.pages.about');
+    }
+
     public function welcomeForm()
     {
         return view('afriscribe.welcome-form');
@@ -35,23 +40,48 @@ class AfriscribeController extends Controller
     public function processRequest(Request $request)
     {
         try {
-            // Validate the request data (mapping form fields to expected fields)
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'service' => 'required|string|in:' . implode(',', array_keys(AfriscribeRequest::getServiceTypes())),
-                'details' => 'required|string',
-                'file' => 'nullable|file|mimes:pdf,doc,docx|max:10240', // 10MB max
-            ]);
+            // Check if this is a proofreading form submission
+            $isProofreadingForm = $request->input('form_type') === 'proofreading_quote';
 
-            // Map form fields to expected field names
-            $processedData = [
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'service_type' => $validatedData['service'],
-                'message' => $validatedData['details'],
-                'document' => $validatedData['file'] ?? null,
-            ];
+            if ($isProofreadingForm) {
+                // Validation for proofreading form
+                $validatedData = $request->validate([
+                    'name' => 'required|string|max:255',
+                    'email' => 'required|email|max:255',
+                    'institution' => 'nullable|string|max:255',
+                    'word_count' => 'required|integer|min:1',
+                    'turnaround_time' => 'required|string|in:standard,advanced,express',
+                    'details' => 'nullable|string',
+                    'form_type' => 'required|string|in:proofreading_quote',
+                ]);
+
+                // Map proofreading form fields to expected field names
+                $processedData = [
+                    'name' => $validatedData['name'],
+                    'email' => $validatedData['email'],
+                    'service_type' => 'proofreading',
+                    'message' => $validatedData['details'] ?: 'Word count: ' . $validatedData['word_count'] . ', Turnaround: ' . $validatedData['turnaround_time'] . ($validatedData['institution'] ? ', Institution: ' . $validatedData['institution'] : ''),
+                    'document' => null,
+                ];
+            } else {
+                // Validation for regular form
+                $validatedData = $request->validate([
+                    'name' => 'required|string|max:255',
+                    'email' => 'required|email|max:255',
+                    'service' => 'required|string|in:' . implode(',', array_keys(AfriscribeRequest::getServiceTypes())),
+                    'details' => 'required|string',
+                    'file' => 'nullable|file|mimes:pdf,doc,docx|max:10240', // 10MB max
+                ]);
+
+                // Map form fields to expected field names
+                $processedData = [
+                    'name' => $validatedData['name'],
+                    'email' => $validatedData['email'],
+                    'service_type' => $validatedData['service'],
+                    'message' => $validatedData['details'],
+                    'document' => $validatedData['file'] ?? null,
+                ];
+            }
 
             $filePath = null;
             $originalFilename = null;
@@ -88,20 +118,45 @@ class AfriscribeController extends Controller
                 'request_id' => $afriscribeRequest->id,
             ];
 
-            // Send email to admin
+            // Send email to admin with custom sender name for proofreading requests
             try {
-                Mail::to('researchfripub@gmail.com')->send(new AfriscribeRequestMail($emailData));
+                $senderEmail = 'researchafrpub@gmail.com';
+                $senderName = $processedData['service_type'] === 'proofreading'
+                    ? 'AfriScribe Proofreading Service'
+                    : 'AfriScribe';
+
+                $email = new AfriscribeRequestMail($emailData, $senderName, $senderEmail);
+
+                // Configure mail settings for this email
+                config([
+                    'mail.from.address' => $senderEmail,
+                    'mail.from.name' => $senderName,
+                ]);
+
+                Mail::to('researchafrpub@gmail.com')->send($email);
+                Log::info('Admin email sent successfully to: researchafrpub@gmail.com');
             } catch (\Exception $e) {
                 // Log email error but don't fail the request
                 Log::error('Failed to send admin notification email: ' . $e->getMessage());
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your request was saved but there was an error sending the notification email. Please contact support.',
+                    'error' => $e->getMessage()
+                ], 500);
             }
 
             // Send acknowledgment email to client
             try {
                 Mail::to($processedData['email'])->send(new AfriscribeClientAcknowledgementMail($emailData));
+                Log::info('Client acknowledgment email sent successfully to: ' . $processedData['email']);
             } catch (\Exception $e) {
                 // Log email error but don't fail the request
                 Log::error('Failed to send client acknowledgment email: ' . $e->getMessage());
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your request was saved but there was an error sending the acknowledgment email. Please contact support.',
+                    'error' => $e->getMessage()
+                ], 500);
             }
 
             return response()->json([

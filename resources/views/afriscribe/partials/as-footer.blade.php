@@ -13,10 +13,10 @@
                         <div>
                             <a href="{{ route('afriscribe.welcome') }}"
                                 style="display: inline-block; margin-bottom: 1rem;">
-                                <img src="{{ asset('afriscribe/img/afriscribe-logo-white.png') }}" alt="AfriScribe Logo"
+                                <img src="{{ asset('afriscribe/img/afriscribe-logo-main-logo-white.png') }}" alt="AfriScribe Logo"
                                     style="height: 40px; width: auto;">
                             </a>
-                            <p style="color: #a0aec0; font-size: 0.9rem; line-height: 1.6;">
+                            <p style="color: #a0aec0; font-size: 0.9rem; line-height: 1.6; text-align: left">
                                 Empowering African academic publishing through innovative technology solutions.
                             </p>
                         </div>
@@ -48,7 +48,7 @@
                         <div>
                             <h4 style="color: #f9b233; margin-bottom: 1.2rem; font-size: 1.1rem;">Company</h4>
                             <ul style="list-style: none; padding: 0; margin: 0;">
-                                <li style="margin-bottom: 0.75rem;"><a href="#"
+                                <li style="margin-bottom: 0.75rem;"><a href="{{ route('afriscribe.about') }}"
                                         style="color: #fff; text-decoration: none; transition: color 0.3s;"
                                         onmouseover="this.style.color='#f9b233'"
                                         onmouseout="this.style.color='#fff'">About Us</a></li>

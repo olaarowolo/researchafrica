@@ -500,7 +500,7 @@
     <!-- Navbar -->
     <nav class="navbar">
         <a href="{{ route('afriscribe.welcome') }}" class="logo">
-            <img src="{{ asset('afriscribe/img/afriscribe-logo-white.png') }}" alt="AfriScribe Logo" style="height: 60px; width: auto;">
+            <img src="{{ asset('afriscribe/img/afriscribe-logo-main-logo-white.png') }}" alt="AfriScribe Logo" style="height: 60px; width: auto;">
         </a>
         <ul class="nav-links">
             <li><a href="{{ route('afriscribe.welcome') }}">Home</a></li>
