@@ -61,8 +61,11 @@ AfriScribe is a specialized subsystem within Research Africa that provides profe
 ### Frontend
 
 - **Livewire**: Reactive components for dynamic interfaces
+- **Tailwind CSS**: Utility-first CSS framework
 - **Bootstrap**: Responsive UI framework
 - **JavaScript**: Vanilla JS with jQuery support
+- **Vite**: Fast build tool and development server
+- **Blade Templates**: Laravel's templating engine
 
 ### Key Dependencies
 
@@ -72,6 +75,13 @@ AfriScribe is a specialized subsystem within Research Africa that provides profe
 - **Document Processing**: phpoffice/phpword
 - **Authentication**: Laravel Sanctum
 - **Data Tables**: yajra/laravel-datatables-oracle
+- **File Management**: spatie/laravel-permission
+- **Image Processing**: intervention/image
+- **SEO Management**: artesaos/seotools
+- **Backup**: spatie/laravel-backup
+- **Queue Management**: Laravel Queue
+- **Testing**: Laravel Dusk, PHPUnit
+- **API Documentation**: Laravel API Resource
 
 ## 📋 Prerequisites
 
@@ -182,91 +192,273 @@ php artisan queue:work
 research-africa/
 ├── app/
 │   ├── Console/                    # Artisan commands
+│   │   ├── Commands/              # Custom Artisan commands
+│   │   └── Kernel.php             # Console kernel
 │   ├── Exceptions/                 # Exception handlers
+│   │   └── Handler.php            # Global exception handler
 │   ├── Http/
 │   │   ├── Controllers/           # Main application controllers
-│   │   │   ├── AfriscribeController.php    # AfriScribe proofreading service
-│   │   │   ├── ArticleController.php        # Article management
-│   │   │   ├── MemberController.php         # Member management
-│   │   │   └── Admin/              # Administrative controllers
-│   │   ├── Livewire/               # Livewire components
-│   │   ├── Middleware/             # Route middleware
-│   │   └── Requests/               # Form request validation
-│   ├── Mail/                       # Email classes
-│   │   ├── AfriscribeRequestMail.php       # Proofreading service emails
-│   │   ├── ArticleMail.php                 # Article notifications
-│   │   ├── CommentMail.php                 # Review comments
-│   │   └── PublisherMail.php               # Publication notifications
-│   ├── Models/                     # Eloquent models
-│   │   ├── Article.php                     # Main article model
-│   │   ├── Member.php                      # User management
-│   │   ├── ArticleCategory.php             # Content organization
-│   │   ├── Comment.php                     # Review system
-│   │   └── Afriscribe/            # AfriScribe-specific models
-│   ├── Providers/                  # Service providers
-│   ├── Services/
-│   │   ├── ArticleService.php              # Article business logic
-│   │   └── AfriscribeService.php           # Proofreading service logic
-│   └── View/Components/            # Reusable view components
-├── config/                         # Configuration files
-│   ├── afriscribe.php             # AfriScribe service configuration
-│   ├── app.php                    # Application settings
-│   └── mail.php                   # Email configuration
+│   │   │   ├── Auth/              # Authentication controllers
+│   │   │   ├── Controller.php     # Base controller
+│   │   │   └── Livewire/          # Livewire components
+│   │   ├── Kernel.php             # HTTP kernel
+│   │   ├── Middleware/            # Route middleware
+│   │   │   ├── Authenticate.php   # Authentication middleware
+│   │   │   └── RedirectIfAuthenticated.php
+│   │   └── Requests/              # Form request validation
+│   ├── Mail/                      # Email classes
+│   │   ├── AcceptedMail.php       # Acceptance notifications
+│   │   ├── ArticleMail.php        # Article notifications
+│   │   ├── CommentMail.php        # Review comments
+│   │   ├── ContactUsMail.php      # Contact form emails
+│   │   ├── EditorMail.php         # Editor notifications
+│   │   ├── EmailVerification.php  # Email verification
+│   │   ├── ForwardedArticle.php   # Article forwarding
+│   │   ├── NewArticle.php        # New article notifications
+│   │   ├── PublishArticle.php     # Publication notifications
+│   │   ├── PublisherMail.php      # Publisher notifications
+│   │   ├── QuoteRequestClientAcknowledgementMail.php
+│   │   ├── QuoteRequestMail.php   # Quote request emails
+│   │   ├── ResetPassword.php     # Password reset
+│   │   └── ReviewerMail.php       # Reviewer notifications
+│   ├── Models/                    # Eloquent models
+│   │   ├── About.php              # About page content
+│   │   ├── AfriscribeRequest.php  # AfriScribe requests
+│   │   ├── Article.php            # Main article model
+│   │   ├── ArticleCategory.php    # Article categories
+│   │   ├── ArticleKeyword.php     # Article keywords
+│   │   ├── Bookmark.php           # User bookmarks
+│   │   ├── Comment.php            # Article comments
+│   │   ├── ContentCategory.php    # Content categories
+│   │   ├── ContentPage.php        # Content pages
+│   │   ├── ContentTag.php         # Content tags
+│   │   ├── Country.php            # Country data
+│   │   ├── DownloadArticle.php    # Article downloads
+│   │   ├── EditorAccept.php       # Editor acceptances
+│   │   ├── EmailVerify.php        # Email verification
+│   │   ├── FaqCategory.php        # FAQ categories
+│   │   ├── FaqQuestion.php        # FAQ questions
+│   │   ├── Member.php             # User members
+│   │   ├── MemberRole.php         # Member roles
+│   │   ├── MemberSubscription.php # Member subscriptions
+│   │   ├── MemberType.php         # Member types
+│   │   ├── Permission.php         # User permissions
+│   │   ├── PublisherAccept.php    # Publisher acceptances
+│   │   ├── PurchasedArticle.php   # Purchased articles
+│   │   ├── QuoteRequest.php       # Quote requests
+│   │   ├── ResetPassword.php      # Password reset
+│   │   ├── ReviewerAccept.php     # Reviewer acceptances
+│   │   ├── ReviewerAcceptFinal.php # Final reviewer acceptances
+│   │   ├── Role.php               # User roles
+│   │   ├── Setting.php            # Application settings
+│   │   ├── State.php              # State data
+│   │   ├── SubArticle.php         # Sub articles
+│   │   ├── Subscription.php       # Subscriptions
+│   │   ├── User.php               # Users
+│   │   └── ViewArticle.php        # Article views
+│   ├── Modules/                   # Modular application structure
+│   │   └── AfriScribe/           # AfriScribe proofreading module
+│   │       ├── Http/
+│   │       │   ├── Controllers/  # Module controllers
+│   │       │   │   ├── AfriscribeController.php
+│   │       │   │   └── QuoteRequestController.php
+│   │       │   ├── Middleware/   # Module middleware
+│   │       │   └── routes.php     # Module routes
+│   │       └── Mail/             # Module-specific emails
+│   │           ├── AfriscribeRequestMail.php
+│   │           └── QuoteRequestMail.php
+│   ├── Providers/                 # Service providers
+│   │   ├── AppServiceProvider.php
+│   │   ├── AuthServiceProvider.php
+│   │   ├── BroadcastServiceProvider.php
+│   │   ├── EventServiceProvider.php
+│   │   └── RouteServiceProvider.php
+│   ├── Services/                  # Business logic services
+│   │   └── ArticleService.php    # Article business logic
+│   └── View/                     # View components
+│       └── Components/           # Blade components
+├── bootstrap/                     # Laravel bootstrap files
+│   ├── app.php                   # Application bootstrap
+│   └── cache/                    # Cache files
+├── config/                        # Configuration files
+│   ├── app.php                   # Application settings
+│   ├── auth.php                  # Authentication config
+│   ├── broadcasting.php          # Broadcasting config
+│   ├── cache.php                 # Cache configuration
+│   ├── cors.php                  # CORS settings
+│   ├── database.php              # Database configuration
+│   ├── filesystems.php           # Filesystem config
+│   ├── hashing.php               # Hash configuration
+│   ├── logging.php               # Logging configuration
+│   ├── mail.php                  # Email configuration
+│   ├── panel.php                 # Admin panel config
+│   ├── queue.php                 # Queue configuration
+│   ├── sanctum.php               # Sanctum API config
+│   ├── services.php              # Third-party services
+│   ├── session.php               # Session configuration
+│   └── view.php                  # View configuration
 ├── database/
-│   ├── factories/                  # Model factories
-│   ├── migrations/                 # Database migrations
-│   └── seeders/                    # Database seeders
-├── public/
-│   ├── afriscribe/                # AfriScribe public assets
-│   └── css/js/images/             # General assets
-├── resources/
-│   ├── css/                       # Stylesheets
-│   ├── js/                        # JavaScript files
-│   ├── lang/                      # Language files
-│   └── views/
-│       ├── layouts/               # Master layouts
-│       ├── afriscribe/            # AfriScribe templates
-│       │   ├── welcome.blade.php           # Service landing page
-│       │   ├── request.blade.php           # Service request form
-│       │   └── pricing.blade.php           # Pricing information
-│       ├── articles/              # Article templates
-│       └── auth/                  # Authentication views
+│   ├── factories/                # Model factories
+│   │   └── Modules/             # Module-specific factories
+│   │       └── AfriScribe/
+│   │           └── Models/
+│   │               └── QuoteRequestFactory.php
+│   ├── migrations/               # Database migrations
+│   └── seeders/                  # Database seeders
+├── public/                       # Public web assets
+│   ├── afriscribe/              # AfriScribe public assets
+│   │   ├── css/                 # AfriScribe stylesheets
+│   │   ├── images/              # AfriScribe images
+│   │   ├── js/                  # AfriScribe JavaScript
+│   │   └── lib/                 # AfriScribe libraries
+│   ├── css/                     # Global stylesheets
+│   ├── favicon.ico              # Site favicon
+│   ├── images/                  # Global images
+│   ├── index.php                # Laravel entry point
+│   ├── js/                      # Global JavaScript
+│   ├── lib/                     # Global libraries
+│   └── robots.txt               # SEO robots file
+├── resources/                    # Source files
+│   ├── css/                     # Source stylesheets
+│   ├── js/                      # Source JavaScript
+│   ├── lang/                    # Language files
+│   └── views/                   # Blade templates
+│       ├── afriscribe/          # AfriScribe views
+│       │   ├── layouts/         # Layout templates
+│       │   │   ├── app.blade.php           # Main application layout
+│       │   │   ├── dashboard.blade.php     # Dashboard layout
+│       │   │   ├── form.blade.php          # Form layout
+│       │   │   └── landing.blade.php      # Landing page layout
+│       │   ├── pages/           # Page templates
+│       │   │   ├── about.blade.php         # About Us page
+│       │   │   ├── dashboard.blade.php     # Dashboard page
+│       │   │   ├── manuscripts.blade.php   # Manuscripts page
+│       │   │   ├── proofreading.blade.php  # Proofreading page
+│       │   │   ├── quote-request.blade.php # Quote request page
+│       │   │   └── welcome.blade.php      # Welcome page
+│       │   └── partials/        # Reusable partials
+│       │       ├── as-cta.blade.php        # Call-to-action partial
+│       │       ├── as-features.blade.php   # Features partial
+│       │       ├── as-footer.blade.php     # Footer partial
+│       │       ├── as-hero.blade.php       # Hero section partial
+│       │       ├── as-nav.blade.php        # Navigation partial
+│       │       ├── as-proofreading-form.blade.php
+│       │       ├── as-services.blade.php   # Services partial
+│       │       └── welcome-form.blade.php  # Welcome form partial
+│       ├── components/          # Blade components
+│       ├── layouts/            # Main layouts
+│       └── vendor/             # Vendor views
 ├── routes/
-│   ├── web.php                    # Main routes
-│   ├── api.php                    # API routes
-│   └── afriscribe.php             # AfriScribe-specific routes
-├── storage/
-│   ├── app/
-│   │   ├── afriscribe_uploads/    # Proofreading service uploads
-│   │   └── public/               # Public file storage
-│   └── logs/                      # Application logs
-├── tests/
-│   ├── Feature/
-│   │   ├── AfriscribeTest.php     # AfriScribe functionality tests
-│   │   ├── ArticleTest.php        # Article management tests
-│   │   └── AuthenticationTest.php # Auth system tests
-│   └── Unit/                      # Unit tests
-└── uploaded_pdf_articles/        # Article file storage
+│   ├── api.php                 # API routes
+│   ├── channels.php            # Broadcasting channels
+│   ├── console.php             # Console routes
+│   ├── quote_requests.php      # Quote request routes
+│   ├── user.php                # User routes
+│   └── web.php                 # Web routes
+├── storage/                    # Storage directories
+│   ├── app/                    # Application storage
+│   ├── framework/              # Framework storage
+│   ├── logs/                   # Log files
+│   └── uploaded_pdf_articles/  # Uploaded articles
+├── tests/                      # Test files
+│   ├── Browser/                # Browser tests
+│   ├── CreatesApplication.php  # Test helper
+│   ├── DuskTestCase.php        # Dusk test case
+│   ├── Feature/                # Feature tests
+│   │   ├── QuoteRequestTest.php
+│   │   └── UserTest.php
+│   ├── TestCase.php            # Base test case
+│   └── Unit/                   # Unit tests
+├── .editorconfig              # Editor configuration
+├── .env.example               # Environment template
+├── .gitattributes            # Git attributes
+├── .gitignore                # Git ignore rules
+├── .htaccess                 # Apache configuration
+├── artisan                   # Artisan command line
+├── composer.json             # PHP dependencies
+├── composer.lock             # Dependency lock file
+├── package.json              # Node.js dependencies
+├── phpunit.xml              # PHPUnit configuration
+├── README.md                 # Project documentation
+├── tailwind.config.js        # Tailwind CSS config
+├── vite.config.js            # Vite configuration
+└── webpack.mix.js            # Laravel Mix configuration
 ```
 
 ## 🔐 Key Models
 
-- **Article**: Main content model with metadata and file handling
-- **Member**: User management and subscriptions
-- **ArticleCategory**: Content organization
-- **Comment**: Review and feedback system
-- **EditorAccept/PublisherAccept/ReviewerAccept**: Workflow management
-- **PurchasedArticle**: Monetization tracking
+### Core Models
+- **Article**: Main content model with metadata, file handling, and publication workflow
+- **Member**: User management with subscriptions, roles, and permissions
+- **User**: Base user model with authentication and profile management
+- **Role & Permission**: Role-based access control system
+- **Subscription**: Subscription tiers and billing management
+
+### Content Management Models
+- **ArticleCategory**: Content organization and classification
+- **ArticleKeyword**: SEO and discoverability keywords
+- **ContentCategory & ContentTag**: Flexible content organization
+- **ContentPage**: Static content pages (About, FAQ, etc.)
+- **FaqCategory & FaqQuestion**: FAQ management system
+
+### Review & Workflow Models
+- **Comment**: Article comments and review feedback
+- **EditorAccept**: Editorial acceptance workflow
+- **PublisherAccept**: Publisher approval process
+- **ReviewerAccept**: Peer review management
+- **ReviewerAcceptFinal**: Final review decisions
+- **ViewArticle**: Article view tracking and analytics
+
+### AfriScribe Module Models
+- **AfriscribeRequest**: Proofreading service requests
+- **QuoteRequest**: Quote request management with pricing
+- **AfriscribeRequest**: Legacy AfriScribe request model
+
+### Business & Analytics Models
+- **Bookmark**: User bookmarking system
+- **DownloadArticle**: Article download tracking
+- **PurchasedArticle**: Monetization and purchase history
+- **MemberSubscription**: Subscription management
+- **MemberType**: Member classification system
+
+### System Models
+- **About**: About page content management
+- **Country & State**: Geographic data
+- **EmailVerify**: Email verification system
+- **ResetPassword**: Password reset functionality
+- **Setting**: Application configuration
+- **SubArticle**: Sub-article relationships
 
 ## 📧 Email Templates
 
-The application includes email templates for:
+The application includes comprehensive email templates for:
 
-- Article submissions and confirmations
-- Review assignments and feedback
-- Publication notifications
-- Proofreading service requests
-- User registration and verification
+### Article Management Emails
+- **ArticleMail**: General article notifications and updates
+- **NewArticle**: New article submission confirmations
+- **PublishArticle**: Article publication notifications
+- **ForwardedArticle**: Article forwarding to editors/publishers
+
+### Review & Workflow Emails
+- **EditorMail**: Editorial assignments and feedback
+- **ReviewerMail**: Peer review assignments and notifications
+- **PublisherMail**: Publisher notifications and approvals
+- **CommentMail**: Review comments and discussions
+- **AcceptedMail**: Acceptance confirmations
+
+### AfriScribe Proofreading Emails
+- **AfriscribeRequestMail**: Proofreading service requests (legacy)
+- **QuoteRequestMail**: Quote request notifications to admin
+- **QuoteRequestClientAcknowledgementMail**: Client acknowledgment with CC
+
+### User Management Emails
+- **EmailVerification**: Account verification emails
+- **ResetPassword**: Password reset functionality
+- **ContactUsMail**: Contact form submissions
+
+### System Emails
+- **EmailVerify**: Email verification system
+- **ResetPassword**: Password reset notifications
 
 ## 🧪 Testing
 
@@ -285,12 +477,14 @@ php artisan test --coverage
 
 ### Test Categories
 
-- **AuthenticationTest**: User authentication and authorization
+- **QuoteRequestTest**: AfriScribe quote request functionality
+- **UserTest**: User authentication and authorization
 - **ArticleTest**: Article management functionality
 - **MemberTest**: Member and subscription features
 - **CommentTest**: Comment and review system
 - **FaqTest**: FAQ management
 - **AdminTest**: Administrative functions
+- **Browser Tests**: End-to-end browser testing with Laravel Dusk
 
 ## 🤝 Contributing
 
@@ -332,8 +526,15 @@ For support, please contact the development team or create an issue in the repos
 ## 🌟 Features in Development
 
 - [ ] Payment gateway integration (Stripe/Paystack)
-- [ ] Advanced search functionality
-- [ ] API documentation
-- [ ] Mobile application
-- [ ] Multi-language support
+- [ ] Advanced search functionality with filters
+- [ ] API documentation and developer portal
+- [ ] Mobile application (React Native)
+- [ ] Multi-language support (French, Portuguese, Arabic)
 - [ ] Advanced analytics dashboard
+- [ ] Real-time notifications with WebSockets
+- [ ] Article versioning system
+- [ ] Citation management tools
+- [ ] Integration with academic databases (Google Scholar, ORCID)
+- [ ] Automated plagiarism checking
+- [ ] Conference management module
+- [ ] Journal metrics and impact factor tracking

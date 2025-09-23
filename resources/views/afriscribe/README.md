@@ -1,175 +1,218 @@
-# AfriScribe Extendable Layout System
+# AfriScribe - Academic Proofreading Service Module
 
-This directory contains the Blade views for the AfriScribe module. It includes a **proposed** modular, extendable layout system (`layouts/`, `partials/`) designed for consistency and maintainability.
+AfriScribe is a specialized proofreading service module within the Research Africa platform, designed to provide professional academic document proofreading services with location-based pricing and comprehensive workflow management.
 
-> **Important:** While this README describes a modular system, some key pages like `welcome-form.blade.php` are currently implemented as large, standalone files with inline CSS and JavaScript. They do not yet adhere to the layout system. The `partials/` are used in some places, but not universally. This documentation serves as both a guide to the existing structure and a blueprint for future refactoring.
+## 🌍 About AfriScribe
 
-## 📁 Current Directory Structure
+AfriScribe offers professional proofreading services for academic documents, research papers, theses, and dissertations. The service features:
 
-```text
-resources/views/afriscribe/
-├── layouts/                    # Master layout templates (Proposed)
-│   ├── app.blade.php          # Base layout with common elements
-│   ├── landing.blade.php      # Landing page layout
-│   ├── dashboard.blade.php    # Admin dashboard layout
-│   └── form.blade.php         # Form-focused layout
-├── pages/                     # Example page implementations (Proposed)
-│   ├── welcome.blade.php      # Landing page example
-│   ├── dashboard.blade.php    # Dashboard page example
-│   └── quote-request.blade.php # Form page example
-├── partials/                  # Reusable components (Partially implemented)
-│   ├── as-nav.blade.php       # General: Navigation component
-│   ├── as-footer.blade.php     # General: Footer component
-│   ├── as-hero.blade.php      # General: Hero section for main landing page
-│   ├── as-services.blade.php   # General: Services grid for main landing page
-│   ├── as-features.blade.php   # General: Features grid for main landing page
-│   ├── as-cta.blade.php        # General: Call-to-action for main landing page
-│   │
-│   ├── as-pr-form.blade.php    # Proofreading: The dynamic quote/order form component
-│   ├── as-hero-proofreading.blade.php   # Proofreading: Page-specific hero section
-│   ├── as-proofreading-overview.blade.php # Proofreading: Page-specific overview section
-│   ├── as-proofreading-pricing.blade.php  # Proofreading: Page-specific pricing section
-│   ├── as-proofreading-cta.blade.php      # Proofreading: Page-specific CTA section
-│   ├── as-proofreading-form.blade.php     # Proofreading: Page-specific simple interest form
-│   │
-│   ├── as-hero-manuscripts.blade.php    # Manuscripts: Page-specific hero section
-│   ├── as-manuscripts-overview.blade.php # Manuscripts: Page-specific overview section
-│   ├── as-manuscripts-features.blade.php # Manuscripts: Page-specific features section
-│   ├── as-manuscripts-pricing.blade.php  # Manuscripts: Page-specific pricing section
-│   ├── as-manuscripts-cta.blade.php      # Manuscripts: Page-specific CTA section
-│   └── as-manuscripts-form.blade.php     # Manuscripts: Page-specific simple interest form
-├── welcome-form.blade.php     # Main landing page with integrated quote form (monolithic)
-├── afriscribe-proofread-order-form.blade.php  # Standalone page for the dynamic order form
-├── afriscribe-proofread-quote-form.blade.php  # Legacy/simple quote form page
-└── README.md                  # This file
+- **Location-based pricing** (UK vs Nigeria rates)
+- **Dynamic cost calculation** based on word count and service type
+- **Professional proofreaders** with academic expertise
+- **File processing** for multiple document formats
+- **Automated client communication** and project tracking
+
+## 🏗️ Module Architecture
+
+### Backend Structure
+
+```
+app/Modules/AfriScribe/
+├── AFRISCRIBE_APP_README.md
+├── composer.json
+├── Config/
+│   └── afriscribe.php
+├── Http/
+│   ├── Controllers/
+│   │   ├── AfriscribeController.php
+│   │   └── QuoteRequestController.php
+│   └── routes.php
+├── Mail/
+│   ├── AfriscribeClientAcknowledgementMail.php
+│   ├── AfriscribeRequestMail.php
+│   ├── QuoteRequestClientAcknowledgementMail.php
+│   └── QuoteRequestMail.php
+├── Models/
+│   ├── AfriscribeRequest.php
+│   └── QuoteRequest.php
+└── Providers/
+    └── AfriScribeServiceProvider.php
 ```
 
-## 🎨 Layout Types
+### Frontend Structure
 
-### 1. Base Layout (`layouts/app.blade.php`)
-The foundation layout that includes:
-- HTML structure and head section
-- Common CSS styles
-- Navigation component
-- Footer component
-- JavaScript functionality
-- Section yielding for content
+```
+resources/views/afriscribe/
+├── afriscribe-proofread-order-form.blade.php
+├── afriscribe-proofread-quote-form.blade.php
+├── manuscripts.blade.php
+├── old-welcome.blade.php
+├── README.md
+├── success.blade.php
+├── welcome-form.blade.php
+├── image/
+│   └── README/
+├── layouts/
+│   ├── app.blade.php
+│   ├── dashboard.blade.php
+│   ├── form.blade.php
+│   └── landing.blade.php
+├── pages/
+│   ├── about.blade.php
+│   ├── dashboard.blade.php
+│   ├── manuscripts.blade.php
+│   ├── proofreading.blade.php
+│   ├── quote-request.blade.php
+│   └── welcome.blade.php
+└── partials/
+    ├── as-cta.blade.php
+    ├── as-features.blade.php
+    ├── as-footer.blade.php
+    ├── as-hero-manuscripts.blade.php
+    ├── as-hero-proofreading.blade.php
+    ├── as-hero.blade.php
+    ├── as-manuscripts-cta.blade.php
+    ├── as-manuscripts-features.blade.php
+    ├── as-manuscripts-form.blade.php
+    ├── as-manuscripts-overview.blade.php
+    ├── as-manuscripts-pricing.blade.php
+    ├── as-nav.blade.php
+    ├── as-pr-form.blade.php
+    ├── as-proofreading-cta.blade.php
+    ├── as-proofreading-form.blade.php
+    ├── as-proofreading-overview.blade.php
+    ├── as-proofreading-pricing.blade.php
+    └── as-services.blade.php
+```
 
-### 2. Landing Layout (`layouts/landing.blade.php`)
-Perfect for marketing pages and public-facing content:
-- Extends the base layout
-- Includes hero, services, features, and CTA sections
-- Allows custom sections to be yielded
-- Ideal for: Home page, product pages, about pages
+### Public Assets
 
-### 3. Dashboard Layout (`layouts/dashboard.blade.php`)
-For admin and internal pages:
-- Extends the base layout
-- Includes sidebar navigation
-- Dashboard header section
-- Main content area
-- Ideal for: Admin panels, user dashboards, management pages
+```
+public/afriscribe/
+├── files/
+│   ├── AfriScribe-NG-RateCard.pdf
+│   └── AfriScribe-UK-RateCard.pdf
+└── img/
+    ├── afriscribe_proofread_apple-touch-icon.png
+    ├── afriscribe_proofread_favicon-landscape.png
+    ├── afriscribe_proofread-favicon-96x96.png
+    ├── afriscribe_proofread-favicon.ico
+    ├── afriscribe_proofread-favicon.png
+    ├── afriscribe_proofread-favicon.svg
+    ├── afriscribe_proofread-logo-black.png
+    ├── afriscribe_proofread-logo-white.png
+    ├── afriscribe_proofread-web-app-manifest-192x192.png
+    ├── afriscribe_proofread-web-app-manifest-512x512.png
+    ├── afriscribe-logo-main-logo-black.png
+    ├── afriscribe-logo-main-logo-white.png
+    └── site.webmanifest
+```
 
-### 4. Form Layout (`layouts/form.blade.php`)
-Specialized for forms and data entry:
-- Extends the base layout
-- Form-specific styling
-- File upload functionality
-- Form validation scripts
-- Ideal for: Contact forms, quote requests, data entry
 
-## 🧩 Partials (Components)
+## 🎯 Key Features
 
-This section details the reusable Blade components. They are grouped into "General", "Proofreading", and "Manuscripts" categories.
+### Proofreading Services
+- **Document Analysis**: Automatic word count and complexity assessment
+- **Pricing Calculator**: Real-time pricing based on location and service type
+- **File Upload**: Support for PDF, Word, and other document formats
+- **Quality Assurance**: Multi-tier review process
+- **Client Communication**: Automated email notifications and updates
 
-### General Partials
+### Quote Request System
+- **Dynamic Pricing**: Location-based pricing (UK/Nigeria rates)
+- **Service Tiers**: Different levels of proofreading service
+- **Instant Quotes**: Real-time cost calculation
+- **Request Management**: Complete workflow from quote to completion
 
-These are used across multiple pages.
+### User Experience
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **Interactive Forms**: Dynamic form validation and feedback
+- **Professional UI**: Clean, academic-focused design
+- **Accessibility**: WCAG compliant interface
 
-- **`partials/as-nav.blade.php`**: Responsive navigation bar with logo, menu items, and mobile hamburger menu.
-- **`partials/as-footer.blade.php`**: Simple footer with copyright information.
-- **`partials/as-hero.blade.php`**: Main hero banner with title, description, and a primary call-to-action button.
-- **`partials/as-services.blade.php`**: Grid layout for displaying service cards with icons and descriptions.
-- **`partials/as-features.blade.php`**: A grid for highlighting key features, typically on a dark background.
-- **`partials/as-cta.blade.php`**: A prominent call-to-action section with a gradient background.
+## 🛠️ Technical Implementation
 
-### Proofreading Partials
+### Controllers
 
-These are specific to the "AfriScribe Proofread" product pages.
+#### AfriscribeController
+- **welcome()**: Landing page display
+- **manuscripts()**: Manuscripts service page
+- **proofreading()**: Proofreading service page
+- **about()**: About Us page
+- **processRequest()**: Handle proofreading requests
+- **getRequests()**: Admin request management
+- **updateRequestStatus()**: Status update functionality
 
-- **`partials/as-pr-form.blade.php`**: The core dynamic proofreading order form. Includes location-based pricing, service selection, word count input, file uploads, and real-time cost calculation.
-- **`partials/as-hero-proofreading.blade.php`**: A hero section tailored for the proofreading service page.
-- **`partials/as-proofreading-overview.blade.php`**: An overview section explaining the proofreading service.
-- **`partials/as-proofreading-pricing.blade.php`**: A section detailing the pricing tiers for proofreading.
-- **`partials/as-proofreading-cta.blade.php`**: A call-to-action specific to starting a proofreading request.
-- **`partials/as-proofreading-form.blade.php`**: A simple interest/contact form for the proofreading service.
+#### QuoteRequestController
+- **create()**: Quote request form
+- **store()**: Process quote requests
+- **index()**: Admin quote listing
+- **show()**: Quote details view
+- **updateStatus()**: Status management
+- **getPricingData()**: Dynamic pricing API
+- **downloadFile()**: File download handling
 
-### Manuscripts Partials
+### Routes
 
-These are specific to the "AfriScribe Manuscripts" product pages.
+```php
+// Public routes
+Route::get('/afriscribe/welcome', [AfriscribeController::class, 'welcome']);
+Route::get('/afriscribe/about', [AfriscribeController::class, 'about']);
+Route::get('/afriscribe/manuscripts', [AfriscribeController::class, 'manuscripts']);
+Route::get('/afriscribe/proofreading', [AfriscribeController::class, 'proofreading']);
+Route::post('/afriscribe/request', [AfriscribeController::class, 'processRequest']);
+Route::get('/afriscribe/quote-request', [QuoteRequestController::class, 'create']);
+Route::post('/afriscribe/quote-request', [QuoteRequestController::class, 'store']);
+Route::get('/afriscribe/pricing-data', [QuoteRequestController::class, 'getPricingData']);
 
-- **`partials/as-hero-manuscripts.blade.php`**: A hero section tailored for the manuscripts service page.
-- **`partials/as-manuscripts-overview.blade.php`**: An overview section explaining the manuscripts platform.
-- **`partials/as-manuscripts-features.blade.php`**: A section highlighting the features of the manuscripts platform.
-- **`partials/as-manuscripts-pricing.blade.php`**: A section detailing the pricing for the manuscripts service.
-- **`partials/as-manuscripts-cta.blade.php`**: A call-to-action specific to the manuscripts service.
-- **`partials/as-manuscripts-form.blade.php`**: A simple interest/contact form for the manuscripts service.
+// Admin routes
+Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
+    Route::get('/afriscribe/requests', [AfriscribeController::class, 'getRequests']);
+    Route::put('/afriscribe/requests/{id}/status', [AfriscribeController::class, 'updateRequestStatus']);
+    Route::get('/afriscribe/quote-requests', [QuoteRequestController::class, 'index']);
+    Route::get('/afriscribe/quote-requests/{id}', [QuoteRequestController::class, 'show']);
+    Route::put('/afriscribe/quote-requests/{id}/status', [QuoteRequestController::class, 'updateStatus']);
+    Route::get('/afriscribe/quote-requests/{id}/download', [QuoteRequestController::class, 'downloadFile']);
+});
+```
 
-## 🏗️ Recommended Structure & Workflow
+### Email System
 
-This project uses a modular structure to promote code reuse and maintainability. The goal is to move away from monolithic files (like `welcome-form.blade.php`) and towards a component-based architecture.
+#### QuoteRequestMail
+- **Purpose**: Admin notifications for new quote requests
+- **Recipient**: researchafripub@gmail.com
+- **Content**: Request details and client information
 
-### 1. **Layouts (`layouts/`)**
-- **Purpose**: These are the master templates. A layout defines the main HTML structure (like `<html>`, `<head>`, `<body>`, header, footer) and yields sections for content.
-- **Usage**: Every page should `@extends` a layout. Choose the one that best fits the page's purpose (e.g., `landing.blade.php` for a marketing page, `dashboard.blade.php` for an admin page).
+#### QuoteRequestClientAcknowledgementMail
+- **Purpose**: Client acknowledgment with CC
+- **Recipient**: Client email + CC to olasunkanmiarowolo@gmail.com
+- **Content**: Confirmation of request receipt and next steps
 
-### 2. **Partials (`partials/`)**
-- **Purpose**: These are small, reusable pieces of UI. A partial could be a navigation bar, a footer, a specific card, or a form section. They should not contain any page-specific logic.
-- **Usage**: Partials are included within layouts or pages using `@include()`. They are the building blocks of your pages.
+### Models
 
-### 3. **Pages (`pages/`)**
-- **Purpose**: These are the final views that a user sees. A page's primary job is to extend a layout and compose various partials to build the final UI.
-- **Usage**: Create a new file in this directory for each new page (e.g., `about-us.blade.php`). This file will contain `@section` directives to inject content into the chosen layout.
+#### QuoteRequest
+- **Purpose**: Quote request management
+- **Key Fields**:
+  - Client information (name, email, phone)
+  - Document details (type, word count, deadline)
+  - Pricing information (location, service type, total cost)
+  - Status tracking (pending, in-progress, completed)
 
-### Workflow for Creating a New Page
-1.  **Define the Page**: Determine the page's purpose and what layout it should use (e.g., a new "Contact Us" page would use `layouts/landing.blade.php`).
-2.  **Create the Page File**: Create a new file in the `pages/` directory (e.g., `pages/contact.blade.php`).
-3.  **Extend the Layout**: In the new file, start by extending the chosen layout: `@extends('afriscribe.layouts.landing')`.
-4.  **Identify Reusable Components**: Look at the design and identify sections that already exist as partials (e.g., hero, CTA).
-5.  **Create New Partials (if needed)**: If a section is unique but might be reused later, create a new file in `partials/`.
-6.  **Compose the Page**: Use `@section` and `@include` to assemble the partials and add unique content to the page.
-7.  **Add Route**: Finally, add a route in your routes file to point to your new page view.
+#### AfriscribeRequest
+- **Purpose**: Legacy proofreading requests
+- **Key Fields**:
+  - Client details and document information
+  - Processing status and timestamps
 
-This structure makes the codebase cleaner, easier to navigate, and faster to develop with over time.
+## 🎨 Frontend Components
 
-## 🚀 How to Use
+### Layouts
+- **app.blade.php**: Main layout with navigation and footer
+- **landing.blade.php**: Landing page specific layout
+- **form.blade.php**: Form-focused layout
+- **dashboard.blade.php**: Admin dashboard layout
 
-### Creating a New Landing Page
-
-```blade
-@extends('afriscribe.layouts.landing')
-
-@section('page_title', 'Your Page Title')
-
-@section('page_description', 'Your page description for SEO')
-
-@section('hero')
-    @include('afriscribe.partials.as-hero')
-@endsection
-
-@section('services_section')
-    @include('afriscribe.partials.as-services')
-@endsection
-
-@section('custom_sections')
-    <!-- Add your custom sections here -->
-@endsection
-
-@section('page_scripts')
-<script>
-    // Page-specific JavaScript
-</script>
-@endsection
+### Partials
 ```
 
 ### Creating a Dashboard Page
