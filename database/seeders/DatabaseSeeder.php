@@ -19,7 +19,10 @@ class DatabaseSeeder extends Seeder
             StatesTableSeeder::class,
             MemberTypeSeeder::class,
             MemberRoleSeeder::class,
+            MembersTableSeeder::class,
             ArticleCategoryTableSeeder::class,
+            ArticlesTableSeeder::class,
+            SubArticlesTableSeeder::class,
             SettingsTableSeeder::class,
             AboutTableSeeder::class,
         ]);

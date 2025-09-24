@@ -17,28 +17,18 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // Debug: Log middleware execution
-        \Log::info('AdminMiddleware: Executing', [
-            'url' => $request->fullUrl(),
-            'user_agent' => $request->userAgent(),
-            'auth_check' => Auth::check(),
-            'expects_json' => $request->expectsJson(),
-        ]);
-
-        // For testing purposes, allow all authenticated users
-        // In production, you would check for admin role/permission
-        if (Auth::check()) {
-            \Log::info('AdminMiddleware: User is authenticated, proceeding');
+        // Check if user is authenticated and has the 'Admin' role.
+        if (Auth::check() && Auth::user()->roles()->where('title', 'Admin')->exists()) {
             return $next($request);
         }
 
-        // Return JSON response for API requests, redirect for web requests
+        // If the user is not an admin, handle the response.
         if ($request->expectsJson()) {
-            \Log::info('AdminMiddleware: API request, returning JSON error');
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        \Log::info('AdminMiddleware: Redirecting to login');
-        return redirect('/admin/login');
+        // For web requests, redirect them to the admin home page.
+        // This prevents a redirect loop if they are already logged in but not an admin.
+        return redirect()->route('admin.home')->with('error', 'You do not have permission to access this page.');
     }
 }

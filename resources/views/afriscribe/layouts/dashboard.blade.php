@@ -12,14 +12,14 @@
             <img src="{{ asset('afriscribe/img/afriscribe-logo-white.png') }}" alt="AfriScribe Logo">
         </div>
         <ul>
-            <li><a href="{{ route('afriscribe.dashboard') }}" class="{{ request()->routeIs('afriscribe.dashboard') ? 'active' : '' }}">Dashboard</a></li>
-            <li><a href="{{ route('afriscribe.manuscripts') }}" class="{{ request()->routeIs('afriscribe.manuscripts*') ? 'active' : '' }}">Manuscripts</a></li>
-            <li><a href="{{ route('afriscribe.proofread') }}" class="{{ request()->routeIs('afriscribe.proofread*') ? 'active' : '' }}">Proofreading</a></li>
-            <li><a href="{{ route('afriscribe.insights') }}" class="{{ request()->routeIs('afriscribe.insights*') ? 'active' : '' }}">Insights</a></li>
-            <li><a href="{{ route('afriscribe.connect') }}" class="{{ request()->routeIs('afriscribe.connect*') ? 'active' : '' }}">Connect</a></li>
-            <li><a href="{{ route('afriscribe.archive') }}" class="{{ request()->routeIs('afriscribe.archive*') ? 'active' : '' }}">Archive</a></li>
-            <li><a href="{{ route('afriscribe.editor') }}" class="{{ request()->routeIs('afriscribe.editor*') ? 'active' : '' }}">Editor</a></li>
-            <li><a href="{{ route('afriscribe.settings') }}" class="{{ request()->routeIs('afriscribe.settings*') ? 'active' : '' }}">Settings</a></li>
+            <li><a href="{{ route('afriscribe.dashboard') }}" class="{{ request()->routeIs('afriscribe.dashboard') ? 'active' : '' }}"><span class="icon">🏠</span> Dashboard</a></li>
+            <li><a href="{{ route('afriscribe.manuscripts') }}" class="{{ request()->routeIs('afriscribe.manuscripts*') ? 'active' : '' }}"><span class="icon">📝</span> Manuscripts</a></li>
+            <li><a href="{{ route('afriscribe.proofread') }}" class="{{ request()->routeIs('afriscribe.proofread*') ? 'active' : '' }}"><span class="icon">✏️</span> Proofreading</a></li>
+            <li><a href="{{ route('afriscribe.insights') }}" class="{{ request()->routeIs('afriscribe.insights*') ? 'active' : '' }}"><span class="icon">📊</span> Insights</a></li>
+            <li><a href="{{ route('afriscribe.connect') }}" class="{{ request()->routeIs('afriscribe.connect*') ? 'active' : '' }}"><span class="icon">🤝</span> Connect</a></li>
+            <li><a href="{{ route('afriscribe.archive') }}" class="{{ request()->routeIs('afriscribe.archive*') ? 'active' : '' }}"><span class="icon">📚</span> Archive</a></li>
+            <li><a href="{{ route('afriscribe.editor') }}" class="{{ request()->routeIs('afriscribe.editor*') ? 'active' : '' }}"><span class="icon">✂️</span> Editor</a></li>
+            <li><a href="{{ route('afriscribe.settings') }}" class="{{ request()->routeIs('afriscribe.settings*') ? 'active' : '' }}"><span class="icon">⚙️</span> Settings</a></li>
         </ul>
     </aside>
 
@@ -45,12 +45,13 @@
 
 .dashboard-sidebar {
     width: 250px;
-    background: #0c1e35;
+    background: linear-gradient(180deg, #0c1e35, #1a2e47);
     color: #fff;
     padding: 2rem 0;
     position: fixed;
     height: 100vh;
     overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
 
 .dashboard-sidebar .logo {
@@ -61,6 +62,7 @@
 .dashboard-sidebar .logo img {
     height: 50px;
     width: auto;
+    border-radius: 10px;
 }
 
 .dashboard-sidebar ul {
@@ -73,40 +75,73 @@
 }
 
 .dashboard-sidebar ul li a {
-    display: block;
+    display: flex;
+    align-items: center;
     padding: 1rem 2rem;
     color: #fff;
     text-decoration: none;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.dashboard-sidebar ul li a .icon {
+    margin-right: 1rem;
+    font-size: 1.2rem;
 }
 
 .dashboard-sidebar ul li a:hover,
 .dashboard-sidebar ul li a.active {
     background: #f9b233;
     color: #0c1e35;
+    border-left-color: #f9b233;
+    transform: translateX(5px);
 }
 
 .dashboard-main {
     flex: 1;
     margin-left: 250px;
     padding: 2rem;
+    background: #f8f9fa;
 }
 
 .dashboard-header {
-    background: #fff;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #fff, #e9ecef);
+    padding: 1.5rem 2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     margin-bottom: 2rem;
+    border-radius: 10px;
 }
 
 .dashboard-header h1 {
     margin: 0;
     color: #0c1e35;
+    font-size: 2rem;
+    font-weight: 700;
 }
 
 .dashboard-header p {
     margin: 0.5rem 0 0 0;
     color: #666;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .dashboard-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .dashboard-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .dashboard-main {
+        margin-left: 0;
+    }
+
+    .dashboard-header {
+        padding: 1rem;
+    }
 }
 
 @yield('dashboard_styles')

@@ -9,33 +9,22 @@ use Illuminate\Support\Facades\Route;
 | AfriScribe Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/afriscribe/home', function () { return view('afriscribe.welcome-form'); })->name('afriscribe.welcome');
-Route::get('/afriscribe/manuscripts', function () { return view('afriscribe.manuscripts'); })->name('afriscribe.manuscripts');
-
+// Public AfriScribe landing page and related routes
 Route::redirect('/afriscribe', '/afriscribe/home');
 Route::get('/afriscribe/home', function () { return view('afriscribe.welcome-form'); })->name('afriscribe.welcome');
  
-require 'user.php';
-
-
-
+/*
+|--------------------------------------------------------------------------
+| AfriScribe Module Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/admin', function () {
     return redirect('/admin/login');
 });
-Route::get('/admin/home', function () {
-
-    if (session('status')) {
-        return redirect()->route('admin.home')->with('status', session('status'));
-    }
-
-    return redirect()->route('admin.home');
-});
 // Auth
 Route::get('/admin/login', 'Auth\LoginController@login')->name('admin.login');
 Route::post('/admin/login', 'Auth\LoginController@authLogin')->name('admin.submit-login');
-
-Auth::routes(['register' => false, 'login' => false]);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function ()
 {
@@ -44,9 +33,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function ()
     {
     //     Route::get('login', 'LoginController@authLogin')->name('submit-login');
 
-    });
-    Route::group(['namespace' => 'Admin', 'middleware' => ['auth']], function () {
+    }); // This closing brace was misplaced, it should be after the Auth namespace group.
+    Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
         // Route::post('logout', 'UserController@logout')->name('logout');
+
+        /*
+        |--------------------------------------------------------------------------
+        | AfriScribe Module Routes
+        |--------------------------------------------------------------------------
+        */
+        require __DIR__.'/../app/Modules/AfriScribe/Http/routes.php';
 
         Route::get('/home', 'HomeController@index')->name('home');
         Route::post('/logout', 'HomeController@logout')->name('logout');
@@ -169,3 +165,7 @@ Route::group(['prefix' => 'admin/profile', 'as' => 'profile.', 'namespace' => 'A
         Route::post('profile/destroy', 'ChangePasswordController@destroy')->name('password.destroyProfile');
     }
  });
+
+require 'user.php';
+
+require 'user.php';

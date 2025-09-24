@@ -46,8 +46,8 @@
     {{-- <meta property="og:description" content="{!! $setting ? $setting->description : '' !!}" /> --}}
     <meta property="og:url" content="{{ route('home') }}" />
     <meta property="og:site_name" content="{{ $setting ? $setting->website_name : trans('panel.site_title') }}" />
-    <meta property="og:image" content="{{ $setting && $setting->logo ? $setting->logo->getUrl() : '' }}" />
-    <meta property="og:image:secure_url" content="{{ $setting && $setting->logo ? $setting->logo->getUrl() : '' }}" />
+    <meta property="og:image" content="{{ $setting && $setting->logo ? $setting->logo->getUrl() : '/images/logo.png' }}" />
+    <meta property="og:image:secure_url" content="{{ $setting && $setting->logo ? $setting->logo->getUrl() : '/images/logo.png' }}" />
     <meta property="og:image:width" content="600" />
     <meta property="og:image:height" content="660" />
     <!--twitter description-->
@@ -55,7 +55,7 @@
     <meta name="twitter:description" content="{!! $setting ? $setting->description : '' !!}" />
     <meta name="twitter:title" content="{{ $setting ? $setting->website_name : trans('panel.site_title') }}" />
     <meta name="twitter:site" content="{{ route('home') }}" />
-    <meta name="twitter:image" content="{{ $setting && $setting->logo ? $setting->logo->getUrl() : '' }}" />
+    <meta name="twitter:image" content="{{ $setting && $setting->logo ? $setting->logo->getUrl() : '/images/logo.png' }}" />
     <meta name="twitter:creator" content="@research_africa" />
     <!--opengraph tags for location or address for information panel in google-->
     <meta name="og:latitude" content="" />
@@ -71,14 +71,14 @@
     <!--powered by meta-->
     <meta name="generator" content="" />
     <!-- Site fevicon icons -->
-    <link rel="icon" href="{{ $setting && $setting->favicon ? $setting->favicon->getUrl() : '' }}"
+    <link rel="icon" href="{{ $setting && $setting->favicon ? $setting->favicon->getUrl() : '/images/logo.png' }}"
         sizes="32x32" />
-    <link rel="icon" href="{{ $setting && $setting->favicon ? $setting->favicon->getUrl() : '' }}"
+    <link rel="icon" href="{{ $setting && $setting->favicon ? $setting->favicon->getUrl() : '/images/logo.png' }}"
         sizes="192x192" />
     <link rel="apple-touch-icon-precomposed"
-        href="{{ $setting && $setting->favicon ? $setting->favicon->getUrl() : '' }}" />
+        href="{{ $setting && $setting->favicon ? $setting->favicon->getUrl() : '/images/logo.png' }}" />
     <meta name="msapplication-TileImage"
-        content="{{ $setting && $setting->favicon ? $setting->favicon->getUrl() : '' }}" />
+        content="{{ $setting && $setting->favicon ? $setting->favicon->getUrl() : '/images/logo.png' }}" />
     <!--complete list of meta tags at - https://gist.github.com/lancejpollard/1978404 -->
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.css" />

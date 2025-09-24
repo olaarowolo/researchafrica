@@ -507,6 +507,7 @@
             <li><a href="#services">Products</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="{{ route('afriscribe.quote-request.create') }}">Get Quote</a></li>
+            <li><a href="{{ route('admin.home') }}" target="_blank">Admin Dashboard</a></li>
         </ul>
         <div class="hamburger" onclick="toggleMenu()">
             <span></span>

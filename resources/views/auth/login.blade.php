@@ -7,8 +7,8 @@ $setting = \App\Models\Setting::where('status', 1)->first();
 <div class="row">
     <div class="col-md-4" style="background-color: #0d0d0d;">
         <div class="d-flex flex-column align-items-center"  style="display:grid;height: 100vh;place-content: center">
-            <img src="{{ $setting->logo ? $setting->logo->getUrl() : '' }}" alt="" class="text-center p-3 bg-light rounded mb-2">
-            <h1>{{ $setting->website_name }}</h1>
+            <img src="{{ $setting && $setting->logo ? $setting->logo->getUrl() : '/images/logo.png' }}" alt="" class="text-center p-3 bg-light rounded mb-2">
+            <h1>{{ $setting ? $setting->website_name : trans('panel.site_title') }}</h1>
         </div>
     </div>
     <div class="col-md-8" style="background-color: #f1f1f1;">

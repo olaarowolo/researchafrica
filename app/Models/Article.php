@@ -167,7 +167,13 @@ class Article extends Model
     {
         return Attribute::make(
             get: function ($value) {
-                $size = $this->file_path ? Storage::disk($this->storage_disk)->size($this->file_path) / 1024 : $this->last->upload_paper?->size / 1024;
+                if ($this->file_path && Storage::disk($this->storage_disk)->exists($this->file_path)) {
+                    $size = Storage::disk($this->storage_disk)->size($this->file_path) / 1024;
+                } elseif ($this->last && $this->last->upload_paper) {
+                    $size = $this->last->upload_paper->size / 1024;
+                } else {
+                    $size = 0;
+                }
                 $size = round($size, 1) >= 1024 ? round($size / 1024, 2) . " MB" : round($size, 1) . " KB";
                 return $size;
             },
