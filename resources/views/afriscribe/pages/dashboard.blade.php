@@ -26,19 +26,93 @@
         <div class="card-icon">📊</div>
         <h3>Insights</h3>
         <p>View analytics and performance metrics</p>
-        <a href="#" class="btn">View Insights</a>
+        <a href="{{ route('afriscribe.insights') }}" class="btn">View Insights</a>
     </div>
     <div class="card">
         <div class="card-icon">🤝</div>
         <h3>Connect</h3>
         <p>Manage collaborations and communications</p>
-        <a href="#" class="btn">View Connect</a>
+        <a href="{{ route('afriscribe.connect') }}" class="btn">View Connect</a>
     </div>
     <div class="card">
         <div class="card-icon">📚</div>
         <h3>Archive</h3>
         <p>Access archived publications and documents</p>
-        <a href="#" class="btn">View Archive</a>
+        <a href="{{ route('afriscribe.archive') }}" class="btn">View Archive</a>
+    </div>
+</div>
+
+<!-- Dashboard Statistics Section -->
+<div class="dashboard-stats-section">
+    <h2>Submissions & Requests Overview</h2>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+                <h3>{{ $totalRequests }}</h3>
+                <p>Total Requests</p>
+            </div>
+        </div>
+        <div class="stat-card pending">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-content">
+                <h3>{{ $pendingRequests }}</h3>
+                <p>Pending</p>
+            </div>
+        </div>
+        <div class="stat-card processing">
+            <div class="stat-icon">⚙️</div>
+            <div class="stat-content">
+                <h3>{{ $processingRequests }}</h3>
+                <p>Processing</p>
+            </div>
+        </div>
+        <div class="stat-card completed">
+            <div class="stat-icon">✅</div>
+            <div class="stat-content">
+                <h3>{{ $completedRequests }}</h3>
+                <p>Completed</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Requests Table -->
+    <div class="recent-requests">
+        <h3>Recent Requests</h3>
+        @if($recentRequests->count() > 0)
+            <div class="table-responsive">
+                <table class="requests-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Service Type</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($recentRequests as $request)
+                            <tr>
+                                <td>{{ $request->name }}</td>
+                                <td>{{ $request->email }}</td>
+                                <td>{{ ucfirst($request->service_type) }}</td>
+                                <td>
+                                    <span class="status-badge {{ $request->status }}">
+                                        {{ ucfirst($request->status) }}
+                                    </span>
+                                </td>
+                                <td>{{ $request->created_at->format('M d, Y') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <p class="no-data">No recent requests found.</p>
+        @endif
     </div>
 </div>
 @endsection

@@ -20,6 +20,10 @@
     @include('afriscribe.partials.as-cta')
 @endsection
 
+@section('dashboard_section')
+    @include('afriscribe.partials.as-dashboard')
+@endsection
+
 @section('page_scripts')
 <script>
 // Additional scripts specific to the welcome page

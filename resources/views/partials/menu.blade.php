@@ -193,20 +193,32 @@
                 <span class="menu-text">AfriScribe</span>
                 <i class="fas fa-chevron-down ms-auto dropdown-icon" aria-hidden="true"></i>
             </a>
-            <ul id="afriscribe-dropdown" class="c-sidebar-nav-dropdown-items list-unstyled shadow-sm rounded-2 mt-2">
+            <ul id="afriscribe-dropdown" class="c-sidebar-nav-dropdown-items list-unstyled shadow-sm rounded-2 mt-2" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border: none; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s ease;">
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/afriscribe*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.afriscribe.requests') }}"
-                       aria-label="AfriScribe Admin">
+                       aria-label="AfriScribe Admin"
+                       style="color: #1565c0; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-cogs c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">AfriScribe Admin</span>
                     </a>
                 </li>
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all"
+                       href="{{ route('afriscribe.admin.dashboard') }}"
+                       target="_blank"
+                       aria-label="AfriScribe Dashboard"
+                       style="color: #1565c0; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
+                        <i class="fa-fw fas fa-tachometer-alt c-sidebar-nav-icon me-3" aria-hidden="true"></i>
+                        <span class="submenu-text">AfriScribe Dashboard</span>
+                    </a>
+                </li>
+                <li class="c-sidebar-nav-item">
+                    <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all"
                        href="{{ route('afriscribe.welcome') }}"
                        target="_blank"
-                       aria-label="AfriScribe Landing Page">
+                       aria-label="AfriScribe Landing Page"
+                       style="color: #1565c0; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-external-link-alt c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">AfriScribe Home</span>
                     </a>
@@ -225,13 +237,14 @@
                 <span class="menu-text">Research Africa</span>
                 <i class="fas fa-chevron-down ms-auto dropdown-icon" aria-hidden="true"></i>
             </a>
-            <ul id="research-africa-dropdown" class="c-sidebar-nav-dropdown-items list-unstyled shadow-sm rounded-2 mt-2">
+            <ul id="research-africa-dropdown" class="c-sidebar-nav-dropdown-items list-unstyled shadow-sm rounded-2 mt-2" style="background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%); border: none; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s ease;">
                 <!-- Member Management -->
                 @can('member_management_access')
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/members*') || request()->is('admin/member-types*') || request()->is('admin/member-roles*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.members.index') }}"
-                       aria-label="{{ trans('cruds.memberManagement.title') }}">
+                       aria-label="{{ trans('cruds.memberManagement.title') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-users c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('cruds.memberManagement.title') }}</span>
                     </a>
@@ -243,7 +256,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/article-categories*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.article-categories.index') }}"
-                       aria-label="{{ trans('cruds.articleCategory.title') }}">
+                       aria-label="{{ trans('cruds.articleCategory.title') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-folder c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('cruds.articleCategory.title') }}</span>
                     </a>
@@ -255,7 +269,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/article-sub-categories*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.article-sub-categories.index') }}"
-                       aria-label="Article Journal">
+                       aria-label="Article Journal"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-folder c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">Article Journal</span>
                     </a>
@@ -267,7 +282,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/article-keywords*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.article-keywords.index') }}"
-                       aria-label="{{ __('Article Keyword') }}">
+                       aria-label="{{ __('Article Keyword') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-tags c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ __('Article Keyword') }}</span>
                     </a>
@@ -279,7 +295,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/articles*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.articles.index') }}"
-                       aria-label="{{ trans('cruds.article.title') }}">
+                       aria-label="{{ trans('cruds.article.title') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-file c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('cruds.article.title') }}</span>
                     </a>
@@ -291,7 +308,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/comments*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.comments.index') }}"
-                       aria-label="{{ trans('cruds.comment.title') }}">
+                       aria-label="{{ trans('cruds.comment.title') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-comments c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('cruds.comment.title') }}</span>
                     </a>
@@ -303,7 +321,8 @@
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 px-3 rounded-2 text-decoration-none transition-all {{ request()->is('admin/abouts*') ? 'is-active' : '' }}"
                        href="{{ route('admin.abouts.index') }}"
                        aria-label="About Us"
-                       aria-current="{{ request()->is('admin/abouts*') ? 'page' : 'false' }}">
+                       aria-current="{{ request()->is('admin/abouts*') ? 'page' : 'false' }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-user c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="menu-text">About Us</span>
                     </a>
@@ -314,7 +333,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/faq-categories*') || request()->is('admin/faq-questions*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.faq-categories.index') }}"
-                       aria-label="{{ trans('cruds.faqManagement.title') }}">
+                       aria-label="{{ trans('cruds.faqManagement.title') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-question c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('cruds.faqManagement.title') }}</span>
                     </a>
@@ -326,7 +346,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/content-categories*') || request()->is('admin/content-tags*') || request()->is('admin/content-pages*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.content-categories.index') }}"
-                       aria-label="{{ trans('cruds.contentManagement.title') }}">
+                       aria-label="{{ trans('cruds.contentManagement.title') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-book c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('cruds.contentManagement.title') }}</span>
                     </a>
@@ -338,7 +359,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/permissions*') || request()->is('admin/roles*') || request()->is('admin/users*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.permissions.index') }}"
-                       aria-label="{{ trans('cruds.userManagement.title') }}">
+                       aria-label="{{ trans('cruds.userManagement.title') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-users c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('cruds.userManagement.title') }}</span>
                     </a>
@@ -350,7 +372,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/subscriptions*') || request()->is('admin/member-subscriptions*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.subscriptions.index') }}"
-                       aria-label="{{ trans('cruds.subscriptionManagement.title') }}">
+                       aria-label="{{ trans('cruds.subscriptionManagement.title') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-cogs c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('cruds.subscriptionManagement.title') }}</span>
                     </a>
@@ -362,7 +385,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/countries*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.countries.index') }}"
-                       aria-label="{{ trans('cruds.country.title') }}">
+                       aria-label="{{ trans('cruds.country.title') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-flag c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('cruds.country.title') }}</span>
                     </a>
@@ -374,7 +398,8 @@
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('admin/settings*') ? 'is-active is-child-active' : '' }}"
                        href="{{ route('admin.settings.index') }}"
-                       aria-label="{{ trans('cruds.setting.title') }}">
+                       aria-label="{{ trans('cruds.setting.title') }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-cogs c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('cruds.setting.title') }}</span>
                     </a>
@@ -388,7 +413,8 @@
                     <a class="c-sidebar-nav-link d-flex align-items-center py-2 text-decoration-none transition-all {{ request()->is('profile/password') || request()->is('profile/password/*') ? 'is-active' : '' }}"
                        href="{{ route('profile.password.edit') }}"
                        aria-label="{{ trans('global.change_password') }}"
-                       aria-current="{{ request()->is('profile/password*') ? 'page' : 'false' }}">
+                       aria-current="{{ request()->is('profile/password*') ? 'page' : 'false' }}"
+                       style="color: #2e7d32; border-radius: 8px; margin: 4px; padding: 10px 16px !important;">
                         <i class="fa-fw fas fa-key c-sidebar-nav-icon me-3" aria-hidden="true"></i>
                         <span class="submenu-text">{{ trans('global.change_password') }}</span>
                     </a>

@@ -15,7 +15,39 @@ class AfriscribeController extends Controller
 {
     public function welcome()
     {
-        return view('afriscribe.pages.welcome');
+        // Fetch dashboard data
+        $totalRequests = AfriscribeRequest::count();
+        $pendingRequests = AfriscribeRequest::where('status', AfriscribeRequest::STATUS_PENDING)->count();
+        $processingRequests = AfriscribeRequest::where('status', AfriscribeRequest::STATUS_PROCESSING)->count();
+        $completedRequests = AfriscribeRequest::where('status', AfriscribeRequest::STATUS_COMPLETED)->count();
+        $recentRequests = AfriscribeRequest::orderBy('created_at', 'desc')->limit(5)->get();
+
+        return view('afriscribe.pages.welcome', compact(
+            'totalRequests',
+            'pendingRequests',
+            'processingRequests',
+            'completedRequests',
+            'recentRequests'
+        ));
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        // Manually start the session if not started
+        if (!$request->hasSession()) {
+            $request->setLaravelSession(session());
+        }
+
+        if (auth()->guard('web')->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('afriscribe.dashboard'));
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->withInput();
     }
 
     public function manuscripts()
@@ -208,5 +240,58 @@ class AfriscribeController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Dashboard page
+     */
+    public function dashboard()
+    {
+        // Fetch dashboard data
+        $totalRequests = AfriscribeRequest::count();
+        $pendingRequests = AfriscribeRequest::where('status', AfriscribeRequest::STATUS_PENDING)->count();
+        $processingRequests = AfriscribeRequest::where('status', AfriscribeRequest::STATUS_PROCESSING)->count();
+        $completedRequests = AfriscribeRequest::where('status', AfriscribeRequest::STATUS_COMPLETED)->count();
+        $recentRequests = AfriscribeRequest::orderBy('created_at', 'desc')->limit(10)->get();
+
+        return view('afriscribe.pages.dashboard', compact(
+            'totalRequests',
+            'pendingRequests',
+            'processingRequests',
+            'completedRequests',
+            'recentRequests'
+        ));
+    }
+
+    /**
+     * Insights page
+     */
+    public function insights()
+    {
+        return view('afriscribe.pages.insights');
+    }
+
+    /**
+     * Connect page
+     */
+    public function connect()
+    {
+        return view('afriscribe.pages.connect');
+    }
+
+    /**
+     * Archive page
+     */
+    public function archive()
+    {
+        return view('afriscribe.pages.archive');
+    }
+
+    /**
+     * Editor page
+     */
+    public function editor()
+    {
+        return view('afriscribe.pages.editor');
     }
 }

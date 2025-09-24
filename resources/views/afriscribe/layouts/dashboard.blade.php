@@ -1,8 +1,12 @@
 @extends('afriscribe.layouts.app')
 
-@section('title', @yield('page_title', 'AfriScribe Dashboard'))
+@section('title')
+@yield('page_title', 'AfriScribe Dashboard')
+@endsection
 
-@section('meta_description', @yield('page_description', 'AfriScribe Admin Dashboard - Manage your academic publishing workflow'))
+@section('meta_description')
+@yield('page_description', 'AfriScribe Admin Dashboard - Manage your academic publishing workflow')
+@endsection
 
 @section('content')
 <div class="dashboard-container">
@@ -12,14 +16,14 @@
             <img src="{{ asset('afriscribe/img/afriscribe-logo-white.png') }}" alt="AfriScribe Logo">
         </div>
         <ul>
-            <li><a href="{{ route('afriscribe.dashboard') }}" class="{{ request()->routeIs('afriscribe.dashboard') ? 'active' : '' }}"><span class="icon">🏠</span> Dashboard</a></li>
+            <li><a href="/afriscribe/admin" class="{{ request()->routeIs('afriscribe.admin.dashboard') ? 'active' : '' }}"><span class="icon">🏠</span> Dashboard</a></li>
             <li><a href="{{ route('afriscribe.manuscripts') }}" class="{{ request()->routeIs('afriscribe.manuscripts*') ? 'active' : '' }}"><span class="icon">📝</span> Manuscripts</a></li>
-            <li><a href="{{ route('afriscribe.proofread') }}" class="{{ request()->routeIs('afriscribe.proofread*') ? 'active' : '' }}"><span class="icon">✏️</span> Proofreading</a></li>
+            <li><a href="{{ route('afriscribe.proofreading') }}" class="{{ request()->routeIs('afriscribe.proofreading*') ? 'active' : '' }}"><span class="icon">✏️</span> Proofreading</a></li>
             <li><a href="{{ route('afriscribe.insights') }}" class="{{ request()->routeIs('afriscribe.insights*') ? 'active' : '' }}"><span class="icon">📊</span> Insights</a></li>
             <li><a href="{{ route('afriscribe.connect') }}" class="{{ request()->routeIs('afriscribe.connect*') ? 'active' : '' }}"><span class="icon">🤝</span> Connect</a></li>
             <li><a href="{{ route('afriscribe.archive') }}" class="{{ request()->routeIs('afriscribe.archive*') ? 'active' : '' }}"><span class="icon">📚</span> Archive</a></li>
             <li><a href="{{ route('afriscribe.editor') }}" class="{{ request()->routeIs('afriscribe.editor*') ? 'active' : '' }}"><span class="icon">✂️</span> Editor</a></li>
-            <li><a href="{{ route('afriscribe.settings') }}" class="{{ request()->routeIs('afriscribe.settings*') ? 'active' : '' }}"><span class="icon">⚙️</span> Settings</a></li>
+            <li><a href="{{ route('afriscribe.logout') }}" class="{{ request()->routeIs('afriscribe.logout') ? 'active' : '' }}"><span class="icon">🚪</span> Logout</a></li>
         </ul>
     </aside>
 

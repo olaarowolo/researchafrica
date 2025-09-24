@@ -16,6 +16,10 @@ use App\Modules\AfriScribe\Http\Controllers\QuoteRequestController;
 
 // Public routes
 Route::prefix('afriscribe')->name('afriscribe.')->group(function () {
+    Route::get('/login', function () {
+        return view('afriscribe.login');
+    })->name('login');
+    Route::post('/login', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'login'])->name('login.submit');
     Route::get('/home', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'welcome'])->name('welcome');
     Route::get('/about', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'about'])->name('about');
     Route::get('/manuscripts', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'manuscripts'])->name('manuscripts');
@@ -36,4 +40,13 @@ Route::prefix('admin/afriscribe')->name('admin.afriscribe.')->middleware(['auth'
     Route::get('/quote-requests/{id}', [\App\Modules\AfriScribe\Http\Controllers\QuoteRequestController::class, 'show'])->name('quote-requests.show');
     Route::put('/quote-requests/{id}/status', [\App\Modules\AfriScribe\Http\Controllers\QuoteRequestController::class, 'updateStatus'])->name('quote-requests.update-status');
     Route::get('/quote-requests/{id}/download', [\App\Modules\AfriScribe\Http\Controllers\QuoteRequestController::class, 'downloadFile'])->name('quote-requests.download');
+});
+
+// Dashboard routes (protected)
+Route::prefix('afriscribe')->name('afriscribe.')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'dashboard'])->name('dashboard');
+    Route::get('/insights', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'insights'])->name('insights');
+    Route::get('/connect', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'connect'])->name('connect');
+    Route::get('/archive', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'archive'])->name('archive');
+    Route::get('/editor', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'editor'])->name('editor');
 });

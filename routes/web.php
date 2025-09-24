@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\Route;
 // Public AfriScribe landing page and related routes
 Route::redirect('/afriscribe', '/afriscribe/home');
 Route::get('/afriscribe/home', function () { return view('afriscribe.welcome-form'); })->name('afriscribe.welcome');
+
+// New route for AfriScribe admin dashboard
+Route::get('/afriscribe/admin', [\App\Modules\AfriScribe\Http\Controllers\AfriscribeController::class, 'dashboard'])->name('afriscribe.admin.dashboard');
+
+// Logout route for AfriScribe
+Route::get('/afriscribe/logout', function () {
+    Auth::logout();
+    return redirect('/afriscribe/home');
+})->name('afriscribe.logout');
  
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +32,8 @@ Route::get('/admin', function () {
     return redirect('/admin/login');
 });
 // Auth
+Route::get('/login', 'Auth\LoginController@login')->name('login');
+Route::post('/login', 'Auth\LoginController@authLogin')->name('login.submit');
 Route::get('/admin/login', 'Auth\LoginController@login')->name('admin.login');
 Route::post('/admin/login', 'Auth\LoginController@authLogin')->name('admin.submit-login');
 
@@ -152,9 +163,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function ()
         Route::post('comments/ckmedia', 'CommentController@storeCKEditorImages')->name('comments.storeCKEditorImages');
         Route::resource('comments', 'CommentController');
     });
-
 });
-
 
 Route::group(['prefix' => 'admin/profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password

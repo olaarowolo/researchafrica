@@ -21,6 +21,9 @@
     <!-- Custom sections can be yielded here -->
     @yield('custom_sections')
 
+    <!-- Dashboard Section -->
+    @yield('dashboard_section')
+
     <!-- CTA Section -->
     @yield('cta_section', @include('afriscribe.partials.as-cta'))
 
