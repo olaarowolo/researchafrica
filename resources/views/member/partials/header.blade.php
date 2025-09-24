@@ -1,339 +1,304 @@
-<!-- Top Bar
-     ============================================= -->
-<div id="top-bar">
-    <div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0BeIjyytfqxuMPsV0VDKY4GM2u07V7oxA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0BeIjyytfqxuMPsV0VDKY4GM2u07V7oxA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* Smooth mega-menu animation */
+    .mega-menu {
+      transform: translateY(-10px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+    .group:hover .mega-menu {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
 
-        <div class="kb-flex kb-justify-between kb-items-center">
-            <div class="">
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
 
-                <!-- Top Social
-                               ============================================= -->
-                <ul id="top-social">
-                    <li>
-                        <a href="{{ $setting->facebook_url ?? '' }}" class="h-bg-facebook" target="_blank">
-                            <span class="ts-icon">
-                                <i class="fa-brands fa-facebook-f"></i>
-                            </span>
-                            <span class="ts-text">
-                                Facebook
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ $setting->twitter_url ?? '' }}" class="h-bg-twitter" target="_blank">
-                            <span class="ts-icon">
-                                <i class="fa-brands fa-twitter"> </i>
-                            </span>
-                            <span class="ts-text">
-                                Twitter
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ $setting->instagram_url ?? '' }}" class="h-bg-instagram" target="_blank">
-                            <span class="ts-icon">
-                                <i class="fa-brands fa-instagram"> </i>
-                            </span>
-                            <span class="ts-text">
-                                Instagram
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ $setting->linkedin_url ?? '' }}" class="h-bg-linkedin" target="_blank">
-                            <span class="ts-icon">
-                                <i class="fa-brands fa-linkedin"> </i>
-                            </span>
-                            <span class="ts-text">
-                                Linkedin
-                            </span>
-                        </a>
-                    </li>
-                </ul><!-- #top-social end -->
+<!-- Navbar Wrapper -->
+<div class="p-4 sticky top-0 z-50">
+  <!-- The Island Navbar -->
+  <div class="max-w-7xl mx-auto bg-white/80 backdrop-blur-lg shadow-2xl rounded-2xl">
+    <div class="px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+      
+      <!-- Logo -->
+      <a href="/" class="flex-shrink-0">
+        <img class="h-10" src="images/logo.png" alt="ResearchAfrica Logo">
+      </a>
 
-            </div>
-
-            <div class="">
-
-                <!-- Top Links
-                               ============================================= -->
-                <div class="top-links">
-                    <ul class="top-links-container">
-                        @auth('member')
-                            <li class="top-links-item"><a href="{{ route('member.profile') }}"><i
-                                        class="fa fa-user
-                                            "></i>View Profile</a>
-                            </li>
-                        @else
-                            <li class="top-links-item">
-                                <a href="{{ route('member.register') }}">
-                                    <i class="fa-sharp fa-solid fa-plus"></i>Create Account</a>
-                            </li>
-                            <li class="top-links-item">
-                                <a href="{{ route('member.login') }}">
-                                    <i class="fa-sharp fa-solid fa-right-to-bracket"></i>Sign In</a>
-                            </li>
-                        @endauth
-
-
-                    </ul>
-                </div><!-- .top-links end -->
-
-            </div>
-        </div>
-
-    </div>
-</div><!-- #top-bar end -->
-
-
-<nav class="kb-bg-white kb-border-gray-200">
-    <div class="kb-max-w-screen-xl kb-flex kb-flex-wrap kb-items-center kb-justify-between kb-mx-auto kb-p-4">
-        <a href="/" class="kb-flex kb-items-center">
-            <img src="{{ asset('images/logo.png') }}" class="kb-mr-3 kb-h-16 md:kb-h-24" alt="Research  Logo" />
-        </a>
-        <button type="button"
-            class="kb-inline-flex kb-items-center kb-p-2 kb-ml-3 kb-text-sm kb-text-black kb-rounded-lg md:kb-hidden btnBar close"
-            aria-expanded="false">
-            <span class="kb-sr-only">Open main menu</span>
-            <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+      <!-- Mobile Menu Button -->
+      <div class="lg:hidden flex items-center">
+        <button id="menu-toggle" class="text-black hover:text-gray-800 focus:outline-none text-3xl transition-all duration-200 p-3 rounded-lg hover:bg-gray-200">
+          <i class="fas fa-bars"></i>
         </button>
-        <div class="kb-hidden kb-w-full md:kb-block md:kb-w-auto" id="navbar-default">
-            <ul class="kb-font-medium kb-flex kb-flex-col kb-items-center kb-p-4 md:kb-p-0 kb-mt-4 kb-border kb-border-gray-100 kb-rounded-lg kb-bg-gray-50 md:kb-flex-row md:kb-space-x-8 md:kb-mt-0 md:kb-border-0 md:kb-bg-white">
+      </div>
 
-                <li>
-                    <a class="menu-link {{ request()->routeIs('home') ? 'active-a' : '' }}" href="{{ route('home') }}">
-                        <div>Home</div>
-                    </a>
-                </li>
+      <!-- Desktop Menu -->
+      <ul id="menu" class="hidden lg:flex items-center justify-center flex-grow space-x-12 font-light text-gray-700">
+        <li><a href="/" class="hover:text-blue-600 transition flex items-center"><i class="fas mr-2"></i>Home</a></li>
+        
+        <!-- Information For Mega Menu -->
+        <li class="relative group">
+          <button class="hover:text-blue-600 transition flex items-center">
+            <i class="fas mr-1"></i>Information For
+          </button>
 
-                <li class="nav-item dropdown mega-menu-item">
-                    <a class="menu-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                        data-mdb-toggle="dropdown" aria-expanded="false">
-                        Information s for
-                    </a>
-                    <div class="dropdown-menu mega-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <a href="/information/authors" class="dropdown-item"><h5>Authors</h5></a>
-                                    <ul class="list-unstyled">
-                                        <li><a href="/information/authors" class="dropdown-item">Author's Guidelines</a></li>
-                                        <li><a href="/ethics" class="dropdown-item">Ethics Guidelines</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-3">
-                                    <a href="/information/editors" class="dropdown-item"><h5>Editors</h5></a>
-                                </div>
-                                <div class="col-md-3">
-                                    <a href="/information/researchers" class="dropdown-item"><h5>Researchers</h5></a>
-                                </div>
-                                <div class="col-md-3">
-                                    <a href="/information/reviewers" class="dropdown-item"><h5>Reviewers</h5></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
+          <div class="mega-menu absolute left-1/2 -translate-x-1/2 mt-3 w-max max-w-xl lg:max-w-4xl bg-white/90 backdrop-blur-lg shadow-xl rounded-xl p-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm text-gray-600">
+              <div>
+                <a href="/information/authors"><h5 class="font-semibold text-gray-900 mb-2 hover:text-blue-600">Authors</h5></a>
+                <ul class="space-y-2">
+                  <li><a href="/information/authors" class="hover:text-blue-600 flex items-center"><i class="fas fa-pen mr-2"></i>Author’s Guidelines</a></li>
+                  <li><a href="/ethics" class="hover:text-blue-600 flex items-center"><i class="fas fa-balance-scale mr-2"></i>Ethics Guidelines</a></li>
+                </ul>
+              </div>
+              <div>
+                <a href="/information/editors"><h5 class="font-semibold text-gray-900 mb-2 hover:text-blue-600">Editors</h5></a>
+                <ul class="space-y-2">
+                  <li><a href="/information/editors" class="hover:text-blue-600 flex items-center"><i class="fas fa-edit mr-2"></i>Editorial Policy</a></li>
+                  <li><a href="/information/editors" class="hover:text-blue-600 flex items-center"><i class="fas mr-2"></i>Responsibilities</a></li>
+                </ul>
+              </div>
+              <div>
+                <a href="/information/researchers"><h5 class="font-semibold text-gray-900 mb-2 hover:text-blue-600">Researchers</h5></a>
+                <ul class="space-y-2">
+                  <li><a href="/information/researchers" class="hover:text-black flex items-center"><i class="fas fa-file-upload mr-2"></i>Submit Paper</a></li>
+                  <li><a href="/information/researchers" class="hover:text-blue-600 flex items-center"><i class="fas fa-hand-holding-dollar mr-2"></i>Funding Opportunities</a></li>
+                </ul>
+              </div>
+              <div>
+                <a href="/information/reviewers"><h5 class="font-semibold text-gray-900 mb-2 hover:text-blue-600">Reviewers</h5></a>
+                <ul class="space-y-2">
+                  <li><a href="/information/reviewers" class="hover:text-blue-600 flex items-center"><i class="fas fa-check-circle mr-2"></i>Review Guidelines</a></li>
+                  <li><a href="/information/reviewers" class="hover:text-blue-600 flex items-center"><i class="fas fa-user-plus mr-2"></i>Join as Reviewer</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
 
-                <li class="nav-item dropdown mega-menu-item">
-                    <a class="menu-link dropdown-toggle" href="#" id="navbarDropdownRA" role="button"
-                        data-mdb-toggle="dropdown" aria-expanded="false">
-                        Services
-                    </a>
-                    <div class="dropdown-menu mega-menu" aria-labelledby="navbarDropdownRA">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-6">
-                    <a href="{{ route('afriscribe.welcome') }}" class="dropdown-item"><h5 class="mega-menu-title">AfriScribe</h5></a>
-                    <ul class="list-unstyled">
-                        <li><a href="{{ route('afriscribe.manuscripts') }}" class="dropdown-item">AfriScribe Manuscripts Manager</a></li>
-                        <li><a href="{{ route('afriscribe.welcome') }}" class="dropdown-item">AfriScribe Proofread</a></li>
-                        <li><a href="{{ route('afriscribe.welcome') }}" class="dropdown-item">AfriScribe Insights</a></li>
-                        <li><a href="{{ route('afriscribe.welcome') }}" class="dropdown-item">AfriScribe Connect</a></li>
-                        <li><a href="{{ route('afriscribe.welcome') }}" class="dropdown-item">AfriScribe Archive</a></li>
-                        <li><a href="{{ route('afriscribe.welcome') }}" class="dropdown-item">AfriScribe Editor</a></li>
-                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <h5 class="mega-menu-title">Research Africa Services</h5>
-                                     <ul class="list-unstyled">
-                                        <li><a href="/services/consulting" class="dropdown-item">Consulting (Coming Soon)</a></li>
-                                        <li><a href="/services/training" class="dropdown-item">Training (Coming Soon)</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
+        <!-- Services Mega Menu -->
+        <li class="relative group">
+          <button class="hover:text-blue-600 transition flex items-center">
+            <i class="fas mr-1"></i>Services
+          </button>
+          <div class="mega-menu absolute left-1/2 -translate-x-1/2 mt-3 w-max max-w-xl lg:max-w-2xl bg-white/90 backdrop-blur-lg shadow-xl rounded-xl p-6">
+            <div class="grid grid-cols-2 gap-6 text-sm text-gray-600">
+              <div>
+                <a href="/afriscribe"><h5 class="font-semibold text-gray-900 mb-2 hover:text-blue-600">AfriScribe</h5></a>
+                <ul class="space-y-2">
+                  <li><a href="/afriscribe/manuscripts" class="hover:text-blue-600 flex items-center"><i class="fas fa-file-alt mr-2"></i>Manuscripts Manager</a></li>
+                  <li><a href="/afriscribe" class="hover:text-blue-600 flex items-center"><i class="fas fa-check mr-2"></i>Proofread</a></li>
+                  <li><a href="/afriscribe" class="hover:text-blue-600 flex items-center"><i class="fas fa-lightbulb mr-2"></i>Insights</a></li>
+                  <li><a href="/afriscribe" class="hover:text-blue-600 flex items-center"><i class="fas fa-link mr-2"></i>Connect</a></li>
+                  <li><a href="/afriscribe" class="hover:text-blue-600 flex items-center"><i class="fas fa-archive mr-2"></i>Archive</a></li>
+                  <li><a href="/afriscribe" class="hover:text-blue-600 flex items-center"><i class="fas fa-user-edit mr-2"></i>Editor</a></li>
+                </ul>
+              </div>
+              <div>
+                <h5 class="font-semibold text-gray-900 mb-2">Research Africa Services</h5>
+                <ul class="space-y-2">
+                  <li><a href="/services/consulting" class="hover:text-blue-600 flex items-center"><i class="fas fa-chalkboard-teacher mr-2"></i>Consulting (Coming Soon)</a></li>
+                  <li><a href="/services/training" class="hover:text-blue-600 flex items-center"><i class="fas fa-school mr-2"></i>Training (Coming Soon)</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
 
-                <!-- Keep your other items -->
-                <li>
-                    <a class="menu-link {{ request()->routeIs('member.about') ? 'active-a' : '' }}"
-                        href="{{ route('member.about') }}">
-                        <div>About Us</div>
-                    </a>
-                </li>
-                <li>
-                    <a class="menu-link {{ request()->routeIs('member.faq') ? 'active-a' : '' }}"
-                        href="{{ route('member.faq') }}">
-                        <div>FAQ</div>
-                    </a>
-                </li>
-                {{-- <li>
-                    <a class="menu-link {{ request()->routeIs('member.contact') ? 'active-a' : '' }}"
-                        href="{{ route('member.contact') }}">
-                        <div>Contact</div>
-                    </a>
-                </li> --}}
-                <li>
-                    <a class="menu-link" href="http://blog.researchafricapublications.com">
-                        <div>Blog</div>
-                    </a>
-                </li>
-                <li>
-                    @auth('member')
-                        @if (auth('member')->user()->member_type_id == 1)
-                            <a class="menu-link px-3 rounded text-light bg-dark kb-text-white hover:kb-text-white"
-                                href="{{ route('member.articles.create') }}">
-                                <div>Create Article</div>
-                            </a>
-                        @endif
-                    @else
-                        <a class="menu-link px-3 rounded text-light bg-dark kb-text-white hover:kb-text-white"
-                            href="{{ route('member.login') }}">
-                            <div>Create Article</div>
-                        </a>
-                    @endauth
-                </li>
-            </ul>
-        </div>
-        <style>
-            /* Base styles for the new layout */
-            .container {
-                max-width: 1280px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .nav-link {
-                display: block;
-                padding: 0.5rem 1rem;
-                font-weight: 500;
-                color: #4b5563; /* Gray-700 */
-                transition: color 0.2s ease-in-out;
-            }
-
-            .nav-link:hover, .nav-link.active {
-                color: #1f2937; /* Gray-900 */
-                text-decoration: underline;
-            }
-
-            .nav-link.active {
-                font-weight: 600; /* Semi-bold for active link */
-            }
-
-            .btn-primary {
-                display: inline-block;
-                padding: 0.5rem 1rem;
-                border-radius: 0.375rem; /* Rounded-md */
-                color: #fff;
-                background-color: #1f2937; /* Gray-900 */
-                transition: background-color 0.2s ease-in-out;
-            }
-
-            .btn-primary:hover {
-                background-color: #374151; /* Gray-800 */
-            }
-
-            /* Mega Menu styles */
-            .mega-menu {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                z-index: 10;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                border-top: 1px solid #e5e7eb; /* Gray-200 */
-            }
-
-            .mega-menu-title {
-                font-weight: bold;
-                color: #1f2937; /* Gray-900 */
-                margin-bottom: 0.5rem;
-            }
-
-            .mega-menu-item {
-                color: #4b5563; /* Gray-700 */
-                display: block;
-                padding: 0.25rem 0;
-                transition: color 0.2s ease-in-out;
-            }
-
-            .mega-menu-item:hover {
-                color: #000;
-                text-decoration: underline;
-            }
-
-            /* Responsive behavior for mobile menu */
-            @media (min-width: 768px) {
-                .mega-menu {
-                    /* Keep mega menu aligned with parent on desktop */
-                    left: 50%;
-                    transform: translateX(-50%);
-                    width: max-content;
-                }
-            }
-            .menu-link {
-  font-weight: 400; /* normal */
-}
-.menu-link div {
-  font-weight: 400; /* also apply to nested div text */
-}
-
-        </style>
-
+        <li><a href="/faq" class="hover:text-blue-600 transition flex items-center"><i class="fas fa-question-circle mr-2"></i></a></li>
+        <li><a href="http://blog.researchafricapublications.com" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition flex items-center"><i class="fas fa-blog mr-2"></i></a></li>
+        <li>
+          <a href="/login" class="bg-gradient-to-r from-gray-900 to-black text-white px-5 py-3 rounded-lg font-semibold hover:from-black hover:to-gray-800 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">Submit Paper</a>
+        </li>
+      </ul>
+      </div>
     </div>
-</nav>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="lg:hidden hidden bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 pb-3 pt-2 rounded-b-2xl">
+      <ul class="space-y-2 font-light text-gray-700">
+      <li><a href="/" class="block py-2 hover:text-blue-600 flex items-center"><i class="fas mr-2"></i>Home</a></li>
+      
+      <!-- Information For Mobile Dropdown -->
+      <li>
+        <button class="w-full flex justify-between items-center py-2 hover:text-blue-600 focus:outline-none dropdown-toggle">
+          <span class="flex items-center"><i class="fas mr-2"></i>Information For</span>
+        </button>
+        <ul class="dropdown-menu hidden pl-6 space-y-1 text-gray-600">
+          <li class="pt-2 font-semibold text-gray-800"><a href="/information/authors" class="hover:text-blue-600">Authors</a></li>
+          <li><a href="/information/authors" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-pen mr-2 w-4 text-center"></i>Author’s Guidelines</a></li>
+          <li><a href="/ethics" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-balance-scale mr-2 w-4 text-center"></i>Ethics Guidelines</a></li>
+          
+          <li class="pt-2 font-semibold text-gray-800"><a href="/information/editors" class="hover:text-blue-600">Editors</a></li>
+          <li><a href="/information/editors" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-edit mr-2 w-4 text-center"></i>Editorial Policy</a></li>
+          <li><a href="/information/editors" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas mr-2 w-4 text-center"></i>Responsibilities</a></li>
 
-<div class="bg-light fw-bold text-danger fs-4">
-    <marquee direction="left" scrollamount="3">Are you in need of a website to host your academic journal? We offer
-        state-of-the-art digital peer review, ensures ethical standards, and promotes academic rigour. Join the Research
-        Africa community and promote your publications. Contact us to learn more about our services and start publishing
-        today</marquee>
+          <li class="pt-2 font-semibold text-gray-800"><a href="/information/researchers" class="hover:text-blue-600">Researchers</a></li>
+          <li><a href="/information/researchers" class="block py-1 hover:text-black flex items-center"><i class="fas fa-file-upload mr-2 w-4 text-center"></i>Submit Paper</a></li>
+          <li><a href="/information/researchers" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-hand-holding-dollar mr-2 w-4 text-center"></i>Funding</a></li>
+
+          <li class="pt-2 font-semibold text-gray-800"><a href="/information/reviewers" class="hover:text-blue-600">Reviewers</a></li>
+          <li><a href="/information/reviewers" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-check-circle mr-2 w-4 text-center"></i>Review Guidelines</a></li>
+          <li><a href="/information/reviewers" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-user-plus mr-2 w-4 text-center"></i>Join as Reviewer</a></li>
+        </ul>
+      </li>
+
+      <!-- Services Mobile Dropdown -->
+      <li>
+        <button class="w-full flex justify-between items-center py-2 hover:text-blue-600 focus:outline-none dropdown-toggle">
+          <span class="flex items-center"><i class="fas mr-2"></i>Services</span>
+        </button>
+        <ul class="dropdown-menu hidden pl-6 space-y-1 text-gray-600">
+          <li class="pt-2 font-semibold text-gray-800"><a href="/afriscribe" class="hover:text-blue-600">AfriScribe</a></li>
+          <li><a href="/afriscribe/manuscripts" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-file-alt mr-2 w-4 text-center"></i>Manuscripts Manager</a></li>
+          <li><a href="/afriscribe" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-check mr-2 w-4 text-center"></i>Proofread</a></li>
+          <li><a href="/afriscribe" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-lightbulb mr-2 w-4 text-center"></i>Insights</a></li>
+          <li><a href="/afriscribe" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-link mr-2 w-4 text-center"></i>Connect</a></li>
+          <li><a href="/afriscribe" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-archive mr-2 w-4 text-center"></i>Archive</a></li>
+          <li><a href="/afriscribe" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-user-edit mr-2 w-4 text-center"></i>Editor</a></li>
+
+          <li class="pt-2 font-semibold text-gray-800">Research Africa Services</li>
+          <li><a href="/services/consulting" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-chalkboard-teacher mr-2 w-4 text-center"></i>Consulting (Coming Soon)</a></li>
+          <li><a href="/services/training" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-school mr-2 w-4 text-center"></i>Training (Coming Soon)</a></li>
+        </ul>
+      </li>
+
+      <li><a href="/faq" class="block py-2 hover:text-blue-600 flex items-center"><i class="fas fa-question-circle mr-2"></i></a></li>
+      <li><a href="http://blog.researchafricapublications.com" target="_blank" rel="noopener noreferrer" class="block py-2 hover:text-blue-600 flex items-center"><i class="fas fa-blog mr-2"></i></a></li>
+      <li class="pt-4">
+        <a href="/login" class="block text-center py-2 px-4 bg-gradient-to-r from-gray-900 to-black text-white rounded-lg font-semibold hover:bg-black transition">Submit Paper</a>
+      </li>
+    </ul>
+    </div>
+</div>
 </div>
 
-
-<!-- #header end -->
-@push('component')
-    <script>
-        $('.btnBar').click(function(e) {
-            e.preventDefault();
-
-            let thisBar = $(this);
-
-            if (thisBar.hasClass('close')) {
-                thisBar.removeClass('close').addClass('open');
-                $('#navbar-default').show();
-
-
-            } else {
-                thisBar.removeClass('open').addClass('close');
-
-                $('#navbar-default').hide();
-            }
-
-        });
-    </script>
-@endpush
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MK4S7W7B2F"></script>
 <script>
-    window.dataLayer = window.dataLayer || [];
+  // Mobile menu toggle with animation
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-    function gtag() {
-        dataLayer.push(arguments);
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+
+        // Toggle hamburger icon animation
+        const icon = document.querySelector('#menu-toggle i');
+        if (mobileMenu.classList.contains('hidden')) {
+          icon.className = 'fas fa-bars';
+        } else {
+          icon.className = 'fas fa-times';
+        }
+      });
     }
-    gtag('js', new Date());
+  });
 
-    gtag('config', 'G-MK4S7W7B2F');
+  // Mobile dropdown toggles with chevron animation
+  document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const submenu = btn.nextElementSibling;
+      
+      // Toggle the hidden class on the submenu
+      submenu.classList.toggle('hidden');
+      
+      // Rotate the chevron icon
+      const chevron = btn.querySelector('.fa-chevron-down, .fa-chevron-up');
+      if (chevron) {
+        if (submenu.classList.contains('hidden')) {
+          chevron.classList.remove('rotate-180');
+        } else {
+          chevron.classList.add('rotate-180');
+        }
+      }
+    });
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuToggle = document.getElementById('menu-toggle');
+
+    // This logic only applies to mobile/tablet screens.
+    if (window.innerWidth < 1024 && mobileMenu && menuToggle) {
+      if (!mobileMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+        mobileMenu.classList.add('hidden');
+        document.querySelector('#menu-toggle i').className = 'fas fa-bars';
+      }
+    }
+  });
+
+  // Mega-menu positioning logic to keep it within the viewport on desktop
+  document.querySelectorAll('.group').forEach(group => {
+    const megaMenu = group.querySelector('.mega-menu');
+    if (megaMenu) {
+      group.addEventListener('mouseenter', () => {
+        // We only want to run this on desktop screens
+        if (window.innerWidth < 1024) {
+          return;
+        }
+
+        const viewportWidth = window.innerWidth;
+        const menuRect = megaMenu.getBoundingClientRect();
+
+        // Calculate if the mega-menu is going to overflow the right edge
+        const overflowRight = menuRect.right > viewportWidth;
+        // Calculate if the mega-menu is going to overflow the left edge
+        const overflowLeft = menuRect.left < 0;
+
+        // Reset classes before applying new ones to avoid conflicts
+        megaMenu.classList.remove('left-1/2', '-translate-x-1/2', 'right-0', 'left-0');
+        
+        if (overflowRight) {
+          // If it overflows right, align it to the right
+          megaMenu.classList.add('right-0');
+        } else if (overflowLeft) {
+          // If it overflows left, align it to the left
+          megaMenu.classList.add('left-0');
+        } else {
+          // If it doesn't overflow, keep it centered
+          megaMenu.classList.add('left-1/2', '-translate-x-1/2');
+        }
+      });
+    }
+  });
+
+  // Re-check positioning on resize
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.group').forEach(group => {
+      const megaMenu = group.querySelector('.mega-menu');
+      if (megaMenu && window.innerWidth >= 1024) {
+        const viewportWidth = window.innerWidth;
+        const menuRect = megaMenu.getBoundingClientRect();
+        const overflowRight = menuRect.right > viewportWidth;
+        const overflowLeft = menuRect.left < 0;
+
+        megaMenu.classList.remove('left-1/2', '-translate-x-1/2', 'right-0', 'left-0');
+
+        if (overflowRight) {
+          megaMenu.classList.add('right-0');
+        } else if (overflowLeft) {
+          megaMenu.classList.add('left-0');
+        } else {
+          megaMenu.classList.add('left-1/2', '-translate-x-1/2');
+        }
+      }
+    });
+  });
 </script>
+
+</body>
+</html>
