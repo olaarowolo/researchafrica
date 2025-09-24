@@ -43,7 +43,13 @@ class QuoteRequest extends Model
     public function getFormattedCostAttribute()
     {
         if ($this->estimated_cost) {
-            return '£' . number_format($this->estimated_cost, 2);
+            $currencySymbol = match ($this->location) {
+                'Nigeria' => '₦',
+                'UK' => '£',
+                default => '$', // Default or fallback currency
+            };
+
+            return $currencySymbol . number_format($this->estimated_cost, 2);
         }
         return 'Not quoted yet';
     }

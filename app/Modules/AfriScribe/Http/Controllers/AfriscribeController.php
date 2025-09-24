@@ -120,69 +120,49 @@ class AfriscribeController extends Controller
 
             // Send email to admin with custom sender name for proofreading requests
             try {
-                $senderEmail = 'researchafrpub@gmail.com';
                 $senderName = $processedData['service_type'] === 'proofreading'
                     ? 'AfriScribe Proofreading Service'
                     : 'AfriScribe';
 
-                $email = new AfriscribeRequestMail($emailData, $senderName, $senderEmail);
+                // The Mailable likely uses its constructor arguments to set the 'from' header.
+                // The original code was incorrectly passing the recipient's email as the sender's email.
+                // We now use the 'from' address configured for the 'afriscribe' mailer.
+                $fromAddress = config('mail.mailers.afriscribe.from.address');
+                $email = new AfriscribeRequestMail($emailData, $senderName, $fromAddress);
 
-                // Configure mail settings for this email
-                config([
-                    'mail.from.address' => $senderEmail,
-                    'mail.from.name' => $senderName,
-                ]);
-
-                Mail::to('researchafrpub@gmail.com')->send($email);
-                Log::info('Admin email sent successfully to: researchafrpub@gmail.com');
+                Mail::mailer('afriscribe')->to('researchafrpub@gmail.com')->send($email);
+                Log::info('Admin email sent successfully to: researchafripub@gmail.com');
             } catch (\Exception $e) {
                 // Log email error but don't fail the request
                 Log::error('Failed to send admin notification email: ' . $e->getMessage());
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Your request was saved but there was an error sending the notification email. Please contact support.',
-                    'error' => $e->getMessage()
-                ], 500);
+                Log::error('Stack trace: ' . $e->getTraceAsString());
             }
 
             // Send acknowledgment email to client
             try {
-                Mail::to($processedData['email'])->send(new AfriscribeClientAcknowledgementMail($emailData));
+                // Use the 'afriscribe' mailer for consistency and to add CC/BCC recipients.
+                Mail::mailer('afriscribe')->to($processedData['email'])->cc('ola@researchafrica.pub')->bcc('olasunkanmiarowolo@gmail.com')->send(new AfriscribeClientAcknowledgementMail($emailData));
                 Log::info('Client acknowledgment email sent successfully to: ' . $processedData['email']);
             } catch (\Exception $e) {
                 // Log email error but don't fail the request
                 Log::error('Failed to send client acknowledgment email: ' . $e->getMessage());
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Your request was saved but there was an error sending the acknowledgment email. Please contact support.',
-                    'error' => $e->getMessage()
-                ], 500);
+                Log::error('Stack trace: ' . $e->getTraceAsString());
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Your request has been submitted successfully! An acknowledgment email has been sent to you, and our team will get back to you shortly.',
-                'data' => [
-                    'request_id' => $afriscribeRequest->id,
-                    'name' => $processedData['name'],
-                    'email' => $processedData['email'],
-                    'service_type' => $processedData['service_type'],
-                    'status' => $afriscribeRequest->status,
-                ]
-            ], 200);
+            return view('afriscribe.success', [
+                'message'     => 'Your request has been submitted successfully! An acknowledgment email has been sent to you, and our team will get back to you shortly.',
+                'redirectUrl' => '/afriscribe/home',
+                'countdown'   => 5,
+            ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
+            return back()->withErrors($e->validator)->withInput();
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred while processing your request',
-                'error' => $e->getMessage()
-            ], 500);
+            Log::error('An error occurred while processing your request: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            return back()
+                ->withInput()
+                ->with('error', 'An error occurred while processing your request. Please try again or contact support.');
         }
     }
 

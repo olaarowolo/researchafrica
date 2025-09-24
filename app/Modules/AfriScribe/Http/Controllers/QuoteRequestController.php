@@ -3,7 +3,7 @@
 namespace App\Modules\AfriScribe\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\QuoteRequest;
+use App\Modules\AfriScribe\Models\QuoteRequest;
 use App\Modules\AfriScribe\Mail\QuoteRequestMail;
 use App\Modules\AfriScribe\Mail\QuoteRequestClientAcknowledgementMail;
 use Illuminate\Http\Request;
