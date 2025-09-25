@@ -232,7 +232,7 @@ $navigation = [
             <!-- Nav-bar end -->
         </div>
         
-        <div id="mobile-menu-dropdowns" class="hidden lg:hidden top-full left-0 z-30 bg-white absolute w-full min-h-[calc(100vh-4rem)]">
+        <div id="mobile-menu-dropdowns" class="hidden lg:hidden top-full left-0 z-5 bg-white w-full min-h-[calc(100vh-4rem">
 
                 @php
                     $generalNav = array_filter($navigation, fn($item) => empty($item['children']));
@@ -289,20 +289,21 @@ $navigation = [
                     const arrow = document.getElementById(arrowId);
 
                     if (!toggle || !content || !arrow) return; // Safety check
+                    
+                    toggle.addEventListener('click', (event) => {
+                        event.stopPropagation(); // Prevent event from bubbling up to menu-toggle
 
-                    toggle.addEventListener('click', () => {
                         // Toggle visibility of the content (using the custom class)
                         content.classList.toggle('hidden');
-
+                        
                         // Toggle the arrow rotation (using Tailwind's rotate-180 utility)
                         arrow.classList.toggle('rotate-180');
                     });
                 }
-
+                
                 // Dynamically set up dropdowns based on the navigation data
-                const dropdownNav = @json($dropdownNav);
-                dropdownNav.forEach(item => {
-                    const slug = item.title.toLowerCase().replace(/\s+/g, '-');
+                document.querySelectorAll('[id$="-toggle"]').forEach(toggleElement => {
+                    const slug = toggleElement.id.replace('-toggle', '');
                     setupDropdown(`${slug}-toggle`, `${slug}-content`, `${slug}-arrow`);
                 });
             });

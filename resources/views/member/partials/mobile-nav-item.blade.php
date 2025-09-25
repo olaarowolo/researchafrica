@@ -8,7 +8,7 @@
             </svg>
         </div>
     </div>
-    <div id="{{ \Illuminate\Support\Str::slug($item['title']) }}-content" class="hidden px-4 py-3 bg-gray-50 border-b border-gray-200">
+    <div id="{{ \Illuminate\Support\Str::slug($item['title']) }}-content" class="hidden pt-16 px-4 py-3 bg-gray-50 border-b border-gray-200">
         <ul class="space-y-2 text-sm text-gray-600">
             @foreach ($item['children'] as $child)
                 <li class="pt-1 font-semibold text-gray-800"><a href="{{ $child['url'] }}"
