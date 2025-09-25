@@ -15508,7 +15508,7 @@ img.lazy:not([src]) {
   --cnvs-topbar-border-color: rgba(var(--cnvs-contrast-rgb), 0.1);
   --cnvs-topbar-social-icon-color: var(--cnvs-contrast-600);
   --cnvs-topbar-submenu-padding:	0.625rem;
-  --cnvs-topbar-submenu-font-size:	0.75rem;
+  --cnvs-topbar-submenu-font-size:	0.55rem;
   position: relative;
   border-bottom: var(--cnvs-topbar-border-size) solid var(--cnvs-topbar-border-color);
   font-size: var(--cnvs-topbar-font-size);
@@ -15568,7 +15568,7 @@ img.lazy:not([src]) {
 }
 .top-links-item.full-icon > a > i {
   top: 2px;
-  font-size: 0.875rem;
+  font-size: 0.675rem;
   margin: 0;
 }
 .top-links-item:hover {

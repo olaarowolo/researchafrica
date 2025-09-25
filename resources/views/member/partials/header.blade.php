@@ -2,303 +2,374 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- FontAwesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0BeIjyytfqxuMPsV0VDKY4GM2u07V7oxA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0BeIjyytfqxuMPsV0VDKY4GM2u07V7oxA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <style>
-    /* Smooth mega-menu animation */
-    .mega-menu {
-      transform: translateY(-10px);
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.25s ease;
-    }
-    .group:hover .mega-menu {
-      transform: translateY(0);
-      opacity: 1;
-      visibility: visible;
-    }
 
+
+  @include('member.partials.topbar-padding-style')
+  <style>
+    /* Show mega-menu when the parent group has 'is-open' class */
+    .group.is-open .mega-menu {
+        display: block;
+    }
+    /* Rotate arrow when the parent group has 'is-open' class */
+    .group.is-open svg {
+        transform: rotate(180deg);
+    }
+    /* Disable transition for instant state change */
+    .no-transition {
+        transition: none !important;
+    }
   </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-50 font-sans antialiased">
+@php
+$navigation = [
+    [
+        'title' => 'Home',
+        'url' => '/',
+        'icon' => 'fas fa-home',
+        'target_blank' => false,
+    ],
+    [
+        'title' => 'Information For',
+        'icon' => '',
+        'target_blank' => false,
+        'mega_menu_position' => 'left-0',
+        'mega_menu_cols' => 'grid-cols-2 md:grid-cols-4',
+        'children' => [
+            [
+                'title' => 'Authors',
+                'url' => '/information/authors',
+                'children' => [
+                    ['title' => 'Author’s Guidelines', 'url' => '/information/authors', 'icon' => 'fas fa-pen'],
+                    ['title' => 'Ethics Guidelines', 'url' => '/ethics', 'icon' => 'fas fa-balance-scale'],
+                ],
+            ],
+            [
+                'title' => 'Editors',
+                'url' => '/information/editors',
+                'children' => [
+                    ['title' => 'Editorial Policy', 'url' => '/information/editors', 'icon' => 'fas fa-edit'],
+                    ['title' => 'Responsibilities', 'url' => '/information/editors', 'icon' => 'fas fa-user-tie'],
+                ],
+            ],
+            [
+                'title' => 'Researchers',
+                'url' => '/information/researchers',
+                'children' => [
+                    ['title' => 'Submit Paper', 'url' => '/information/researchers', 'icon' => 'fas fa-file-upload'],
+                    ['title' => 'Opportunities', 'url' => '/information/researchers', 'icon' => 'fas fa-hand-holding-dollar'],
+                ],
+            ],
+            [
+                'title' => 'Reviewers',
+                'url' => '/information/reviewers',
+                'children' => [
+                    ['title' => 'Review Guidelines', 'url' => '/information/reviewers', 'icon' => 'fas fa-check-circle'],
+                    ['title' => 'Join as Reviewer', 'url' => '/information/reviewers', 'icon' => 'fas fa-user-plus'],
+                ],
+            ],
+        ],
+    ],
+    [
+        'title' => 'Services',
+        'icon' => '',
+        'target_blank' => false,
+        'mega_menu_position' => 'left-1/2 -translate-x-1/2',
+        'mega_menu_cols' => 'grid-cols-2',
+        'children' => [
+            [
+                'title' => 'AfriScribe',
+                'url' => '/afriscribe',
+                'children' => [
+                    ['title' => 'Manuscripts Manager', 'url' => '/afriscribe/manuscripts', 'icon' => 'fas fa-file-alt'],
+                    ['title' => 'Proofread', 'url' => '/afriscribe', 'icon' => 'fas fa-check'],
+                    ['title' => 'Insights', 'url' => '/afriscribe', 'icon' => 'fas fa-lightbulb'],
+                    ['title' => 'Connect', 'url' => '/afriscribe', 'icon' => 'fas fa-link'],
+                    ['title' => 'Archive', 'url' => '/afriscribe', 'icon' => 'fas fa-archive'],
+                    ['title' => 'Editor', 'url' => '/afriscribe', 'icon' => 'fas fa-user-edit'],
+                ],
+            ],
+            [
+                'title' => 'Research Africa Services',
+                'url' => '#',
+                'children' => [
+                    ['title' => 'Consulting (Coming Soon)', 'url' => '/services/consulting', 'icon' => 'fas fa-chalkboard-teacher'],
+                    ['title' => 'Training (Coming Soon)', 'url' => '/services/training', 'icon' => 'fas fa-school'],
+                ],
+            ],
+        ],
+    ],
+    [
+        'title' => 'Journals',
+        'url' => '/journals',
+        'icon' => 'fas fa-book-open',
+        'target_blank' => false,
+    ],
+    [
+        'title' => 'FAQ',
+        'url' => '/faq',
+        'icon' => 'fas fa-question-circle',
+        'target_blank' => false,
+    ],
+    [
+        'title' => 'Blog',
+        'url' => 'http://blog.researchafricapublications.com',
+        'icon' => 'fas fa-blog',
+        'target_blank' => true,
+    ],
+];
+@endphp
 
-<!-- Navbar Wrapper -->
-<div class="p-4 sticky top-0 z-50">
-  <!-- The Island Navbar -->
-  <div class="max-w-7xl mx-auto bg-white/80 backdrop-blur-lg shadow-2xl rounded-2xl">
-    <div class="px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
-      
-      <!-- Logo -->
-      <a href="/" class="flex-shrink-0">
-        <img class="h-10" src="images/logo.png" alt="ResearchAfrica Logo">
-      </a>
-
-      <!-- Mobile Menu Button -->
-      <div class="lg:hidden flex items-center">
-        <button id="menu-toggle" class="text-black hover:text-gray-800 focus:outline-none text-3xl transition-all duration-200 p-3 rounded-lg hover:bg-gray-200">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-
-      <!-- Desktop Menu -->
-      <ul id="menu" class="hidden lg:flex items-center justify-center flex-grow space-x-12 font-light text-gray-700">
-        <li><a href="/" class="hover:text-blue-600 transition flex items-center"><i class="fas mr-2"></i>Home</a></li>
-        
-        <!-- Information For Mega Menu -->
-        <li class="relative group">
-          <button class="hover:text-blue-600 transition flex items-center">
-            <i class="fas mr-1"></i>Information For
-          </button>
-
-          <div class="mega-menu absolute left-1/2 -translate-x-1/2 mt-3 w-max max-w-xl lg:max-w-4xl bg-white/90 backdrop-blur-lg shadow-xl rounded-xl p-6">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm text-gray-600">
-              <div>
-                <a href="/information/authors"><h5 class="font-semibold text-gray-900 mb-2 hover:text-blue-600">Authors</h5></a>
-                <ul class="space-y-2">
-                  <li><a href="/information/authors" class="hover:text-blue-600 flex items-center"><i class="fas fa-pen mr-2"></i>Author’s Guidelines</a></li>
-                  <li><a href="/ethics" class="hover:text-blue-600 flex items-center"><i class="fas fa-balance-scale mr-2"></i>Ethics Guidelines</a></li>
-                </ul>
-              </div>
-              <div>
-                <a href="/information/editors"><h5 class="font-semibold text-gray-900 mb-2 hover:text-blue-600">Editors</h5></a>
-                <ul class="space-y-2">
-                  <li><a href="/information/editors" class="hover:text-blue-600 flex items-center"><i class="fas fa-edit mr-2"></i>Editorial Policy</a></li>
-                  <li><a href="/information/editors" class="hover:text-blue-600 flex items-center"><i class="fas mr-2"></i>Responsibilities</a></li>
-                </ul>
-              </div>
-              <div>
-                <a href="/information/researchers"><h5 class="font-semibold text-gray-900 mb-2 hover:text-blue-600">Researchers</h5></a>
-                <ul class="space-y-2">
-                  <li><a href="/information/researchers" class="hover:text-black flex items-center"><i class="fas fa-file-upload mr-2"></i>Submit Paper</a></li>
-                  <li><a href="/information/researchers" class="hover:text-blue-600 flex items-center"><i class="fas fa-hand-holding-dollar mr-2"></i>Funding Opportunities</a></li>
-                </ul>
-              </div>
-              <div>
-                <a href="/information/reviewers"><h5 class="font-semibold text-gray-900 mb-2 hover:text-blue-600">Reviewers</h5></a>
-                <ul class="space-y-2">
-                  <li><a href="/information/reviewers" class="hover:text-blue-600 flex items-center"><i class="fas fa-check-circle mr-2"></i>Review Guidelines</a></li>
-                  <li><a href="/information/reviewers" class="hover:text-blue-600 flex items-center"><i class="fas fa-user-plus mr-2"></i>Join as Reviewer</a></li>
-                </ul>
-              </div>
+<!-- Top Bar -->
+<div id="top-bar" class="fixed top-0 left-0 w-full z-50">
+    <div class="container max-w-7xl mx-auto bg-white/80 backdrop-blur-lg shadow-2xl rounded-2xl">
+        <div class="kb-flex kb-justify-between kb-items-center">
+            <div class="">
+                <!-- Top Social -->
+                <ul id="top-social">
+                    <li>
+                        <a href="{{ $setting->facebook_url ?? '#' }}" class="h-bg-facebook" target="_blank">
+                            <span class="ts-icon"><i class="fa-brands fa-facebook-f"></i></span>
+                            <span class="ts-text">Facebook</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ $setting->twitter_url ?? '#' }}" class="h-bg-twitter" target="_blank">
+                            <span class="ts-icon"><i class="fa-brands fa-twitter"> </i></span>
+                            <span class="ts-text">Twitter</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ $setting->instagram_url ?? '#' }}" class="h-bg-instagram" target="_blank">
+                            <span class="ts-icon"><i class="fa-brands fa-instagram"> </i></span>
+                            <span class="ts-text">Instagram</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ $setting->linkedin_url ?? '#' }}" class="h-bg-linkedin" target="_blank">
+                            <span class="ts-icon"><i class="fa-brands fa-linkedin"> </i></span>
+                            <span class="ts-text">Linkedin</span>
+                        </a>
+                    </li>
+                </ul><!-- #top-social end -->
             </div>
-          </div>
-        </li>
-
-        <!-- Services Mega Menu -->
-        <li class="relative group">
-          <button class="hover:text-blue-600 transition flex items-center">
-            <i class="fas mr-1"></i>Services
-          </button>
-          <div class="mega-menu absolute left-1/2 -translate-x-1/2 mt-3 w-max max-w-xl lg:max-w-2xl bg-white/90 backdrop-blur-lg shadow-xl rounded-xl p-6">
-            <div class="grid grid-cols-2 gap-6 text-sm text-gray-600">
-              <div>
-                <a href="/afriscribe"><h5 class="font-semibold text-gray-900 mb-2 hover:text-blue-600">AfriScribe</h5></a>
-                <ul class="space-y-2">
-                  <li><a href="/afriscribe/manuscripts" class="hover:text-blue-600 flex items-center"><i class="fas fa-file-alt mr-2"></i>Manuscripts Manager</a></li>
-                  <li><a href="/afriscribe" class="hover:text-blue-600 flex items-center"><i class="fas fa-check mr-2"></i>Proofread</a></li>
-                  <li><a href="/afriscribe" class="hover:text-blue-600 flex items-center"><i class="fas fa-lightbulb mr-2"></i>Insights</a></li>
-                  <li><a href="/afriscribe" class="hover:text-blue-600 flex items-center"><i class="fas fa-link mr-2"></i>Connect</a></li>
-                  <li><a href="/afriscribe" class="hover:text-blue-600 flex items-center"><i class="fas fa-archive mr-2"></i>Archive</a></li>
-                  <li><a href="/afriscribe" class="hover:text-blue-600 flex items-center"><i class="fas fa-user-edit mr-2"></i>Editor</a></li>
-                </ul>
-              </div>
-              <div>
-                <h5 class="font-semibold text-gray-900 mb-2">Research Africa Services</h5>
-                <ul class="space-y-2">
-                  <li><a href="/services/consulting" class="hover:text-blue-600 flex items-center"><i class="fas fa-chalkboard-teacher mr-2"></i>Consulting (Coming Soon)</a></li>
-                  <li><a href="/services/training" class="hover:text-blue-600 flex items-center"><i class="fas fa-school mr-2"></i>Training (Coming Soon)</a></li>
-                </ul>
-              </div>
+            <div class="">
+                <!-- Top Links -->
+                <div class="top-links">
+                    <ul class="top-links-container">
+                        @auth('member')
+                            <li class="top-links-item"><a href="{{ route('member.profile') }}" class="text-xs sm:text-sm"><i class="fa fa-user"></i>View Profile</a></li>
+                        @else
+                            <li class="top-links-item"><a href="{{ route('member.register') }}" class="text-xs sm:text-sm"><i class="fa-sharp fa-solid fa-plus"></i>Create Account</a></li>
+                            <li class="top-links-item"><a href="{{ route('member.login') }}" class="text-xs sm:text-sm"><i class="fa-sharp fa-solid fa-right-to-bracket"></i>Sign In</a></li>
+                        @endauth
+                    </ul>
+                </div><!-- .top-links end -->
             </div>
-          </div>
-        </li>
-
-        <li><a href="/faq" class="hover:text-blue-600 transition flex items-center"><i class="fas fa-question-circle mr-2"></i></a></li>
-        <li><a href="http://blog.researchafricapublications.com" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition flex items-center"><i class="fas fa-blog mr-2"></i></a></li>
-        <li>
-          <a href="/login" class="bg-gradient-to-r from-gray-900 to-black text-white px-5 py-3 rounded-lg font-semibold hover:from-black hover:to-gray-800 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">Submit Paper</a>
-        </li>
-      </ul>
-      </div>
-    </div>
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="lg:hidden hidden bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 pb-3 pt-2 rounded-b-2xl">
-      <ul class="space-y-2 font-light text-gray-700">
-      <li><a href="/" class="block py-2 hover:text-blue-600 flex items-center"><i class="fas mr-2"></i>Home</a></li>
-      
-      <!-- Information For Mobile Dropdown -->
-      <li>
-        <button class="w-full flex justify-between items-center py-2 hover:text-blue-600 focus:outline-none dropdown-toggle">
-          <span class="flex items-center"><i class="fas mr-2"></i>Information For</span>
-        </button>
-        <ul class="dropdown-menu hidden pl-6 space-y-1 text-gray-600">
-          <li class="pt-2 font-semibold text-gray-800"><a href="/information/authors" class="hover:text-blue-600">Authors</a></li>
-          <li><a href="/information/authors" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-pen mr-2 w-4 text-center"></i>Author’s Guidelines</a></li>
-          <li><a href="/ethics" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-balance-scale mr-2 w-4 text-center"></i>Ethics Guidelines</a></li>
-          
-          <li class="pt-2 font-semibold text-gray-800"><a href="/information/editors" class="hover:text-blue-600">Editors</a></li>
-          <li><a href="/information/editors" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-edit mr-2 w-4 text-center"></i>Editorial Policy</a></li>
-          <li><a href="/information/editors" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas mr-2 w-4 text-center"></i>Responsibilities</a></li>
-
-          <li class="pt-2 font-semibold text-gray-800"><a href="/information/researchers" class="hover:text-blue-600">Researchers</a></li>
-          <li><a href="/information/researchers" class="block py-1 hover:text-black flex items-center"><i class="fas fa-file-upload mr-2 w-4 text-center"></i>Submit Paper</a></li>
-          <li><a href="/information/researchers" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-hand-holding-dollar mr-2 w-4 text-center"></i>Funding</a></li>
-
-          <li class="pt-2 font-semibold text-gray-800"><a href="/information/reviewers" class="hover:text-blue-600">Reviewers</a></li>
-          <li><a href="/information/reviewers" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-check-circle mr-2 w-4 text-center"></i>Review Guidelines</a></li>
-          <li><a href="/information/reviewers" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-user-plus mr-2 w-4 text-center"></i>Join as Reviewer</a></li>
-        </ul>
-      </li>
-
-      <!-- Services Mobile Dropdown -->
-      <li>
-        <button class="w-full flex justify-between items-center py-2 hover:text-blue-600 focus:outline-none dropdown-toggle">
-          <span class="flex items-center"><i class="fas mr-2"></i>Services</span>
-        </button>
-        <ul class="dropdown-menu hidden pl-6 space-y-1 text-gray-600">
-          <li class="pt-2 font-semibold text-gray-800"><a href="/afriscribe" class="hover:text-blue-600">AfriScribe</a></li>
-          <li><a href="/afriscribe/manuscripts" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-file-alt mr-2 w-4 text-center"></i>Manuscripts Manager</a></li>
-          <li><a href="/afriscribe" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-check mr-2 w-4 text-center"></i>Proofread</a></li>
-          <li><a href="/afriscribe" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-lightbulb mr-2 w-4 text-center"></i>Insights</a></li>
-          <li><a href="/afriscribe" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-link mr-2 w-4 text-center"></i>Connect</a></li>
-          <li><a href="/afriscribe" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-archive mr-2 w-4 text-center"></i>Archive</a></li>
-          <li><a href="/afriscribe" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-user-edit mr-2 w-4 text-center"></i>Editor</a></li>
-
-          <li class="pt-2 font-semibold text-gray-800">Research Africa Services</li>
-          <li><a href="/services/consulting" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-chalkboard-teacher mr-2 w-4 text-center"></i>Consulting (Coming Soon)</a></li>
-          <li><a href="/services/training" class="block py-1 hover:text-blue-600 flex items-center"><i class="fas fa-school mr-2 w-4 text-center"></i>Training (Coming Soon)</a></li>
-        </ul>
-      </li>
-
-      <li><a href="/faq" class="block py-2 hover:text-blue-600 flex items-center"><i class="fas fa-question-circle mr-2"></i></a></li>
-      <li><a href="http://blog.researchafricapublications.com" target="_blank" rel="noopener noreferrer" class="block py-2 hover:text-blue-600 flex items-center"><i class="fas fa-blog mr-2"></i></a></li>
-      <li class="pt-4">
-        <a href="/login" class="block text-center py-2 px-4 bg-gradient-to-r from-gray-900 to-black text-white rounded-lg font-semibold hover:bg-black transition">Submit Paper</a>
-      </li>
-    </ul>
+        </div>
     </div>
 </div>
-</div>
+<!-- #top-bar end -->
 
-<script>
-  // Mobile menu toggle with animation
-  document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.getElementById('menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
+        <div class="">
+        <!-- Nav Bar -->
+            <header class="p-4 sticky top-0 z-50">
+                <div
+                    class="max-w-7xl mx-auto bg-white/80 backdrop-blur-lg shadow-2xl rounded-2xl px-4 py-3 flex justify-between lg:justify-start items-center text-sm font-semibold">
 
-    if (menuToggle && mobileMenu) {
-      menuToggle.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
+                    <div class="flex items-center space-x-2 lg:hidden">
+                        <button id="menu-toggle" class="text-gray-600 focus:outline-none">
+                            <svg id="menu-icon-menu" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                            <svg id="menu-icon-x" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
 
-        // Toggle hamburger icon animation
-        const icon = document.querySelector('#menu-toggle i');
-        if (mobileMenu.classList.contains('hidden')) {
-          icon.className = 'fas fa-bars';
-        } else {
-          icon.className = 'fas fa-times';
-        }
-      });
-    }
-  });
+                    <a href="/" class="flex items-center lg:mr-8">
+                        <img src="/images/logo-ls-blk.png" alt="Research Africa Logo" class="h-12 w-auto" />
+                    </a>
 
-  // Mobile dropdown toggles with chevron animation
-  document.querySelectorAll('.dropdown-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const submenu = btn.nextElementSibling;
-      
-      // Toggle the hidden class on the submenu
-      submenu.classList.toggle('hidden');
-      
-      // Rotate the chevron icon
-      const chevron = btn.querySelector('.fa-chevron-down, .fa-chevron-up');
-      if (chevron) {
-        if (submenu.classList.contains('hidden')) {
-          chevron.classList.remove('rotate-180');
-        } else {
-          chevron.classList.add('rotate-180');
-        }
-      }
-    });
-  });
+                    <ul id="menu"
+                        class="hidden lg:flex items-center justify-center flex-grow space-x-6 lg:space-x-8 font-light text-gray-700 text-sm md:text-xs sm:text-xs">
+                        @foreach ($navigation as $item)
+                            @include('member.partials.desktop-nav-item', ['item' => $item])
+                        @endforeach
+                    </ul>
+                    <div class="flex items-center space-x-4 text-gray-600 lg:ml-auto">
+                        <a href="/login"
+                            class="bg-gradient-to-r from-gray-900 to-black text-white px-3 py-2 rounded-lg font-semibold hover:from-black hover:to-gray-800 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hidden lg:block text-xs">Submit
+                            Paper</a>
 
-  // Close mobile menu when clicking outside
-  document.addEventListener('click', (e) => {
-    const mobileMenu = document.getElementById('mobile-menu');
-    const menuToggle = document.getElementById('menu-toggle');
-
-    // This logic only applies to mobile/tablet screens.
-    if (window.innerWidth < 1024 && mobileMenu && menuToggle) {
-      if (!mobileMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-        mobileMenu.classList.add('hidden');
-        document.querySelector('#menu-toggle i').className = 'fas fa-bars';
-      }
-    }
-  });
-
-  // Mega-menu positioning logic to keep it within the viewport on desktop
-  document.querySelectorAll('.group').forEach(group => {
-    const megaMenu = group.querySelector('.mega-menu');
-    if (megaMenu) {
-      group.addEventListener('mouseenter', () => {
-        // We only want to run this on desktop screens
-        if (window.innerWidth < 1024) {
-          return;
-        }
-
-        const viewportWidth = window.innerWidth;
-        const menuRect = megaMenu.getBoundingClientRect();
-
-        // Calculate if the mega-menu is going to overflow the right edge
-        const overflowRight = menuRect.right > viewportWidth;
-        // Calculate if the mega-menu is going to overflow the left edge
-        const overflowLeft = menuRect.left < 0;
-
-        // Reset classes before applying new ones to avoid conflicts
-        megaMenu.classList.remove('left-1/2', '-translate-x-1/2', 'right-0', 'left-0');
+                        <a href="/login" class="flex flex-col items-center">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            <span class="hidden sm:inline">Access</span>
+                        </a>
+                        <a href="#" class="flex flex-col items-center relative">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span class="hidden sm:inline">Cart</span>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            <!-- Nav-bar end -->
+        </div>
         
-        if (overflowRight) {
-          // If it overflows right, align it to the right
-          megaMenu.classList.add('right-0');
-        } else if (overflowLeft) {
-          // If it overflows left, align it to the left
-          megaMenu.classList.add('left-0');
-        } else {
-          // If it doesn't overflow, keep it centered
-          megaMenu.classList.add('left-1/2', '-translate-x-1/2');
-        }
-      });
-    }
-  });
+        <div id="mobile-menu-dropdowns" class="hidden lg:hidden top-full left-0 z-30 bg-white absolute w-full min-h-[calc(100vh-4rem)]">
 
-  // Re-check positioning on resize
-  window.addEventListener('resize', () => {
-    document.querySelectorAll('.group').forEach(group => {
-      const megaMenu = group.querySelector('.mega-menu');
-      if (megaMenu && window.innerWidth >= 1024) {
-        const viewportWidth = window.innerWidth;
-        const menuRect = megaMenu.getBoundingClientRect();
-        const overflowRight = menuRect.right > viewportWidth;
-        const overflowLeft = menuRect.left < 0;
+                @php
+                    $generalNav = array_filter($navigation, fn($item) => empty($item['children']));
+                    $dropdownNav = array_filter($navigation, fn($item) => !empty($item['children']));
+                @endphp
 
-        megaMenu.classList.remove('left-1/2', '-translate-x-1/2', 'right-0', 'left-0');
+                <div id="general-nav" class="p-4 border-b border-gray-200">
+                    <ul class="space-y-3 text-base font-medium text-gray-700">
+                        @foreach ($generalNav as $item)
+                            @include('member.partials.mobile-nav-item', ['item' => $item])
+                        @endforeach
+                         <li class="pt-4 border-t border-gray-200">
+                            <a href="/login" class="block text-center py-2 px-4 bg-gradient-to-r from-gray-900 to-black text-white rounded-lg font-semibold hover:bg-black transition">Submit Paper</a>
+                        </li>
+                    </ul>
+                </div>
 
-        if (overflowRight) {
-          megaMenu.classList.add('right-0');
-        } else if (overflowLeft) {
-          megaMenu.classList.add('left-0');
-        } else {
-          megaMenu.classList.add('left-1/2', '-translate-x-1/2');
-        }
-      }
-    });
-  });
-</script>
+                @foreach ($dropdownNav as $item)
+                    @include('member.partials.mobile-nav-item', ['item' => $item])
+                @endforeach
+
+            </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const mobileDropdowns = document.getElementById('mobile-menu-dropdowns');
+                const menuToggle = document.getElementById('menu-toggle');
+                const iconX = document.getElementById('menu-icon-x');
+                const iconMenu = document.getElementById('menu-icon-menu');
+
+                // --- 1. Main Menu Toggle Logic ---
+
+                menuToggle.addEventListener('click', () => {
+                    // Toggle visibility of the mobile menu
+                    mobileDropdowns.classList.toggle('hidden');
+
+                    // Toggle the icons
+                    if (mobileDropdowns.classList.contains('hidden')) {
+                        // Menu is CLOSED, show 'Menu' icon
+                        iconX.classList.add('hidden');
+                        iconMenu.classList.remove('hidden');
+                    } else {
+                        // Menu is OPEN, show 'X' icon
+                        iconMenu.classList.add('hidden');
+                        iconX.classList.remove('hidden');
+                    }
+                });
+
+                // --- 2. Dropdown Toggle Logic (Updated to include 'services') ---
+
+                function setupDropdown(toggleId, contentId, arrowId) {
+                    const toggle = document.getElementById(toggleId);
+                    const content = document.getElementById(contentId);
+                    const arrow = document.getElementById(arrowId);
+
+                    if (!toggle || !content || !arrow) return; // Safety check
+
+                    toggle.addEventListener('click', () => {
+                        // Toggle visibility of the content (using the custom class)
+                        content.classList.toggle('hidden');
+
+                        // Toggle the arrow rotation (using Tailwind's rotate-180 utility)
+                        arrow.classList.toggle('rotate-180');
+                    });
+                }
+
+                // Dynamically set up dropdowns based on the navigation data
+                const dropdownNav = @json($dropdownNav);
+                dropdownNav.forEach(item => {
+                    const slug = item.title.toLowerCase().replace(/\s+/g, '-');
+                    setupDropdown(`${slug}-toggle`, `${slug}-content`, `${slug}-arrow`);
+                });
+            });
+
+            // --- 3. Desktop Dropdown Click Logic ---
+            document.addEventListener('DOMContentLoaded', () => {
+                 const menuGroups = document.querySelectorAll('.relative.group');
+                 let closeTimer;
+
+                 menuGroups.forEach(group => {
+                     const toggle = group.querySelector('[data-menu-toggle]');
+                     const content = group.querySelector('[data-menu-content]');
+                     const arrowSvg = group.querySelector('svg');
+
+                     if (!toggle || !content) return;
+
+                     toggle.addEventListener('click', (event) => {
+                         event.stopPropagation();
+                         const wasOpen = group.classList.contains('is-open');
+
+                         // Close all other menus
+                         menuGroups.forEach(g => g.classList.remove('is-open'));
+                         // Reset all arrows
+                         document.querySelectorAll('.relative.group svg').forEach(svg => {
+                            svg.classList.add('no-transition');
+                         });
+
+                         // If it was closed, open it.
+                         if (!wasOpen) {
+                             group.classList.add('is-open');
+                             // Allow animation only when opening
+                             arrowSvg.classList.remove('no-transition');
+                         }
+                     });
+
+                     // Stop clicks inside the menu from closing it
+                     content.addEventListener('click', (event) => {
+                         event.stopPropagation();
+                     });
+
+                     // When mouse leaves the entire group (li + dropdown)
+                     group.addEventListener('mouseleave', () => {
+                         // Set a short delay before closing. This allows the cursor
+                         // to move from the button to the dropdown content.
+                         closeTimer = setTimeout(() => {
+                             group.classList.remove('is-open');
+                             if (arrowSvg) {
+                                 // Prevent animation on close
+                                 arrowSvg.classList.add('no-transition');
+                             }
+                         }, 50); // 50ms delay
+                     });
+
+                     group.addEventListener('mouseenter', () => {
+                         // When re-entering the menu area, clear any pending close timers
+                         clearTimeout(closeTimer);
+                     });
+                 });
+
+                // Close all menus if clicking anywhere else on the page
+                document.addEventListener('click', () => {
+                    document.querySelectorAll('.group.is-open').forEach(openGroup => {
+                        openGroup.classList.remove('is-open');
+                    });
+                });
+            });
+        </script>
 
 </body>
 </html>

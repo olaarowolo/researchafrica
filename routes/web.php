@@ -178,3 +178,10 @@ Route::group(['prefix' => 'admin/profile', 'as' => 'profile.', 'namespace' => 'A
 require 'user.php';
 
 require 'user.php';
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('password/reset', [\App\Http\Controllers\AdminPasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('password/email', [\App\Http\Controllers\AdminPasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('password/reset/{token}', [\App\Http\Controllers\AdminPasswordResetController::class, 'showResetForm'])->name('admin.password.reset');
+    Route::post('password/reset', [\App\Http\Controllers\AdminPasswordResetController::class, 'reset'])->name('admin.password.update');
+});
