@@ -175,4 +175,20 @@ class AuthenticationTest extends TestCase
 
         $response->assertStatus(302);
     }
+
+    public function test_authenticated_admin_is_redirected_from_login_page()
+    {
+        $admin = User::factory()->admin()->create();
+
+        $response = $this->actingAs($admin, 'web')->get('/admin/login');
+
+        $response->assertRedirect(route('admin.home'));
+    }
+
+    public function test_unauthenticated_user_is_redirected_to_login_page()
+    {
+        $response = $this->get('/admin/home');
+
+        $response->assertRedirect(route('admin.login'));
+    }
 }

@@ -1,198 +1,190 @@
-
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublisherGalleyController;
 
 // =============================
-// Admin Routes
+// Public Routes
 // =============================
-// =============================
-// Publisher & Galley Proof Routes
-// =============================
+// Public User Documentation
+Route::view('/user-docs', 'user-docs')->name('user.docs');
 // Author galley proof approval (public link)
 Route::get('/author/galley-approval/{article}', [PublisherGalleyController::class, 'authorGalleyApproval'])->name('author.galley.approval');
-// Publisher routes (grouped in routes/publisher.php)
-require __DIR__.'/publisher.php';
 
-
-
-
-Route::get('/admin', function () {
-    return redirect('/admin/login');
-});
-// Auth
+// =============================
+// Authentication Routes
+// =============================
 Route::get('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/login', 'Auth\LoginController@authLogin')->name('login.submit');
 Route::get('/admin/login', 'Auth\LoginController@login')->name('admin.login');
 Route::post('/admin/login', 'Auth\LoginController@authLogin')->name('admin.submit-login');
+Route::post('/admin/logout', 'Auth\LoginController@logout')->name('admin.logout');
+Route::get('/admin', function () {
+    return redirect('/admin/login');
+});
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.'], function ()
-{
+// =============================
+// Publisher Routes
+// =============================
+require __DIR__.'/publisher.php';
 
-    Route::group(['namespace' => 'Auth'], function ()
-    {
-    //     Route::get('login', 'LoginController@authLogin')->name('submit-login');
+// =============================
+// User Routes
+// =============================
+require __DIR__.'/user.php';
 
-    }); // This closing brace was misplaced, it should be after the Auth namespace group.
-    Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
-        // Route::post('logout', 'UserController@logout')->name('logout');
+// =============================
+// Admin Routes
+// =============================
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:web']], function () {
+    Route::get('/home', 'Admin\HomeController@index')->name('home');
+    // Permissions
+    Route::delete('permissions/destroy', 'Admin\PermissionsController@massDestroy')->name('permissions.massDestroy');
+    Route::resource('permissions', 'Admin\PermissionsController');
 
+    // Roles
+    Route::delete('roles/destroy', 'Admin\RolesController@massDestroy')->name('roles.massDestroy');
+    Route::resource('roles', 'Admin\RolesController');
 
+    // Users
+    Route::delete('users/destroy', 'Admin\UsersController@massDestroy')->name('users.massDestroy');
+    Route::resource('users', 'Admin\UsersController');
 
-        Route::get('/home', 'HomeController@index')->name('home');
-        Route::post('/logout', 'HomeController@logout')->name('logout');
-        // Permissions
-        Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
-        Route::resource('permissions', 'PermissionsController');
+    // Setting
+    Route::delete('settings/destroy', 'Admin\SettingController@massDestroy')->name('settings.massDestroy');
+    Route::post('settings/media', 'Admin\SettingController@storeMedia')->name('settings.storeMedia');
+    Route::get('settings', 'Admin\SettingController@index')->name('settings.index');
+    Route::post('settings', 'Admin\SettingController@update')->name('settings.update');
 
-        // Roles
-        Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
-        Route::resource('roles', 'RolesController');
+    // Faq Category
+    Route::delete('faq-categories/destroy', 'Admin\FaqCategoryController@massDestroy')->name('faq-categories.massDestroy');
+    Route::resource('faq-categories', 'Admin\FaqCategoryController');
 
-        // Users
-        Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
-        Route::resource('users', 'UsersController');
+    // Faq Question
+    Route::delete('faq-questions/destroy', 'Admin\FaqQuestionController@massDestroy')->name('faq-questions.massDestroy');
+    Route::resource('faq-questions', 'Admin\FaqQuestionController');
 
-        // Setting
-        Route::delete('settings/destroy', 'SettingController@massDestroy')->name('settings.massDestroy');
-        Route::post('settings/media', 'SettingController@storeMedia')->name('settings.storeMedia');
-        Route::get('settings', 'SettingController@index')->name('settings.index');
-        Route::post('settings', 'SettingController@update')->name('settings.update');
+    // Content Category
+    Route::delete('content-categories/destroy', 'Admin\ContentCategoryController@massDestroy')->name('content-categories.massDestroy');
+    Route::resource('content-categories', 'Admin\ContentCategoryController');
 
-        // Faq Category
-        Route::delete('faq-categories/destroy', 'FaqCategoryController@massDestroy')->name('faq-categories.massDestroy');
-        Route::resource('faq-categories', 'FaqCategoryController');
+    // Content Tag
+    Route::delete('content-tags/destroy', 'Admin\ContentTagController@massDestroy')->name('content-tags.massDestroy');
+    Route::resource('content-tags', 'Admin\ContentTagController');
 
-        // Faq Question
-        Route::delete('faq-questions/destroy', 'FaqQuestionController@massDestroy')->name('faq-questions.massDestroy');
-        Route::resource('faq-questions', 'FaqQuestionController');
+    // Content Page
+    Route::delete('content-pages/destroy', 'Admin\ContentPageController@massDestroy')->name('content-pages.massDestroy');
+    Route::post('content-pages/media', 'Admin\ContentPageController@storeMedia')->name('content-pages.storeMedia');
+    Route::post('content-pages/ckmedia', 'Admin\ContentPageController@storeCKEditorImages')->name('content-pages.storeCKEditorImages');
+    Route::resource('content-pages', 'Admin\ContentPageController');
 
-        // Content Category
-        Route::delete('content-categories/destroy', 'ContentCategoryController@massDestroy')->name('content-categories.massDestroy');
-        Route::resource('content-categories', 'ContentCategoryController');
+    // Member
+    Route::delete('members/destroy', 'Admin\MemberController@massDestroy')->name('members.massDestroy');
+    Route::post('members/media', 'Admin\MemberController@storeMedia')->name('members.storeMedia');
+    Route::post('members/ckmedia', 'Admin\MemberController@storeCKEditorImages')->name('members.storeCKEditorImages');
+    Route::post('members/parse-csv-import', 'Admin\MemberController@parseCsvImport')->name('members.parseCsvImport');
+    Route::post('members/process-csv-import', 'Admin\MemberController@processCsvImport')->name('members.processCsvImport');
+    Route::resource('members', 'Admin\MemberController');
 
-        // Content Tag
-        Route::delete('content-tags/destroy', 'ContentTagController@massDestroy')->name('content-tags.massDestroy');
-        Route::resource('content-tags', 'ContentTagController');
-
-        // Content Page
-        Route::delete('content-pages/destroy', 'ContentPageController@massDestroy')->name('content-pages.massDestroy');
-        Route::post('content-pages/media', 'ContentPageController@storeMedia')->name('content-pages.storeMedia');
-        Route::post('content-pages/ckmedia', 'ContentPageController@storeCKEditorImages')->name('content-pages.storeCKEditorImages');
-        Route::resource('content-pages', 'ContentPageController');
-
-        // Member
-        Route::delete('members/destroy', 'MemberController@massDestroy')->name('members.massDestroy');
-        Route::post('members/media', 'MemberController@storeMedia')->name('members.storeMedia');
-        Route::post('members/ckmedia', 'MemberController@storeCKEditorImages')->name('members.storeCKEditorImages');
-        Route::post('members/parse-csv-import', 'MemberController@parseCsvImport')->name('members.parseCsvImport');
-        Route::post('members/process-csv-import', 'MemberController@processCsvImport')->name('members.processCsvImport');
-        Route::resource('members', 'MemberController');
-
-        // MemberRole
-        Route::resource('member-roles', 'MemberRoleController');
+    // MemberRole
+    Route::resource('member-roles', 'Admin\MemberRoleController');
 
 
-        // Countries
-        Route::delete('countries/destroy', 'CountriesController@massDestroy')->name('countries.massDestroy');
-        Route::resource('countries', 'CountriesController');
+    // Countries
+    Route::delete('countries/destroy', 'Admin\CountriesController@massDestroy')->name('countries.massDestroy');
+    Route::resource('countries', 'Admin\CountriesController');
 
-        // Subscriptions
-        Route::delete('subscriptions/destroy', 'SubscriptionsController@massDestroy')->name('subscriptions.massDestroy');
-        Route::post('subscriptions/media', 'SubscriptionsController@storeMedia')->name('subscriptions.storeMedia');
-        Route::post('subscriptions/ckmedia', 'SubscriptionsController@storeCKEditorImages')->name('subscriptions.storeCKEditorImages');
-        Route::post('subscriptions/parse-csv-import', 'SubscriptionsController@parseCsvImport')->name('subscriptions.parseCsvImport');
-        Route::post('subscriptions/process-csv-import', 'SubscriptionsController@processCsvImport')->name('subscriptions.processCsvImport');
-        Route::resource('subscriptions', 'SubscriptionsController');
+    // Subscriptions
+    Route::delete('subscriptions/destroy', 'Admin\SubscriptionsController@massDestroy')->name('subscriptions.massDestroy');
+    Route::post('subscriptions/media', 'Admin\SubscriptionsController@storeMedia')->name('subscriptions.storeMedia');
+    Route::post('subscriptions/ckmedia', 'Admin\SubscriptionsController@storeCKEditorImages')->name('subscriptions.storeCKEditorImages');
+    Route::post('subscriptions/parse-csv-import', 'Admin\SubscriptionsController@parseCsvImport')->name('subscriptions.parseCsvImport');
+    Route::post('subscriptions/process-csv-import', 'Admin\SubscriptionsController@processCsvImport')->name('subscriptions.processCsvImport');
+    Route::resource('subscriptions', 'Admin\SubscriptionsController');
 
-        // Member Subscriptions
-        Route::delete('member-subscriptions/destroy', 'MemberSubscriptionsController@massDestroy')->name('member-subscriptions.massDestroy');
-        Route::post('member-subscriptions/parse-csv-import', 'MemberSubscriptionsController@parseCsvImport')->name('member-subscriptions.parseCsvImport');
-        Route::post('member-subscriptions/process-csv-import', 'MemberSubscriptionsController@processCsvImport')->name('member-subscriptions.processCsvImport');
-        Route::resource('member-subscriptions', 'MemberSubscriptionsController');
+    // Member Subscriptions
+    Route::delete('member-subscriptions/destroy', 'Admin\MemberSubscriptionsController@massDestroy')->name('member-subscriptions.massDestroy');
+    Route::post('member-subscriptions/parse-csv-import', 'Admin\MemberSubscriptionsController@parseCsvImport')->name('member-subscriptions.parseCsvImport');
+    Route::post('member-subscriptions/process-csv-import', 'Admin\MemberSubscriptionsController@processCsvImport')->name('member-subscriptions.processCsvImport');
+    Route::resource('member-subscriptions', 'Admin\MemberSubscriptionsController');
 
-        // Article Keyword
-        Route::delete('article-keywords/destroy', 'ArticleKeywordController@massDestroy')->name('article-keywords.massDestroy');
-        Route::resource('article-keywords', 'ArticleKeywordController');
+    // Article Keyword
+    Route::delete('article-keywords/destroy', 'Admin\ArticleKeywordController@massDestroy')->name('article-keywords.massDestroy');
+    Route::resource('article-keywords', 'Admin\ArticleKeywordController');
 
 
 // Article Category
-        Route::delete('article-categories/destroy', 'ArticleCategoryController@massDestroy')->name('article-categories.massDestroy');
-        Route::resource('article-categories', 'ArticleCategoryController');
+    Route::delete('article-categories/destroy', 'Admin\ArticleCategoryController@massDestroy')->name('article-categories.massDestroy');
+    Route::resource('article-categories', 'Admin\ArticleCategoryController');
 
-        // Journals
-        Route::resource('journals', 'JournalController');
-        Route::get('journals/{journal}/settings', 'JournalController@settings')->name('journals.settings');
-        Route::put('journals/{journal}/settings', 'JournalController@updateSettings')->name('journals.settings.update');
-        Route::get('journals/{journal}/analytics', 'JournalController@analytics')->name('journals.analytics');
+    // Journals
+    Route::resource('journals', 'Admin\JournalController');
+    Route::get('journals/{journal}/settings', 'Admin\JournalController@settings')->name('journals.settings');
+    Route::put('journals/{journal}/settings', 'Admin\JournalController@updateSettings')->name('journals.settings.update');
+    Route::get('journals/{journal}/analytics', 'Admin\JournalController@analytics')->name('journals.analytics');
 
-        // Journal Memberships
-        Route::get('journal-memberships/{journal}', 'JournalMembershipController@index')->name('journal-memberships.index');
-        Route::get('journal-memberships/{journal}/create', 'JournalMembershipController@create')->name('journal-memberships.create');
-        Route::post('journal-memberships/{journal}', 'JournalMembershipController@store')->name('journal-memberships.store');
-        Route::get('journal-memberships/{journal}/{member}/edit', 'JournalMembershipController@edit')->name('journal-memberships.edit');
-        Route::put('journal-memberships/{journal}/{member}', 'JournalMembershipController@update')->name('journal-memberships.update');
-        Route::delete('journal-memberships/{journal}/{member}', 'JournalMembershipController@destroy')->name('journal-memberships.destroy');
-        Route::post('journal-memberships/{journal}/{member}/approve', 'JournalMembershipController@approve')->name('journal-memberships.approve');
-        Route::post('journal-memberships/{journal}/{member}/reject', 'JournalMembershipController@reject')->name('journal-memberships.reject');
-        Route::post('journal-memberships/{journal}/{member}/suspend', 'JournalMembershipController@suspend')->name('journal-memberships.suspend');
-        Route::post('journal-memberships/{journal}/{member}/reactivate', 'JournalMembershipController@reactivate')->name('journal-memberships.reactivate');
-        Route::post('journal-memberships/{journal}/bulk-update', 'JournalMembershipController@bulkUpdate')->name('journal-memberships.bulk-update');
-        Route::get('journal-memberships/{journal}/statistics', 'JournalMembershipController@statistics')->name('journal-memberships.statistics');
-
-
-        // ARticle Journal
+    // Journal Memberships
+    Route::get('journal-memberships/{journal}', 'Admin\JournalMembershipController@index')->name('journal-memberships.index');
+    Route::get('journal-memberships/{journal}/create', 'Admin\JournalMembershipController@create')->name('journal-memberships.create');
+    Route::post('journal-memberships/{journal}', 'Admin\JournalMembershipController@store')->name('journal-memberships.store');
+    Route::get('journal-memberships/{journal}/{member}/edit', 'Admin\JournalMembershipController@edit')->name('journal-memberships.edit');
+    Route::put('journal-memberships/{journal}/{member}', 'Admin\JournalMembershipController@update')->name('journal-memberships.update');
+    Route::delete('journal-memberships/{journal}/{member}', 'Admin\JournalMembershipController@destroy')->name('journal-memberships.destroy');
+    Route::post('journal-memberships/{journal}/{member}/approve', 'Admin\JournalMembershipController@approve')->name('journal-memberships.approve');
+    Route::post('journal-memberships/{journal}/{member}/reject', 'Admin\JournalMembershipController@reject')->name('journal-memberships.reject');
+    Route::post('journal-memberships/{journal}/{member}/suspend', 'Admin\JournalMembershipController@suspend')->name('journal-memberships.suspend');
+    Route::post('journal-memberships/{journal}/{member}/reactivate', 'Admin\JournalMembershipController@reactivate')->name('journal-memberships.reactivate');
+    Route::post('journal-memberships/{journal}/bulk-update', 'Admin\JournalMembershipController@bulkUpdate')->name('journal-memberships.bulk-update');
+    Route::get('journal-memberships/{journal}/statistics', 'Admin\JournalMembershipController@statistics')->name('journal-memberships.statistics');
 
 
-        Route::delete('article-sub-categories/destroy', 'ArticleSubCategoryController@massDestroy')->name('article-sub-categories.massDestroy');
-        Route::resource('article-sub-categories', 'ArticleSubCategoryController');
+    // ARticle Journal
 
-        // Article
-        Route::delete('articles/destroy', 'ArticleController@massDestroy')->name('articles.massDestroy');
-        Route::post('articles/media', 'ArticleController@storeMedia')->name('articles.storeMedia');
-        Route::post('articles/ckmedia', 'ArticleController@storeCKEditorImages')->name('articles.storeCKEditorImages');
-        // Route::post('articles/create', 'ArticleController@create')->name('articles.create');
-        // Route::resource('articles', 'ArticleController')->except(['create']);
-        Route::resource('articles', 'ArticleController');
 
-        // About
-        Route::get('abouts', 'AboutController@index')->name('abouts.index');
-        Route::post('abouts', 'AboutController@update')->name('abouts.update');
+    Route::delete('article-sub-categories/destroy', 'Admin\ArticleSubCategoryController@massDestroy')->name('article-sub-categories.massDestroy');
+    Route::resource('article-sub-categories', 'Admin\ArticleSubCategoryController');
 
-        // Member Type
-        Route::delete('member-types/destroy', 'MemberTypeController@massDestroy')->name('member-types.massDestroy');
-        Route::resource('member-types', 'MemberTypeController');
+    // Article
+    Route::delete('articles/destroy', 'Admin\ArticleController@massDestroy')->name('articles.massDestroy');
+    Route::post('articles/media', 'Admin\ArticleController@storeMedia')->name('articles.storeMedia');
+    Route::post('articles/ckmedia', 'Admin\ArticleController@storeCKEditorImages')->name('articles.storeCKEditorImages');
+    Route::resource('articles', 'Admin\ArticleController');
 
-        // Comment
-        Route::delete('comments/destroy', 'CommentController@massDestroy')->name('comments.massDestroy');
-        Route::post('comments/media', 'CommentController@storeMedia')->name('comments.storeMedia');
-        Route::post('comments/ckmedia', 'CommentController@storeCKEditorImages')->name('comments.storeCKEditorImages');
-        Route::resource('comments', 'CommentController');
+    // About
+    Route::get('abouts', 'Admin\AboutController@index')->name('abouts.index');
+    Route::post('abouts', 'Admin\AboutController@update')->name('abouts.update');
 
-        // Editorial Workflows
-        Route::delete('editorial-workflows/destroy', 'EditorialWorkflowController@massDestroy')->name('editorial-workflows.massDestroy');
-        Route::resource('editorial-workflows', 'EditorialWorkflowController');
+    // Member Type
+    Route::delete('member-types/destroy', 'Admin\MemberTypeController@massDestroy')->name('member-types.massDestroy');
+    Route::resource('member-types', 'Admin\MemberTypeController');
 
-        // Editorial Board
-        Route::get('editorial-board/{journal}', 'EditorialBoardController@index')->name('editorial-board.index');
-        Route::get('editorial-board/{journal}/create', 'EditorialBoardController@create')->name('editorial-board.create');
-        Route::post('editorial-board/{journal}', 'EditorialBoardController@store')->name('editorial-board.store');
-        Route::get('editorial-board/{journal}/{member}/edit', 'EditorialBoardController@edit')->name('editorial-board.edit');
-        Route::put('editorial-board/{journal}/{member}', 'EditorialBoardController@update')->name('editorial-board.update');
-        Route::delete('editorial-board/{journal}/{member}', 'EditorialBoardController@destroy')->name('editorial-board.destroy');
-        Route::post('editorial-board/{journal}/reorder', 'EditorialBoardController@reorder')->name('editorial-board.reorder');
-        Route::get('editorial-board/{journal}/analytics', 'EditorialBoardController@analytics')->name('editorial-board.analytics');
+    // Comment
+    Route::delete('comments/destroy', 'Admin\CommentController@massDestroy')->name('comments.massDestroy');
+    Route::post('comments/media', 'Admin\CommentController@storeMedia')->name('comments.storeMedia');
+    Route::post('comments/ckmedia', 'Admin\CommentController@storeCKEditorImages')->name('comments.storeCKEditorImages');
+    Route::resource('comments', 'Admin\CommentController');
 
-        // Editorial Workflow Stages (nested under workflows)
-        Route::post('editorial-workflows/{workflow}/stages', 'EditorialWorkflowController@storeStage')->name('editorial-workflows.stages.store');
-        Route::put('editorial-workflow-stages/{stage}', 'EditorialWorkflowController@updateStage')->name('editorial-workflow-stages.update');
-        Route::delete('editorial-workflow-stages/{stage}', 'EditorialWorkflowController@destroyStage')->name('editorial-workflow-stages.destroy');
+    // Editorial Workflows
+    Route::delete('editorial-workflows/destroy', 'Admin\EditorialWorkflowController@massDestroy')->name('editorial-workflows.massDestroy');
+    Route::resource('editorial-workflows', 'Admin\EditorialWorkflowController');
 
-        // Assign article to workflow
-        Route::post('editorial-workflows/{workflow}/assign-article', 'EditorialWorkflowController@assignArticle')->name('editorial-workflows.assign-article');
-    });
+    // Editorial Board
+    Route::get('editorial-board/{journal}', 'Admin\EditorialBoardController@index')->name('editorial-board.index');
+    Route::get('editorial-board/{journal}/create', 'Admin\EditorialBoardController@create')->name('editorial-board.create');
+    Route::post('editorial-board/{journal}', 'Admin\EditorialBoardController@store')->name('editorial-board.store');
+    Route::get('editorial-board/{journal}/{member}/edit', 'Admin\EditorialBoardController@edit')->name('editorial-board.edit');
+    Route::put('editorial-board/{journal}/{member}', 'Admin\EditorialBoardController@update')->name('editorial-board.update');
+    Route::delete('editorial-board/{journal}/{member}', 'Admin\EditorialBoardController@destroy')->name('editorial-board.destroy');
+    Route::post('editorial-board/{journal}/reorder', 'Admin\EditorialBoardController@reorder')->name('editorial-board.reorder');
+    Route::get('editorial-board/{journal}/analytics', 'Admin\EditorialBoardController@analytics')->name('editorial-board.analytics');
+
+    // Editorial Workflow Stages (nested under workflows)
+    Route::post('editorial-workflows/{workflow}/stages', 'Admin\EditorialWorkflowController@storeStage')->name('editorial-workflows.stages.store');
+    Route::put('editorial-workflow-stages/{stage}', 'Admin\EditorialWorkflowController@updateStage')->name('editorial-workflow-stages.update');
+    Route::delete('editorial-workflow-stages/{stage}', 'Admin\EditorialWorkflowController@destroyStage')->name('editorial-workflow-stages.destroy');
+
+    // Assign article to workflow
+    Route::post('editorial-workflows/{workflow}/assign-article', 'Admin\EditorialWorkflowController@assignArticle')->name('editorial-workflows.assign-article');
 });
 
 Route::group(['prefix' => 'admin/profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
@@ -204,15 +196,6 @@ Route::group(['prefix' => 'admin/profile', 'as' => 'profile.', 'namespace' => 'A
         Route::post('profile/destroy', 'ChangePasswordController@destroy')->name('password.destroyProfile');
     }
  });
-
-
-
-
-// =============================
-// User Routes
-// =============================
-require __DIR__.'/user.php';
-
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('password/reset', [\App\Http\Controllers\AdminPasswordResetController::class, 'showLinkRequestForm'])->name('password.request');

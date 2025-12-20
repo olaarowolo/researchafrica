@@ -48,7 +48,7 @@ class AdminTest extends TestCase
         }
 
         // Create admin user using Admin model
-        $this->admin = \App\Models\Admin::factory()->create();
+        $this->admin = User::factory()->create();
 
         // Assign admin role to the user associated with the admin
         // Since Admin extends User and uses same table, this works
@@ -64,13 +64,13 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_access_dashboard()
     {
-        // Use 'admin' guard
-        $response = $this->actingAs($this->admin, 'admin')
+        // Use 'web' guard
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.home'));
 
 
         $response->assertStatus(200);
-        $response->assertViewIs('home');
+        $response->assertViewIs('admin.home');
     }
 
     /**
@@ -78,7 +78,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_manage_users()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.users.index'));
 
         $response->assertStatus(200);
@@ -98,7 +98,7 @@ class AdminTest extends TestCase
             'roles' => [\App\Models\Role::first()->id]
         ];
 
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->post(route('admin.users.store'), $userData);
 
         $response->assertRedirect();
@@ -112,7 +112,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_manage_roles()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.roles.index'));
 
         $response->assertStatus(200);
@@ -124,7 +124,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_manage_permissions()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.permissions.index'));
 
         $response->assertStatus(200);
@@ -136,7 +136,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_manage_article_categories()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.article-categories.index'));
 
         $response->assertStatus(200);
@@ -154,7 +154,7 @@ class AdminTest extends TestCase
             'description' => 'Test category description',
         ];
 
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->post(route('admin.article-categories.store'), $categoryData);
 
         $response->assertRedirect();
@@ -168,7 +168,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_manage_articles()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.articles.index'));
 
         $response->assertStatus(200);
@@ -182,7 +182,7 @@ class AdminTest extends TestCase
     {
         Member::factory()->count(5)->create();
 
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.members.index'));
 
         $response->assertStatus(200);
@@ -196,7 +196,7 @@ class AdminTest extends TestCase
     {
         Comment::factory()->count(3)->create();
 
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.comments.index'));
 
         $response->assertStatus(200);
@@ -208,7 +208,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_manage_settings()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.settings.index'));
 
         $response->assertStatus(200);
@@ -227,7 +227,7 @@ class AdminTest extends TestCase
             'status' => '1',
         ];
 
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->post(route('admin.settings.update'), $settingsData);
 
         $response->assertRedirect();
@@ -239,7 +239,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_manage_faq_categories()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.faq-categories.index'));
 
         $response->assertStatus(200);
@@ -251,7 +251,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_manage_faq_questions()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.faq-questions.index'));
 
         $response->assertStatus(200);
@@ -263,7 +263,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_manage_content_pages()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.content-pages.index'));
 
         $response->assertStatus(200);
@@ -275,7 +275,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_manage_content_categories()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('admin.content-categories.index'));
 
         $response->assertStatus(200);
@@ -287,7 +287,7 @@ class AdminTest extends TestCase
      */
     public function test_admin_can_logout()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->post(route('admin.logout'));
 
         $response->assertRedirect(route('admin.login'));
@@ -299,9 +299,9 @@ class AdminTest extends TestCase
      */
     public function test_admin_cannot_access_member_areas()
     {
-        $response = $this->actingAs($this->admin, 'admin')
+        $response = $this->actingAs($this->admin, 'web')
             ->get(route('member.profile'));
 
-        $response->assertRedirect(route('home'));
+        $response->assertRedirect(route('admin.home'));
     }
 }

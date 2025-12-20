@@ -49,7 +49,7 @@ class HomeController
         $openAccessArticles = Article::where('access_type', 1)->where('article_status', 3)->count(); // 1 = Open Access, 3 = Published
         $closedAccessArticles = Article::where('access_type', 2)->where('article_status', 3)->count(); // 2 = Close Access, 3 = Published
 
-        return view('home', compact(
+        return view('admin.home', compact(
             'totalUsers', 'totalArticles', 'totalMembers', 'totalSubscriptions', 'totalComments', 'memberTypes',
             'recentMembers', 'recentArticles', 'recentComments',
             'pendingArticles', 'publishedArticles', 'draftArticles',
@@ -57,16 +57,5 @@ class HomeController
             'totalViews', 'totalDownloads',
             'openAccessArticles', 'closedAccessArticles'
         ));
-    }
-
-
-
-    public function logout(Request $request)
-    {
-        # code...
-        Auth::logout();
-        $request->session()->flush();
-
-        return redirect()->route('admin.login');
     }
 }

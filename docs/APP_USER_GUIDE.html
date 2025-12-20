@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Africa App Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f9fa; color: #222; }
+        .container { max-width: 900px; margin: 40px auto; background: #fff; padding: 32px 40px 40px 40px; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+        h1, h2, h3 { color: #1a237e; }
+        pre { background: #f1f1f1; padding: 12px; border-radius: 6px; overflow-x: auto; }
+        .workflow { margin-bottom: 36px; }
+        .diagram { margin: 12px 0 12px 0; }
+        .explanation { margin-bottom: 18px; }
+        ul { margin-top: 0; }
+        @media (max-width: 600px) { .container { padding: 10px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Research Africa Application: User Guide & Workflows</h1>
+    <p>This page explains how the Research Africa platform works, how to use it, and provides step-by-step workflow diagrams and explanations for each user type.</p>
+
+    <h2>How the App Works</h2>
+    <ul>
+        <li><b>Journals</b> are onboarded by Super Admins and managed by Journal Admins.</li>
+        <li><b>Users</b> are assigned roles (Admin, Editor, Reviewer, Author, Contributor, Publisher) with specific permissions.</li>
+        <li><b>Manuscripts</b> are submitted by Authors, reviewed by Reviewers, managed by Editors, and published by Publishers.</li>
+        <li><b>Notifications</b> and workflow status updates are sent automatically at each stage.</li>
+        <li><b>All actions</b> are tracked for transparency and analytics.</li>
+    </ul>
+
+    <h2>How to Use the App</h2>
+    <ol>
+        <li><b>Register or be invited</b> to a journal as a user with a specific role.</li>
+        <li><b>Log in</b> to access your dashboard and see your tasks and permissions.</li>
+        <li><b>Follow your workflow</b> (see below) to submit, review, edit, or publish articles.</li>
+        <li><b>Check notifications</b> for updates, feedback, and required actions.</li>
+        <li><b>Admins</b> can manage users, roles, and journal settings from their dashboard.</li>
+    </ol>
+
+    <h2>User Workflows & Explanations</h2>
+
+    <div class="workflow">
+        <h3>1. Platform Super Admin</h3>
+        <div class="diagram">
+<pre>[Super Admin]
+    |
+    v
+[Onboard Journal] ---> [Configure Global Settings]
+    |                          |
+    v                          v
+[Assign Journal Admins]   [Manage Users/Roles]
+    |                          |
+    v                          v
+[Monitor Analytics] <--- [Support & Troubleshoot]</pre>
+        </div>
+        <div class="explanation">
+            <b>Explanation:</b> The Super Admin manages the entire platform, onboarding new journals, configuring global settings, assigning Journal Admins, managing all users, and monitoring analytics. They provide support and troubleshooting for all journals.
+        </div>
+    </div>
+
+    <div class="workflow">
+        <h3>2. Journal Admin</h3>
+        <div class="diagram">
+<pre>[Journal Admin]
+    |
+    v
+[Configure Journal]
+    |
+    v
+[Add/Edit Users] ---> [Assign Roles]
+    |                      |
+    v                      v
+[Oversee Submissions] --> [Monitor Analytics]</pre>
+        </div>
+        <div class="explanation">
+            <b>Explanation:</b> The Journal Admin sets up their journal, adds and manages users, assigns roles, oversees all submissions and peer review, and monitors journal-specific analytics.
+        </div>
+    </div>
+
+    <div class="workflow">
+        <h3>3. Editor</h3>
+        <div class="diagram">
+<pre>[Editor]
+    |
+    v
+[Manage Submissions]
+    |
+    v
+[Assign Reviewers]
+    |
+    v
+[Track Reviews]
+    |
+    v
+[Make Editorial Decisions]
+    |
+    v
+[Communicate with Authors/Reviewers]</pre>
+        </div>
+        <div class="explanation">
+            <b>Explanation:</b> Editors manage incoming submissions, assign reviewers, track review progress, make editorial decisions (accept, revise, reject), and communicate with authors and reviewers.
+        </div>
+    </div>
+
+    <div class="workflow">
+        <h3>4. Reviewer</h3>
+        <div class="diagram">
+<pre>[Reviewer]
+    |
+    v
+[View Assigned Manuscripts]
+    |
+    v
+[Download Manuscript]
+    |
+    v
+[Submit Review]
+    |
+    v
+[Track Review History]</pre>
+        </div>
+        <div class="explanation">
+            <b>Explanation:</b> Reviewers access assigned manuscripts, download files, submit structured reviews, and can track their review history and deadlines.
+        </div>
+    </div>
+
+    <div class="workflow">
+        <h3>5. Author</h3>
+        <div class="diagram">
+<pre>[Author]
+    |
+    v
+[Submit Manuscript]
+    |
+    v
+[Track Submission Status]
+    |
+    v
+[Respond to Feedback]
+    |
+    v
+[Revise/Resubmit]
+    |
+    v
+[View Decision/Publication]</pre>
+        </div>
+        <div class="explanation">
+            <b>Explanation:</b> Authors submit manuscripts, track their status, respond to editorial and reviewer feedback, revise and resubmit as needed, and view final decisions and publication status.
+        </div>
+    </div>
+
+    <div class="workflow">
+        <h3>6. Contributor</h3>
+        <div class="diagram">
+<pre>[Contributor]
+    |
+    v
+[Access Journal (as assigned)]
+    |
+    v
+[Perform Editorial/Review Tasks]</pre>
+        </div>
+        <div class="explanation">
+            <b>Explanation:</b> Contributors (such as guest editors or section editors) have custom permissions and perform editorial or review tasks as assigned by the Journal Admin.
+        </div>
+    </div>
+
+    <div class="workflow">
+        <h3>7. Publisher (with Galley Proof Workflow)</h3>
+        <div class="diagram">
+<pre>[Publisher]
+    |
+    v
+[Access Ready Articles]
+    |
+    v
+[Upload Galley Proof (PDF)]
+    |
+    v
+[System: Notify Corresponding Author]
+    |
+    v
+[Author: Approve/Reject Galley Proof]
+    |
+    v
+[If Approved] ---> [Upload Final Version (PDF)]
+    |
+    v
+[Approve/Reject Final Publication]
+    |
+    v
+[Manage Publication Schedule]</pre>
+        </div>
+        <div class="explanation">
+            <b>Explanation:</b> The Publisher accesses articles ready for publication, uploads a galley proof (PDF), which triggers an email to the corresponding author for approval. The author can approve or reject the galley proof. If approved, the Publisher uploads the final version (PDF) and manages the publication schedule.
+        </div>
+    </div>
+
+    <hr>
+    <p style="font-size: 0.95em; color: #888;">For more details, see the <b>docs/</b> folder or contact the development team.</p>
+</div>
+</body>
+</html>

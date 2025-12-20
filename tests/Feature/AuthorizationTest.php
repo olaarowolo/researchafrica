@@ -39,7 +39,7 @@ class AuthorizationTest extends TestCase
     {
         $admin = User::factory()->admin()->create();
 
-        $response = $this->actingAs($admin, 'admin')
+        $response = $this->actingAs($admin, 'web')
             ->get(route('admin.home'));
 
         $response->assertStatus(200);
