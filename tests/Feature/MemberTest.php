@@ -45,9 +45,9 @@ class MemberTest extends TestCase
         $memberData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'email' => 'john.doe@test.com',
+            'email_address' => 'john.doe@test.com',
             'password' => 'password123',
-            'phone' => '1234567890',
+            'phone_number' => '1234567890',
             'country_id' => 1,
             'state_id' => 1,
         ];
@@ -57,7 +57,7 @@ class MemberTest extends TestCase
 
         $response->assertRedirect();
         $this->assertDatabaseHas('members', [
-            'email' => 'john.doe@test.com',
+            'email_address' => 'john.doe@test.com',
         ]);
     }
 
@@ -71,8 +71,8 @@ class MemberTest extends TestCase
         $updatedData = [
             'first_name' => 'Updated John',
             'last_name' => 'Updated Doe',
-            'email' => 'updated.john@test.com',
-            'phone' => '0987654321',
+            'email_address' => 'updated.john@test.com',
+            'phone_number' => '0987654321',
         ];
 
         $response = $this->actingAs($this->adminMember, 'member')
