@@ -42,7 +42,16 @@ Research Africa supports multiple user types, each with specific roles and permi
 -   **Permissions:**
     -   Varies by journal; may include limited editorial or review access
 
-## 6. Platform Super Admin
+## 6. Publisher
+
+-   **Description:** Responsible for final approval and publication of accepted articles.
+-   **Permissions:**
+    -   Access articles ready for publication
+    -   Approve or reject final publication
+    -   Manage publication schedule and release
+    -   Communicate with editors and admins regarding publication status
+
+## 7. Platform Super Admin
 
 -   **Description:** Oversees the entire Research Africa platform (all journals).
 -   **Permissions:**

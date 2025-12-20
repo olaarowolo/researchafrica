@@ -1,7 +1,20 @@
+
 <?php
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublisherGalleyController;
+
+// =============================
+// Admin Routes
+// =============================
+// =============================
+// Publisher & Galley Proof Routes
+// =============================
+// Author galley proof approval (public link)
+Route::get('/author/galley-approval/{article}', [PublisherGalleyController::class, 'authorGalleyApproval'])->name('author.galley.approval');
+// Publisher routes (grouped in routes/publisher.php)
+require __DIR__.'/publisher.php';
 
 
 
@@ -193,7 +206,12 @@ Route::group(['prefix' => 'admin/profile', 'as' => 'profile.', 'namespace' => 'A
  });
 
 
-require 'user.php';
+
+
+// =============================
+// User Routes
+// =============================
+require __DIR__.'/user.php';
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -203,18 +221,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('password/reset', [\App\Http\Controllers\AdminPasswordResetController::class, 'reset'])->name('password.update');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Journal Routes - URL-Based Journal Routing (Sprint 4)
-|--------------------------------------------------------------------------
-|
-| These routes handle all journal-related functionality using SEO-friendly
-| URL patterns with journal acronyms. All routes are scoped to specific
-| journals using the {acronym} parameter.
-|
-*/
 
-// Journal routes with acronym-based routing
+// =============================
+// Journal Routes (SEO & Legacy)
+// =============================
+// SEO-friendly journal routes
 Route::prefix('journals/{acronym}')->name('journals.')->group(function () {
     include __DIR__ . '/journal.php';
 });
@@ -239,5 +250,3 @@ Route::get('articles/{article}', function ($articleId) {
     }
     abort(404);
 })->name('legacy-article-redirect');
-
-require __DIR__.'/user.php';

@@ -2,145 +2,62 @@
 
 Research Africa is a comprehensive Laravel-based platform designed to streamline academic journal management and scholarly publishing in Africa. The platform includes multiple subsystems including the AfriScribe proofreading service, article management, peer review workflows, and member services.
 
-## 🌍 About Research Africa
+# Research Africa
 
-Research Africa serves as a comprehensive digital ecosystem for African scholarly communication, providing researchers, academics, and institutions with tools to publish, review, and access quality research content. The platform bridges the gap between academic research and professional publishing services.
+Research Africa is a Laravel-based platform for managing academic journals, peer review workflows, and scholarly publishing in Africa. It provides tools for journal onboarding, user and role management, article submission, peer review, and editorial decision-making.
 
-### AfriScribe Proofreading Service
+## Features
 
-AfriScribe is a specialized subsystem within Research Africa that provides professional proofreading services for academic documents. Accessible via `/afriscribe-welcome`, it offers location-based pricing and document processing capabilities.
+-   Journal onboarding and management
+-   Article submission and categorization
+-   Multi-stage peer review workflow
+-   Role-based access for Admins, Editors, Reviewers, Authors, and Contributors
+-   Editorial board and reviewer assignment
+-   User registration and profile management
+-   Email notifications for workflow events
+-   Analytics for submissions and reviews
 
-### Key Features
+## Quick Start
 
-#### 📝 Article Management System
+1. **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/researchafrica.git
+    cd researchafrica
+    ```
+2. **Install dependencies:**
+    ```bash
+    composer install
+    npm install && npm run build
+    ```
+3. **Configure environment:**
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    # Edit .env for your database and mail settings
+    ```
+4. **Migrate and seed database:**
+    ```bash
+    php artisan migrate
+    php artisan db:seed --class=UserTypesSeeder
+    php artisan db:seed --class=JournalUsersSeeder
+    ```
+5. **Run the application:**
+    ```bash
+    php artisan serve
+    ```
 
--   **Article Submission**: Authors can submit research papers with comprehensive metadata
--   **Multi-stage Review Process**: Editorial workflow with Editor → Reviewer → Publisher stages
--   **Article Categories**: Organized content management with categories and keywords
--   **Access Control**: Open Access and Closed Access publication options
--   **DOI Integration**: Digital Object Identifier support for published articles
+## Documentation
 
-#### 👥 User Management & Roles
+-   See the `docs/` folder for guides on onboarding journals, assigning reviewers, user types, and login/roles.
 
--   **Member System**: User registration with different subscription tiers
--   **Role-based Access**: Members, Editors, Publishers, and Reviewers
--   **Permission Management**: Granular permissions for different user types
--   **Profile Management**: Comprehensive user profiles and preferences
+## Contributing
 
-#### 🔍 Review & Quality Control
+-   Fork, branch, commit, and open a pull request.
+-   Follow PSR-12 and use Laravel Pint for formatting.
 
--   **Peer Review System**: Structured review process with feedback mechanisms
--   **Comment System**: Collaborative commenting on articles
--   **Quality Assurance**: Multi-level approval workflow
--   **Revision Tracking**: Track article revisions and updates
+## License
 
-#### 💼 AfriScribe Proofreading Service
-
--   **Professional Proofreading**: Integrated academic proofreading services
--   **Location-based Pricing**: Different rates for UK and Nigeria clients
--   **Dynamic Cost Calculation**: Real-time pricing based on word count and service type
--   **File Processing**: Support for multiple document formats (PDF, Word, etc.)
--   **Email Integration**: Automated client communication and file handling
-
-#### 💰 Monetization Features
-
--   **Subscription System**: Tiered membership with different access levels
--   **Article Marketplace**: Paid access to premium research content
--   **Download Tracking**: Analytics for article access and downloads
--   **Purchase History**: Complete transaction and access history
-
-## 🛠 Technical Stack
-
-### Backend
-
--   **Framework**: Laravel 10.x
--   **PHP Version**: PHP 8.1 or higher
--   **Database**: MySQL
--   **Queue System**: Laravel Queue for background processing
-
-### Frontend
-
--   **Livewire**: Reactive components for dynamic interfaces
--   **Tailwind CSS**: Utility-first CSS framework
--   **Bootstrap**: Responsive UI framework
--   **JavaScript**: Vanilla JS with jQuery support
--   **Vite**: Fast build tool and development server
--   **Blade Templates**: Laravel's templating engine
-
-### Key Dependencies
-
--   **PDF Generation**: barryvdh/laravel-dompdf
--   **Charts**: laraveldaily/laravel-charts
--   **Media Management**: spatie/laravel-medialibrary
--   **Document Processing**: phpoffice/phpword
--   **Authentication**: Laravel Sanctum
--   **Data Tables**: yajra/laravel-datatables-oracle
--   **File Management**: spatie/laravel-permission
--   **Image Processing**: intervention/image
--   **SEO Management**: artesaos/seotools
--   **Backup**: spatie/laravel-backup
--   **Queue Management**: Laravel Queue
--   **Testing**: Laravel Dusk, PHPUnit
--   **API Documentation**: Laravel API Resource
-
-## 📋 Prerequisites
-
--   PHP 8.1 or higher
--   Composer
--   MySQL 5.7 or higher
--   Node.js and npm (for frontend assets)
-
-## 🚀 Installation
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/your-username/researchafrica.git
-cd researchafrica
-```
-
-### 2. Install PHP Dependencies
-
-```bash
-composer install
-```
-
-### 3. Environment Configuration
-
-```bash
-cp .env.example .env
-php artisan key:generate
-```
-
-### 4. Database Setup
-
-```bash
-# Configure your database in .env file
-php artisan migrate
-# Seed all core and journal-specific users and roles
-php artisan db:seed --class=UserTypesSeeder
-php artisan db:seed --class=JournalUsersSeeder
-```
-
-### 5. Storage Setup
-
-```bash
-php artisan storage:link
-mkdir -p storage/app/afriscribe_uploads
-```
-
-### 6. Frontend Assets
-
-```bash
-npm install
-npm run build
-```
-
-### 7. Queue Configuration (Optional)
-
-```bash
-php artisan queue:work
-```
+MIT
 
 ## ⚙️ Configuration
 
@@ -387,7 +304,6 @@ research-africa/
 -   **ReviewerAcceptFinal**: Final review decisions
 -   **ViewArticle**: Article view tracking and analytics
 
-
 ### Business & Analytics Models
 
 -   **Bookmark**: User bookmarking system
@@ -423,7 +339,6 @@ The application includes comprehensive email templates for:
 -   **PublisherMail**: Publisher notifications and approvals
 -   **CommentMail**: Review comments and discussions
 -   **AcceptedMail**: Acceptance confirmations
-
 
 ### User Management Emails
 

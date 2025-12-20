@@ -23,12 +23,23 @@ class UserTypesSeeder extends Seeder
             4 => 'Climate Change',
         ];
 
-            $roles = [
-                'Editor',
-                'Reviewer',
-                'Author',
-                'Contributor',
-            ];
+        $roles = [
+            'Editor',
+            'Reviewer',
+            'Author',
+            'Contributor',
+            'Publisher',
+        ];
+        // Publisher
+        $publisher = User::firstOrCreate([
+            'email' => 'publisher@journal.org',
+        ], [
+            'name' => 'Publisher',
+            'password' => Hash::make('password'),
+        ]);
+        if (Role::where('title', 'Publisher')->exists()) {
+            $publisher->roles()->syncWithoutDetaching([Role::where('title', 'Publisher')->first()->id]);
+        }
 
         foreach ($journals as $journalId => $journalName) {
             foreach ($roles as $role) {
