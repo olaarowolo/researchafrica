@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             SubArticlesTableSeeder::class,
             SettingsTableSeeder::class,
             AboutTableSeeder::class,
+            SampleDataSeeder::class,
         ]);
 
     }
