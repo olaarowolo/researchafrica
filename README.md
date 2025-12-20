@@ -14,89 +14,89 @@ AfriScribe is a specialized subsystem within Research Africa that provides profe
 
 #### 📝 Article Management System
 
-- **Article Submission**: Authors can submit research papers with comprehensive metadata
-- **Multi-stage Review Process**: Editorial workflow with Editor → Reviewer → Publisher stages
-- **Article Categories**: Organized content management with categories and keywords
-- **Access Control**: Open Access and Closed Access publication options
-- **DOI Integration**: Digital Object Identifier support for published articles
+-   **Article Submission**: Authors can submit research papers with comprehensive metadata
+-   **Multi-stage Review Process**: Editorial workflow with Editor → Reviewer → Publisher stages
+-   **Article Categories**: Organized content management with categories and keywords
+-   **Access Control**: Open Access and Closed Access publication options
+-   **DOI Integration**: Digital Object Identifier support for published articles
 
 #### 👥 User Management & Roles
 
-- **Member System**: User registration with different subscription tiers
-- **Role-based Access**: Members, Editors, Publishers, and Reviewers
-- **Permission Management**: Granular permissions for different user types
-- **Profile Management**: Comprehensive user profiles and preferences
+-   **Member System**: User registration with different subscription tiers
+-   **Role-based Access**: Members, Editors, Publishers, and Reviewers
+-   **Permission Management**: Granular permissions for different user types
+-   **Profile Management**: Comprehensive user profiles and preferences
 
 #### 🔍 Review & Quality Control
 
-- **Peer Review System**: Structured review process with feedback mechanisms
-- **Comment System**: Collaborative commenting on articles
-- **Quality Assurance**: Multi-level approval workflow
-- **Revision Tracking**: Track article revisions and updates
+-   **Peer Review System**: Structured review process with feedback mechanisms
+-   **Comment System**: Collaborative commenting on articles
+-   **Quality Assurance**: Multi-level approval workflow
+-   **Revision Tracking**: Track article revisions and updates
 
 #### 💼 AfriScribe Proofreading Service
 
-- **Professional Proofreading**: Integrated academic proofreading services
-- **Location-based Pricing**: Different rates for UK and Nigeria clients
-- **Dynamic Cost Calculation**: Real-time pricing based on word count and service type
-- **File Processing**: Support for multiple document formats (PDF, Word, etc.)
-- **Email Integration**: Automated client communication and file handling
+-   **Professional Proofreading**: Integrated academic proofreading services
+-   **Location-based Pricing**: Different rates for UK and Nigeria clients
+-   **Dynamic Cost Calculation**: Real-time pricing based on word count and service type
+-   **File Processing**: Support for multiple document formats (PDF, Word, etc.)
+-   **Email Integration**: Automated client communication and file handling
 
 #### 💰 Monetization Features
 
-- **Subscription System**: Tiered membership with different access levels
-- **Article Marketplace**: Paid access to premium research content
-- **Download Tracking**: Analytics for article access and downloads
-- **Purchase History**: Complete transaction and access history
+-   **Subscription System**: Tiered membership with different access levels
+-   **Article Marketplace**: Paid access to premium research content
+-   **Download Tracking**: Analytics for article access and downloads
+-   **Purchase History**: Complete transaction and access history
 
 ## 🛠 Technical Stack
 
 ### Backend
 
-- **Framework**: Laravel 10.x
-- **PHP Version**: PHP 8.1 or higher
-- **Database**: MySQL
-- **Queue System**: Laravel Queue for background processing
+-   **Framework**: Laravel 10.x
+-   **PHP Version**: PHP 8.1 or higher
+-   **Database**: MySQL
+-   **Queue System**: Laravel Queue for background processing
 
 ### Frontend
 
-- **Livewire**: Reactive components for dynamic interfaces
-- **Tailwind CSS**: Utility-first CSS framework
-- **Bootstrap**: Responsive UI framework
-- **JavaScript**: Vanilla JS with jQuery support
-- **Vite**: Fast build tool and development server
-- **Blade Templates**: Laravel's templating engine
+-   **Livewire**: Reactive components for dynamic interfaces
+-   **Tailwind CSS**: Utility-first CSS framework
+-   **Bootstrap**: Responsive UI framework
+-   **JavaScript**: Vanilla JS with jQuery support
+-   **Vite**: Fast build tool and development server
+-   **Blade Templates**: Laravel's templating engine
 
 ### Key Dependencies
 
-- **PDF Generation**: barryvdh/laravel-dompdf
-- **Charts**: laraveldaily/laravel-charts
-- **Media Management**: spatie/laravel-medialibrary
-- **Document Processing**: phpoffice/phpword
-- **Authentication**: Laravel Sanctum
-- **Data Tables**: yajra/laravel-datatables-oracle
-- **File Management**: spatie/laravel-permission
-- **Image Processing**: intervention/image
-- **SEO Management**: artesaos/seotools
-- **Backup**: spatie/laravel-backup
-- **Queue Management**: Laravel Queue
-- **Testing**: Laravel Dusk, PHPUnit
-- **API Documentation**: Laravel API Resource
+-   **PDF Generation**: barryvdh/laravel-dompdf
+-   **Charts**: laraveldaily/laravel-charts
+-   **Media Management**: spatie/laravel-medialibrary
+-   **Document Processing**: phpoffice/phpword
+-   **Authentication**: Laravel Sanctum
+-   **Data Tables**: yajra/laravel-datatables-oracle
+-   **File Management**: spatie/laravel-permission
+-   **Image Processing**: intervention/image
+-   **SEO Management**: artesaos/seotools
+-   **Backup**: spatie/laravel-backup
+-   **Queue Management**: Laravel Queue
+-   **Testing**: Laravel Dusk, PHPUnit
+-   **API Documentation**: Laravel API Resource
 
 ## 📋 Prerequisites
 
-- PHP 8.1 or higher
-- Composer
-- MySQL 5.7 or higher
-- Node.js and npm (for frontend assets)
+-   PHP 8.1 or higher
+-   Composer
+-   MySQL 5.7 or higher
+-   Node.js and npm (for frontend assets)
 
 ## 🚀 Installation
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/afriscribe.git
-cd afriscribe
+git clone https://github.com/your-username/researchafrica.git
+cd researchafrica
 ```
 
 ### 2. Install PHP Dependencies
@@ -155,7 +155,7 @@ MAIL_PORT=587
 MAIL_USERNAME=your-email@domain.com
 MAIL_PASSWORD=your-password
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=noreply@afriscribe.com
+MAIL_FROM_ADDRESS=noreply@researchafrica.com
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
@@ -189,14 +189,15 @@ php artisan queue:work
 ```
 
 ## 📁 Project Structure
+
 ## 📚 Documentation
 
 The following documentation is available in the `docs/` folder:
 
-- [ONBOARDING_NEW_JOURNAL.md](docs/ONBOARDING_NEW_JOURNAL.md): How to onboard new journals on Research Africa
-- [ASSIGNING_PEER_REVIEWERS.md](docs/ASSIGNING_PEER_REVIEWERS.md): How to assign peer reviewers to manuscripts
-- [USER_TYPES.md](docs/USER_TYPES.md): Types of users and roles on the platform
-- [JOURNAL_USER_LOGIN_AND_ROLES.md](docs/JOURNAL_USER_LOGIN_AND_ROLES.md): Creating logins and assigning roles for journal users
+-   [ONBOARDING_NEW_JOURNAL.md](docs/ONBOARDING_NEW_JOURNAL.md): How to onboard new journals on Research Africa
+-   [ASSIGNING_PEER_REVIEWERS.md](docs/ASSIGNING_PEER_REVIEWERS.md): How to assign peer reviewers to manuscripts
+-   [USER_TYPES.md](docs/USER_TYPES.md): Types of users and roles on the platform
+-   [JOURNAL_USER_LOGIN_AND_ROLES.md](docs/JOURNAL_USER_LOGIN_AND_ROLES.md): Creating logins and assigning roles for journal users
 
 Refer to these guides for step-by-step instructions on user management, onboarding, and peer review workflows.
 
@@ -235,7 +236,6 @@ research-africa/
 │   │   └── ReviewerMail.php       # Reviewer notifications
 │   ├── Models/                    # Eloquent models
 │   │   ├── About.php              # About page content
-│   │   ├── AfriscribeRequest.php  # AfriScribe requests
 │   │   ├── Article.php            # Main article model
 │   │   ├── ArticleCategory.php    # Article categories
 │   │   ├── ArticleKeyword.php     # Article keywords
@@ -269,16 +269,6 @@ research-africa/
 │   │   ├── User.php               # Users
 │   │   └── ViewArticle.php        # Article views
 │   ├── Modules/                   # Modular application structure
-│   │   └── AfriScribe/           # AfriScribe proofreading module
-│   │       ├── Http/
-│   │       │   ├── Controllers/  # Module controllers
-│   │       │   │   ├── AfriscribeController.php
-│   │       │   │   └── QuoteRequestController.php
-│   │       │   ├── Middleware/   # Module middleware
-│   │       │   └── routes.php     # Module routes
-│   │       └── Mail/             # Module-specific emails
-│   │           ├── AfriscribeRequestMail.php
-│   │           └── QuoteRequestMail.php
 │   ├── Providers/                 # Service providers
 │   │   ├── AppServiceProvider.php
 │   │   ├── AuthServiceProvider.php
@@ -318,11 +308,6 @@ research-africa/
 │   ├── migrations/               # Database migrations
 │   └── seeders/                  # Database seeders
 ├── public/                       # Public web assets
-│   ├── afriscribe/              # AfriScribe public assets
-│   │   ├── css/                 # AfriScribe stylesheets
-│   │   ├── images/              # AfriScribe images
-│   │   ├── js/                  # AfriScribe JavaScript
-│   │   └── lib/                 # AfriScribe libraries
 │   ├── css/                     # Global stylesheets
 │   ├── favicon.ico              # Site favicon
 │   ├── images/                  # Global images
@@ -335,28 +320,6 @@ research-africa/
 │   ├── js/                      # Source JavaScript
 │   ├── lang/                    # Language files
 │   └── views/                   # Blade templates
-│       ├── afriscribe/          # AfriScribe views
-│       │   ├── layouts/         # Layout templates
-│       │   │   ├── app.blade.php           # Main application layout
-│       │   │   ├── dashboard.blade.php     # Dashboard layout
-│       │   │   ├── form.blade.php          # Form layout
-│       │   │   └── landing.blade.php      # Landing page layout
-│       │   ├── pages/           # Page templates
-│       │   │   ├── about.blade.php         # About Us page
-│       │   │   ├── dashboard.blade.php     # Dashboard page
-│       │   │   ├── manuscripts.blade.php   # Manuscripts page
-│       │   │   ├── proofreading.blade.php  # Proofreading page
-│       │   │   ├── quote-request.blade.php # Quote request page
-│       │   │   └── welcome.blade.php      # Welcome page
-│       │   └── partials/        # Reusable partials
-│       │       ├── as-cta.blade.php        # Call-to-action partial
-│       │       ├── as-features.blade.php   # Features partial
-│       │       ├── as-footer.blade.php     # Footer partial
-│       │       ├── as-hero.blade.php       # Hero section partial
-│       │       ├── as-nav.blade.php        # Navigation partial
-│       │       ├── as-proofreading-form.blade.php
-│       │       ├── as-services.blade.php   # Services partial
-│       │       └── welcome-form.blade.php  # Welcome form partial
 │       ├── components/          # Blade components
 │       ├── layouts/            # Main layouts
 │       └── vendor/             # Vendor views
@@ -400,77 +363,78 @@ research-africa/
 ## 🔐 Key Models
 
 ### Core Models
-- **Article**: Main content model with metadata, file handling, and publication workflow
-- **Member**: User management with subscriptions, roles, and permissions
-- **User**: Base user model with authentication and profile management
-- **Role & Permission**: Role-based access control system
-- **Subscription**: Subscription tiers and billing management
+
+-   **Article**: Main content model with metadata, file handling, and publication workflow
+-   **Member**: User management with subscriptions, roles, and permissions
+-   **User**: Base user model with authentication and profile management
+-   **Role & Permission**: Role-based access control system
+-   **Subscription**: Subscription tiers and billing management
 
 ### Content Management Models
-- **ArticleCategory**: Content organization and classification
-- **ArticleKeyword**: SEO and discoverability keywords
-- **ContentCategory & ContentTag**: Flexible content organization
-- **ContentPage**: Static content pages (About, FAQ, etc.)
-- **FaqCategory & FaqQuestion**: FAQ management system
+
+-   **ArticleCategory**: Content organization and classification
+-   **ArticleKeyword**: SEO and discoverability keywords
+-   **ContentCategory & ContentTag**: Flexible content organization
+-   **ContentPage**: Static content pages (About, FAQ, etc.)
+-   **FaqCategory & FaqQuestion**: FAQ management system
 
 ### Review & Workflow Models
-- **Comment**: Article comments and review feedback
-- **EditorAccept**: Editorial acceptance workflow
-- **PublisherAccept**: Publisher approval process
-- **ReviewerAccept**: Peer review management
-- **ReviewerAcceptFinal**: Final review decisions
-- **ViewArticle**: Article view tracking and analytics
 
-### AfriScribe Module Models
-- **AfriscribeRequest**: Proofreading service requests
-- **QuoteRequest**: Quote request management with pricing
-- **AfriscribeRequest**: Legacy AfriScribe request model
+-   **Comment**: Article comments and review feedback
+-   **EditorAccept**: Editorial acceptance workflow
+-   **PublisherAccept**: Publisher approval process
+-   **ReviewerAccept**: Peer review management
+-   **ReviewerAcceptFinal**: Final review decisions
+-   **ViewArticle**: Article view tracking and analytics
+
 
 ### Business & Analytics Models
-- **Bookmark**: User bookmarking system
-- **DownloadArticle**: Article download tracking
-- **PurchasedArticle**: Monetization and purchase history
-- **MemberSubscription**: Subscription management
-- **MemberType**: Member classification system
+
+-   **Bookmark**: User bookmarking system
+-   **DownloadArticle**: Article download tracking
+-   **PurchasedArticle**: Monetization and purchase history
+-   **MemberSubscription**: Subscription management
+-   **MemberType**: Member classification system
 
 ### System Models
-- **About**: About page content management
-- **Country & State**: Geographic data
-- **EmailVerify**: Email verification system
-- **ResetPassword**: Password reset functionality
-- **Setting**: Application configuration
-- **SubArticle**: Sub-article relationships
+
+-   **About**: About page content management
+-   **Country & State**: Geographic data
+-   **EmailVerify**: Email verification system
+-   **ResetPassword**: Password reset functionality
+-   **Setting**: Application configuration
+-   **SubArticle**: Sub-article relationships
 
 ## 📧 Email Templates
 
 The application includes comprehensive email templates for:
 
 ### Article Management Emails
-- **ArticleMail**: General article notifications and updates
-- **NewArticle**: New article submission confirmations
-- **PublishArticle**: Article publication notifications
-- **ForwardedArticle**: Article forwarding to editors/publishers
+
+-   **ArticleMail**: General article notifications and updates
+-   **NewArticle**: New article submission confirmations
+-   **PublishArticle**: Article publication notifications
+-   **ForwardedArticle**: Article forwarding to editors/publishers
 
 ### Review & Workflow Emails
-- **EditorMail**: Editorial assignments and feedback
-- **ReviewerMail**: Peer review assignments and notifications
-- **PublisherMail**: Publisher notifications and approvals
-- **CommentMail**: Review comments and discussions
-- **AcceptedMail**: Acceptance confirmations
 
-### AfriScribe Proofreading Emails
-- **AfriscribeRequestMail**: Proofreading service requests (legacy)
-- **QuoteRequestMail**: Quote request notifications to admin
-- **QuoteRequestClientAcknowledgementMail**: Client acknowledgment with CC
+-   **EditorMail**: Editorial assignments and feedback
+-   **ReviewerMail**: Peer review assignments and notifications
+-   **PublisherMail**: Publisher notifications and approvals
+-   **CommentMail**: Review comments and discussions
+-   **AcceptedMail**: Acceptance confirmations
+
 
 ### User Management Emails
-- **EmailVerification**: Account verification emails
-- **ResetPassword**: Password reset functionality
-- **ContactUsMail**: Contact form submissions
+
+-   **EmailVerification**: Account verification emails
+-   **ResetPassword**: Password reset functionality
+-   **ContactUsMail**: Contact form submissions
 
 ### System Emails
-- **EmailVerify**: Email verification system
-- **ResetPassword**: Password reset notifications
+
+-   **EmailVerify**: Email verification system
+-   **ResetPassword**: Password reset notifications
 
 ## 🧪 Testing
 
@@ -489,14 +453,13 @@ php artisan test --coverage
 
 ### Test Categories
 
-- **QuoteRequestTest**: AfriScribe quote request functionality
-- **UserTest**: User authentication and authorization
-- **ArticleTest**: Article management functionality
-- **MemberTest**: Member and subscription features
-- **CommentTest**: Comment and review system
-- **FaqTest**: FAQ management
-- **AdminTest**: Administrative functions
-- **Browser Tests**: End-to-end browser testing with Laravel Dusk
+-   **UserTest**: User authentication and authorization
+-   **ArticleTest**: Article management functionality
+-   **MemberTest**: Member and subscription features
+-   **CommentTest**: Comment and review system
+-   **FaqTest**: FAQ management
+-   **AdminTest**: Administrative functions
+-   **Browser Tests**: End-to-end browser testing with Laravel Dusk
 
 ## 🤝 Contributing
 
@@ -508,9 +471,9 @@ php artisan test --coverage
 
 ### Code Style
 
-- Follow PSR-12 coding standards
-- Use Laravel Pint for code formatting: `php artisan pint`
-- Write tests for new features
+-   Follow PSR-12 coding standards
+-   Use Laravel Pint for code formatting: `php artisan pint`
+-   Write tests for new features
 
 ## 📄 License
 
@@ -524,29 +487,29 @@ For support, please contact the development team or create an issue in the repos
 
 ### Regular Tasks
 
-- Monitor queue processing
-- Check disk space for file uploads
-- Review error logs
-- Update dependencies regularly
+-   Monitor queue processing
+-   Check disk space for file uploads
+-   Review error logs
+-   Update dependencies regularly
 
 ### Performance Optimization
 
-- Cache configuration: `php artisan config:cache`
-- Cache routes: `php artisan route:cache`
-- Optimize composer autoloader: `composer dump-autoload --optimize`
+-   Cache configuration: `php artisan config:cache`
+-   Cache routes: `php artisan route:cache`
+-   Optimize composer autoloader: `composer dump-autoload --optimize`
 
 ## 🌟 Features in Development
 
-- [ ] Payment gateway integration (Stripe/Paystack)
-- [ ] Advanced search functionality with filters
-- [ ] API documentation and developer portal
-- [ ] Mobile application (React Native)
-- [ ] Multi-language support (French, Portuguese, Arabic)
-- [ ] Advanced analytics dashboard
-- [ ] Real-time notifications with WebSockets
-- [ ] Article versioning system
-- [ ] Citation management tools
-- [ ] Integration with academic databases (Google Scholar, ORCID)
-- [ ] Automated plagiarism checking
-- [ ] Conference management module
-- [ ] Journal metrics and impact factor tracking
+-   [ ] Payment gateway integration (Stripe/Paystack)
+-   [ ] Advanced search functionality with filters
+-   [ ] API documentation and developer portal
+-   [ ] Mobile application (React Native)
+-   [ ] Multi-language support (French, Portuguese, Arabic)
+-   [ ] Advanced analytics dashboard
+-   [ ] Real-time notifications with WebSockets
+-   [ ] Article versioning system
+-   [ ] Citation management tools
+-   [ ] Integration with academic databases (Google Scholar, ORCID)
+-   [ ] Automated plagiarism checking
+-   [ ] Conference management module
+-   [ ] Journal metrics and impact factor tracking
