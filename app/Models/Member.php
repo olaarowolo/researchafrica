@@ -165,12 +165,22 @@ class Member extends User implements HasMedia
 
     public function getIsEmailVerifyAttribute()
     {
-        return $this->whereNotNull('email_verified_at')->where('email_verified', 1);
+        return !is_null($this->email_verified_at) && $this->email_verified == 1;
     }
 
     public function getFullnameAttribute()
     {
         return $this->first_name ." ". $this->last_name;
+    }
+
+    public function getAuthIdentifierName()
+    {
+        return 'email_address';
+    }
+
+    public function id()
+    {
+        return $this->getAttribute('id');
     }
 
     public function setPasswordAttribute($value)
@@ -221,5 +231,195 @@ class Member extends User implements HasMedia
     public function setEmailVerifiedAtAttribute($value)
     {
         $this->attributes['email_verified_at'] = $value ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $value)->format('Y-m-d H:i:s') : null;
+    }
+
+    // ========================================
+    // SPRINT 2: JOURNAL RELATIONSHIPS
+    // ========================================
+
+    /**
+     * Get journal memberships for this member
+     */
+    public function journalMemberships()
+    {
+        return $this->hasMany(JournalMembership::class, 'member_id');
+    }
+
+    /**
+     * Get active journal memberships
+     */
+    public function activeJournalMemberships()
+    {
+        return $this->hasMany(JournalMembership::class, 'member_id')
+                    ->where('status', JournalMembership::STATUS_ACTIVE);
+    }
+
+    /**
+     * Get editorial board positions
+     */
+    public function editorialPositions()
+    {
+        return $this->hasMany(JournalEditorialBoard::class, 'member_id')
+                    ->where('is_active', true);
+    }
+
+    /**
+     * Get all editorial board positions (including inactive)
+     */
+    public function allEditorialPositions()
+    {
+        return $this->hasMany(JournalEditorialBoard::class, 'member_id');
+    }
+
+    /**
+     * Get journals this member has access to
+     */
+    public function accessibleJournals()
+    {
+        return $this->belongsToMany(
+            ArticleCategory::class,
+            'journal_memberships',
+            'member_id',
+            'journal_id'
+        )->where('journal_memberships.status', JournalMembership::STATUS_ACTIVE)
+         ->where('article_categories.is_journal', true)
+         ->withPivot('member_type_id', 'status', 'assigned_at', 'expires_at');
+    }
+
+    // ========================================
+    // SPRINT 2: JOURNAL HELPER METHODS
+    // ========================================
+
+    /**
+     * Check if member has access to a specific journal
+     */
+    public function hasJournalAccess($journalId, $memberTypeId = null): bool
+    {
+        $query = $this->journalMemberships()
+                      ->where('journal_id', $journalId)
+                      ->where('status', JournalMembership::STATUS_ACTIVE);
+
+        if ($memberTypeId) {
+            $query->where('member_type_id', $memberTypeId);
+        }
+
+        return $query->exists();
+    }
+
+    /**
+     * Check if member is editor for a journal
+     */
+    public function isEditorFor($journalId): bool
+    {
+        return $this->hasJournalAccess($journalId, 2); // Editor type
+    }
+
+    /**
+     * Check if member is reviewer for a journal
+     */
+    public function isReviewerFor($journalId): bool
+    {
+        return $this->hasJournalAccess($journalId, 3); // Reviewer type
+    }
+
+    /**
+     * Check if member is author for a journal
+     */
+    public function isAuthorFor($journalId): bool
+    {
+        return $this->hasJournalAccess($journalId, 1); // Author type
+    }
+
+    /**
+     * Get journals where member is an editor
+     */
+    public function editorJournals()
+    {
+        return $this->accessibleJournals()
+                    ->wherePivot('member_type_id', 2);
+    }
+
+    /**
+     * Get journals where member is a reviewer
+     */
+    public function reviewerJournals()
+    {
+        return $this->accessibleJournals()
+                    ->wherePivot('member_type_id', 3);
+    }
+
+    /**
+     * Get journals where member is an author
+     */
+    public function authorJournals()
+    {
+        return $this->accessibleJournals()
+                    ->wherePivot('member_type_id', 1);
+    }
+
+    /**
+     * Get editorial board positions for a specific journal
+     */
+    public function getEditorialPositionFor($journalId)
+    {
+        return $this->editorialPositions()
+                    ->where('journal_id', $journalId)
+                    ->first();
+    }
+
+    /**
+     * Check if member is on editorial board of a journal
+     */
+    public function isOnEditorialBoard($journalId): bool
+    {
+        return $this->editorialPositions()
+                    ->where('journal_id', $journalId)
+                    ->exists();
+    }
+
+    /**
+     * Get count of journals member has access to
+     */
+    public function getAccessibleJournalsCountAttribute()
+    {
+        return $this->accessibleJournals()->count();
+    }
+
+    /**
+     * Get count of editorial board positions
+     */
+    public function getEditorialPositionsCountAttribute()
+    {
+        return $this->editorialPositions()->count();
+    }
+
+    /**
+     * Assign member to a journal
+     */
+    public function assignToJournal($journalId, $memberTypeId, $assignedBy = null)
+    {
+        return JournalMembership::create([
+            'member_id' => $this->id,
+            'journal_id' => $journalId,
+            'member_type_id' => $memberTypeId,
+            'status' => JournalMembership::STATUS_ACTIVE,
+            'assigned_by' => $assignedBy,
+            'assigned_at' => now(),
+        ]);
+    }
+
+    /**
+     * Remove member from a journal
+     */
+    public function removeFromJournal($journalId, $memberTypeId = null)
+    {
+        $query = $this->journalMemberships()
+                      ->where('journal_id', $journalId);
+
+        if ($memberTypeId) {
+            $query->where('member_type_id', $memberTypeId);
+        }
+
+        return $query->delete();
     }
 }

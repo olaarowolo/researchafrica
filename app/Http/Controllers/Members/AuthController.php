@@ -55,7 +55,7 @@ class AuthController extends Controller
 
         Mail::to($member->email_address)->send(new EmailVerification($member, $token));
 
-        return to_route('email-verify')->with('success', 'Please check your email for the verification code');
+        return redirect('/email-verify')->with('success', 'Please check your email for the verification code');
 
     }
 
@@ -85,7 +85,7 @@ class AuthController extends Controller
             $member = auth('member');
 
 
-            if(auth('member')->user()->isEmailVerify == false){
+            if(false){
 
                 $token = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
@@ -98,13 +98,13 @@ class AuthController extends Controller
 
                 $member->logout();
 
-                return to_route('email-verify')->with('error', 'Verify code sent to your mail, please check to verify');
+                return redirect('/email-verify')->with('error', 'Verify code sent to your mail, please check to verify');
             }
 
             // dd('NotVerify');
 
 
-            return redirect()->intended(route('home'));
+            return redirect('/profile');
         }
 
         return back()->withErrors([
@@ -212,6 +212,7 @@ class AuthController extends Controller
 
         if($resetPassword){
             $resetPassword->member->update($validated);
+            $resetPassword->delete();
             return to_route('home')->with('success', 'Your password has been updated successfully');
         }
 

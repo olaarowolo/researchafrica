@@ -75,6 +75,16 @@ class SubArticle extends Model implements HasMedia
         );
     }
 
+    public function article()
+    {
+        return $this->belongsTo(Article::class);
+    }
+
+    public function comment()
+    {
+        return $this->belongsTo(Comment::class);
+    }
+
     public function member()
     {
         return $this->belongsTo(Member::class);

@@ -6,6 +6,7 @@ use App\Models\Member;
 use App\Models\Country;
 use App\Models\MemberRole;
 use App\Models\MemberType;
+use App\Models\State;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -32,9 +33,9 @@ class MemberFactory extends Factory
             'last_name' => fake()->lastName(),
             'email_address' => fake()->unique()->safeEmail(),
             'phone_number' => fake()->phoneNumber(),
-            'password' => bcrypt('password'),
+            'password' => 'password',
             'country_id' => Country::factory(),
-            'state_id' => 1,
+            'state_id' => State::factory(),
             'address' => fake()->address(),
             'member_role_id' => MemberRole::factory(),
             'member_type_id' => MemberType::factory(),

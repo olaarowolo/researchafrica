@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+
+
+
 use Gate;
 use App\Models\Member;
 use App\Models\Article;
@@ -109,7 +112,8 @@ class ArticleController extends Controller
             $sub_article->addMedia(storage_path('tmp/uploads/' . basename($paper)))->toMediaCollection('upload_paper');
         }
 
-        $article_mail = $this->articleMail($first_name = $member->first_name);
+
+        $article_mail = $this->articleMail($member->first_name, $member->email_address);
 
         $mailing = $this->allEditor($article);
 

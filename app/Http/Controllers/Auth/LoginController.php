@@ -70,6 +70,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        auth()->user()->logout();
+        Auth::logout();
+        return redirect('/');
     }
 }

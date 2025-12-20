@@ -46,6 +46,8 @@ class MemberTypeSeeder extends Seeder
             ],
         ];
 
-        MemberType::insert($member_type);
+        foreach ($member_type as $type) {
+            MemberType::updateOrCreate(['id' => $type['id']], $type);
+        }
     }
 }

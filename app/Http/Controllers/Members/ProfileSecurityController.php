@@ -25,70 +25,125 @@ class ProfileSecurityController extends Controller
     use MemberTypeTrait;
     public function profilePage()
     {
-        if ($this->author()) {
-            abort_unless($this->author(), Response::HTTP_UNAUTHORIZED);
-            $reviewArticlesStatus1 = auth('member')->user()->memberArticles->where('article_status', 1);
-            $reviewArticlesStatus2 = auth('member')->user()->memberArticles->where('article_status', 2);
+        \Log::info('Profile page called', ['user' => auth('member')->user()]);
+        $user = auth('member')->user();
+        if (!$user) {
+            \Log::error('No authenticated user');
+            abort(401, 'Not authenticated');
+        }
+
+        $memberTypeId = $user->member_type_id;
+        \Log::info('Member type', ['type' => $memberTypeId]);
+
+        if ($memberTypeId == 1) { // Author
+            $reviewArticlesStatus1 = $user->memberArticles->where('article_status', 1);
+            $reviewArticlesStatus2 = $user->memberArticles->where('article_status', 2);
             $reviewArticles = $reviewArticlesStatus1->merge($reviewArticlesStatus2);
-            // $reviewArticles = auth('member')->user()->memberArticles?->where('article_status', 2)?->orWhere('article_status', 1)->latest()->get();
-            $publishArticles = auth('member')->user()->memberArticles()->where('article_status', '3')->latest()->get();
+            $publishArticles = $user->memberArticles()->where('article_status', '3')->latest()->get();
             return view('member.profile.author', compact('reviewArticles', 'publishArticles'));
         }
 
-        if ($this->editor()) {
-            abort_unless($this->editor(), Response::HTTP_UNAUTHORIZED);
-            $unaccepted = EditorAccept::with(['member'])->distinct('article_id')->whereNull('member_id')->pluck('article_id')->toArray();
-
-            $newArticles = Article::with('member')->whereIn('id', $unaccepted)->latest()->get();
-            $accept = EditorAccept::with(['member'])->distinct('article_id')->where('member_id', auth('member')->id())->pluck('article_id')->toArray();
-            $articles = Article::with('member')->whereIntegerInRaw('id', $accept)->latest()->get();
+        if ($memberTypeId == 2) { // Editor
+            \Log::info('Editor section - starting queries');
+            try {
+                $unaccepted = EditorAccept::with(['member'])->distinct('article_id')->whereNull('member_id')->pluck('article_id')->toArray();
+                \Log::info('Editor unaccepted query done', ['count' => count($unaccepted)]);
+                $newArticles = Article::with(['member', 'article_category', 'journal_category', 'sub_articles'])->whereIn('id', $unaccepted)->latest()->get();
+                \Log::info('Editor newArticles query done', ['count' => $newArticles->count()]);
+                $accept = EditorAccept::with(['member'])->distinct('article_id')->where('member_id', $user->id)->pluck('article_id')->toArray();
+                \Log::info('Editor accept query done', ['count' => count($accept)]);
+                $articles = Article::with(['member', 'article_category', 'journal_category', 'sub_articles'])->whereIn('id', $accept)->latest()->get();
+                \Log::info('Editor articles query done', ['count' => $articles->count()]);
+            } catch (\Exception $e) {
+                \Log::error('Editor query error', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+                throw $e;
+            }
             $processed = $articles->where('article_status', 3);
             $processing = $articles->where('article_status', 2);
-            // dd($newArticles);
+            \Log::info('About to render view', [
+                'newArticles_count' => $newArticles->count(),
+                'processed_count' => $processed->count(),
+                'processing_count' => $processing->count(),
+                'newArticles_type' => gettype($newArticles),
+                'processed_type' => gettype($processed),
+                'processing_type' => gettype($processing),
+            ]);
             return view('member.profile.editor', compact('newArticles', 'processed', 'processing'));
+            // return response()->json(['status' => 'success', 'type' => 'editor']);
         }
 
-        if ($this->reviewer() || $this->reviewerFinal()) {
-            abort_unless($this->reviewer() || $this->reviewerFinal(), Response::HTTP_UNAUTHORIZED);
+        if ($memberTypeId == 3 || $memberTypeId == 6) { // Reviewer or Reviewer Final
+            \Log::info('Reviewer section - starting queries', ['memberTypeId' => $memberTypeId]);
+            try {
+            try {
+                if ($memberTypeId == 3) {
+                    \Log::info('Processing reviewer type 3');
+                    $unaccepted = ReviewerAccept::with(['member'])->distinct('article_id')
+                        ->where(function ($query) use ($user) {
+                            $query->whereNull('assigned_id');
+                            $query->orWhere('assigned_id', $user->id);
+                        })->whereNull('member_id')
+                        ->pluck('article_id')->toArray();
+                    \Log::info('Reviewer unaccepted query done', ['count' => count($unaccepted)]);
 
-            if ($this->reviewer()) {
-                $unaccepted = ReviewerAccept::with(['member'])->distinct('article_id')
-                    ->where(function ($query) {
-                        $query->whereNull('assigned_id');
-                        $query->orWhere('assigned_id', auth('member')->user()->id);
-                    })->whereNull('member_id')
-                    ->pluck('article_id')->toArray();
+                    $accept = ReviewerAccept::with(['member'])->distinct('article_id')->where('member_id', $user->id)->pluck('article_id')->toArray();
+                    \Log::info('Reviewer accept query done', ['count' => count($accept)]);
+                } else {
+                    \Log::info('Processing reviewer type 6 (final)');
+                    $unaccepted = ReviewerAcceptFinal::with(['member'])->distinct('article_id')->whereNull('member_id')->pluck('article_id')->toArray();
+                    \Log::info('ReviewerFinal unaccepted query done', ['count' => count($unaccepted)]);
 
-                $accept = ReviewerAccept::with(['member'])->distinct('article_id')->where('member_id', auth('member')->id())->pluck('article_id')->toArray();
-            } else {
-                $unaccepted = ReviewerAcceptFinal::with(['member'])->distinct('article_id')->whereNull('member_id')->pluck('article_id')->toArray();
+                    $accept = ReviewerAcceptFinal::with(['member'])->distinct('article_id')->where('member_id', $user->id)->pluck('article_id')->toArray();
+                    \Log::info('ReviewerFinal accept query done', ['count' => count($accept)]);
+                }
 
-                $accept = ReviewerAcceptFinal::with(['member'])->distinct('article_id')->where('member_id', auth('member')->id())->pluck('article_id')->toArray();
+                $newArticles = Article::with('member')->whereIn('id', $unaccepted)->latest()->get();
+                \Log::info('Reviewer newArticles query done', ['count' => $newArticles->count()]);
+                $acceptedArticle = Article::with('member')->whereIn('id', $accept)->latest()->get();
+                \Log::info('Reviewer acceptedArticle query done', ['count' => $acceptedArticle->count()]);
+            } catch (\Exception $e) {
+                \Log::error('Reviewer query error', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+                throw $e;
             }
 
-
-            $newArticles = Article::with('member')->whereIn('id', $unaccepted)->latest()->get();
-
-            $acceptedArticle = Article::with('member')->whereIntegerInRaw('id', $accept)->latest()->get();
-
-            // dd($accept);
+            // try {
+            //     return view('member.profile.reviewer', compact('newArticles', 'acceptedArticle'));
+            // } catch (\Exception $e) {
+            //     \Log::error('Reviewer view rendering error', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            //     throw $e;
+            // }
             return view('member.profile.reviewer', compact('newArticles', 'acceptedArticle'));
+            // return response()->json(['status' => 'success', 'type' => 'reviewer']);
         }
 
-        if ($this->publisher()) {
-            $unaccepted = PublisherAccept::with(['member'])->distinct('article_id')->whereNull('member_id')->pluck('article_id')->toArray();
+        if ($memberTypeId == 5) { // Publisher
+            \Log::info('Publisher section - starting queries');
+            try {
+                $unaccepted = PublisherAccept::with(['member'])->distinct('article_id')->whereNull('member_id')->pluck('article_id')->toArray();
+                \Log::info('Publisher unaccepted query done', ['count' => count($unaccepted)]);
 
-
-            $newArticles = Article::with('member')->whereIn('id', $unaccepted)->latest()->get();
-            $accept = PublisherAccept::with(['member'])->distinct('article_id')->where('member_id', auth('member')->id())->pluck('article_id')->toArray();
-            $acceptedArticle = Article::with('member')->whereIntegerInRaw('id', $accept)->latest()->get();
+                $newArticles = Article::with('member')->whereIn('id', $unaccepted)->latest()->get();
+                \Log::info('Publisher newArticles query done', ['count' => $newArticles->count()]);
+                $accept = PublisherAccept::with(['member'])->distinct('article_id')->where('member_id', $user->id)->pluck('article_id')->toArray();
+                \Log::info('Publisher accept query done', ['count' => count($accept)]);
+                $acceptedArticle = Article::with('member')->whereIn('id', $accept)->latest()->get();
+                \Log::info('Publisher acceptedArticle query done', ['count' => $acceptedArticle->count()]);
+            } catch (\Exception $e) {
+                \Log::error('Publisher query error', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+                throw $e;
+            }
 
             return view('member.profile.publisher', compact('newArticles', 'acceptedArticle'));
+            return response()->json(['status' => 'success', 'type' => 'publisher']);
+            // return response()->json(['status' => 'success', 'type' => 'publisher']);
         }
 
-        if ($this->account()) {
+        if ($memberTypeId == 4) { // Account/Researcher
             return view('member.profile.researcher');
         }
+
+        // Default fallback
+        abort(403, 'Unauthorized access to profile');
     }
 
 
@@ -133,32 +188,32 @@ class ProfileSecurityController extends Controller
 
 
         auth('member')->user()->update([
-            'password' => bcrypt($request->password)
+            'password' => $request->password
         ]);
 
         return back()->with('success', 'Password Updated Successfully');
     }
 
-//     public function profile_picture(Request $request)
-//     {
-//         $validated = $request->validate([
-//             'profile_picture' => [
-//                 'required',
-//                 'mimes: png,jpg,jpeg,gif,tiff',
-//                 'max:2048',
-//             ]
-//         ]);
+    public function profile_picture(Request $request)
+    {
+        $validated = $request->validate([
+            'profile_picture' => [
+                'required',
+                'mimes: png,jpg,jpeg,gif,tiff',
+                'max:2048',
+            ]
+        ]);
 
-//         $profile_picture = $request->file('profile_picture');
+        $profile_picture = $request->file('profile_picture');
 
-//         if ($profile_picture) {
-//             if ($photo = auth('member')->user()->profile_picture) {
-//                 $photo->delete();
-//             }
-//             $profile_picture = $this->manualStoreMedia($profile_picture)['name'];
-//             auth('member')->user()->addMedia(storage_path('tmp/uploads/' . basename($profile_picture)))->toMediaCollection('profile_picture');
-//         }
+        if ($profile_picture) {
+            if ($photo = auth('member')->user()->profile_picture) {
+                $photo->delete();
+            }
+            $profile_picture = $this->manualStoreMedia($profile_picture)['name'];
+            auth('member')->user()->addMedia(storage_path('tmp/uploads/' . basename($profile_picture)))->toMediaCollection('profile_picture');
+        }
 
-//         return back()->with('success', 'Photo Uploaded Successfully');
-//     }
+        return back()->with('success', 'Photo Uploaded Successfully');
+    }
 }

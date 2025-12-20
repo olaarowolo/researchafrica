@@ -40,9 +40,8 @@ class ArticleCategoryFactory extends Factory
         ];
 
         return [
-            'name' => fake()->unique()->randomElement($categories),
-            'description' => fake()->paragraph(),
-            'is_active' => true,
+            'category_name' => fake()->unique()->randomElement($categories),
+            'status' => 'active',
         ];
     }
 
@@ -54,6 +53,34 @@ class ArticleCategoryFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'is_active' => false,
+            ];
+        });
+    }
+
+    /**
+     * Create a journal category.
+     */
+    public function journal()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_journal' => true,
+                'journal_slug' => fake()->slug(),
+                'journal_acronym' => fake()->regexify('[A-Z]{2,5}'), // Generate 2-5 uppercase letters
+                'journal_url' => fake()->url(),
+                'issn' => fake()->regexify('[0-9]{4}-[0-9]{4}'),
+            ];
+        });
+    }
+
+    /**
+     * Create a regular category.
+     */
+    public function category()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_journal' => false,
             ];
         });
     }

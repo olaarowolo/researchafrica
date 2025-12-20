@@ -26,8 +26,8 @@ class CommentFactory extends Factory
         return [
             'article_id' => Article::factory(),
             'member_id' => Member::factory(),
-            'comment' => fake()->paragraph(),
-            'is_approved' => fake()->boolean(80), // 80% chance of being approved
+            'message' => fake()->paragraph(),
+            'status' => fake()->randomElement(array_keys(Comment::STATUS_SELECT)),
             'created_at' => fake()->dateTimeBetween('-1 year', 'now'),
             'updated_at' => fake()->dateTimeBetween('-1 year', 'now'),
         ];

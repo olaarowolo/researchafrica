@@ -51,6 +51,28 @@ class UserFactory extends Factory
                 ['title' => 'Admin']
             );
 
+            // Create permissions if they don't exist
+            $permissions = [
+                'article_access',
+                'article_create',
+                'article_edit',
+                'article_delete',
+                'article_show',
+                'article_category_access',
+                'article_category_create',
+                'article_category_edit',
+                'article_category_delete',
+            ];
+
+            $permissionIds = [];
+            foreach ($permissions as $perm) {
+                $permission = \App\Models\Permission::firstOrCreate(['title' => $perm]);
+                $permissionIds[] = $permission->id;
+            }
+
+            // Attach permissions to the admin role
+            $adminRole->permissions()->attach($permissionIds);
+
             // Assign admin role to user
             $user->roles()->attach($adminRole->id);
         });

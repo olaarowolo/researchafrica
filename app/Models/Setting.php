@@ -32,12 +32,12 @@ class Setting extends Model implements HasMedia
         '2' => 'Disabled',
     ];
 
+
     protected $fillable = [
         'website_name',
         'website_email',
         'phone_number',
         'address',
-        'about',
         'facebook_url',
         'twitter_url',
         'linkedin_url',

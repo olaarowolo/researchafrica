@@ -32,7 +32,7 @@ class MemberTypeFactory extends Factory
         ];
 
         return [
-            'name' => fake()->unique()->randomElement($types),
+            'name' => fake()->randomElement($types),
             'status' => '1', // 1 = Active, 2 = Inactive
         ];
     }

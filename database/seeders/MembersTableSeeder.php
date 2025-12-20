@@ -140,4 +140,30 @@ class MembersTableSeeder extends Seeder
 
         Member::insert($members);
     }
+
+    /**
+     * Seed basic data required for members
+     */
+    private function seedBasicData()
+    {
+        // Seed countries if not already seeded
+        if (\DB::table('countries')->count() == 0) {
+            $this->call(CountrySeeder::class);
+        }
+
+        // Seed states if not already seeded
+        if (\DB::table('states')->count() == 0) {
+            $this->call(StateSeeder::class);
+        }
+
+        // Seed member types if not already seeded
+        if (\DB::table('member_types')->count() == 0) {
+            $this->call(MemberTypeSeeder::class);
+        }
+
+        // Seed member roles if not already seeded
+        if (\DB::table('member_roles')->count() == 0) {
+            $this->call(MemberRoleSeeder::class);
+        }
+    }
 }

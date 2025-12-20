@@ -41,6 +41,8 @@ class Miscellaneous extends Controller
 
             return to_route('member.articles.show', $article->id)->with('success', 'Article accepted for review successfully');
         }
+
+        return back()->with('error', 'No editor acceptance record found for this article.');
     }
 
     public function SecondEditorAccept(Request $request, Article $article)
@@ -58,10 +60,12 @@ class Miscellaneous extends Controller
             $article->last->update(['status' => $status]);
 
             $this->mailEditor($article);
-            // $this->acceptMail($article);
+            $this->acceptMail($article);
 
             return to_route('member.articles.show', $article->id)->with('success', 'Article accepted for review successfully');
         }
+
+        return back()->with('error', 'No editor acceptance record found for this article.');
     }
 
     public function ThirdEditorAccept(Request $request, Article $article)
@@ -83,9 +87,11 @@ class Miscellaneous extends Controller
 
             return to_route('member.articles.show', $article->id)->with('success', 'Article accepted for review successfully');
         }
+
+        return back()->with('error', 'No editor acceptance record found for this article.');
     }
 
-    public function ReviewerAccept(Request $request, Article $article, ArticleService $articleService)
+    public function ReviewerAccept(Request $request, Article $article)
     {
         $accept = ReviewerAccept::where('article_id', $article->id)->latest()->first();
 
@@ -106,6 +112,8 @@ class Miscellaneous extends Controller
 
             return to_route('member.articles.show', $article->id)->with('success', 'Article accepted for review successfully');
         }
+
+        return back()->with('error', 'No reviewer acceptance record found for this article.');
     }
 
     public function ReviewerAcceptFinal(Request $request, Article $article)
@@ -126,13 +134,13 @@ class Miscellaneous extends Controller
 
             return to_route('member.articles.show', $article->id)->with('success', 'Article accepted for review successfully');
         }
+
+        return back()->with('error', 'No final reviewer acceptance record found for this article.');
     }
 
     public function PublisherAccept(Request $request, Article $article)
     {
-        $accept = is_null($article->publisher_accept->member);
-
-        if ($accept) {
+        if ($article->publisher_accept && is_null($article->publisher_accept->member)) {
             $article->publisher_accept->update([
                 'member_id' => auth('member')->id(),
             ]);
@@ -141,12 +149,14 @@ class Miscellaneous extends Controller
 
             return to_route('member.articles.show', $article->id)->with('success', 'Article accepted for review successfully');
         }
+
+        return back()->with('error', 'Publisher acceptance not available or already accepted.');
     }
 
     public function becomeAuthor(Request $request)
     {
         auth('member')->user()->update(['member_type_id' => 1]);
-        return back()->with('success', 'Congratulations, You are now an Author');
+        return redirect()->route('home')->with('success', 'Congratulations, You are now an Author');
     }
 
     public function viewBookmark()

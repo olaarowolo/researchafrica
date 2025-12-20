@@ -9,6 +9,11 @@ class CountriesTableSeeder extends Seeder
 {
     public function run()
     {
+        // Check if countries already exist to prevent duplicates
+        if (\App\Models\Country::count() > 0) {
+            return;
+        }
+
         $countries = [
             ['id' => 1, 'short_code' => 'AF', 'name' => "Afghanistan", 'phone_code' => 93],
             ['id' => 2, 'short_code' => 'AL', 'name' => "Albania", 'phone_code' => 355],

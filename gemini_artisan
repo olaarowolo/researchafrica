@@ -1,0 +1,9 @@
+#!/bin/bash
+# Gemini Artisan Wrapper
+# This script allows AI assistants to run artisan commands safely
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# Run the artisan command
+php artisan "$@"

@@ -378,6 +378,26 @@ class PermissionsTableSeeder extends Seeder
                 'id'    => 92,
                 'title' => 'profile_password_edit',
             ],
+            [
+                'id'    => 93,
+                'title' => 'editorial_workflow_create',
+            ],
+            [
+                'id'    => 94,
+                'title' => 'editorial_workflow_edit',
+            ],
+            [
+                'id'    => 95,
+                'title' => 'editorial_workflow_show',
+            ],
+            [
+                'id'    => 96,
+                'title' => 'editorial_workflow_delete',
+            ],
+            [
+                'id'    => 97,
+                'title' => 'editorial_workflow_access',
+            ],
         ];
 
         Permission::insert($permissions);

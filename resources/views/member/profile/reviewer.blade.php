@@ -10,7 +10,7 @@
         50% { opacity: 0; }
         100% { opacity: 1; }
     }
-    </style> 
+    </style>
 
     <div id="content" class="p-4 p-md-5">
         <x-profile-bar />
@@ -46,16 +46,16 @@
                                     <p class="">
                                         <i class="fa-sharp fa-solid fa-calendar-days"></i>
                                         {{ date('M j, Y - H:i', strtotime($article->created_at ?? now())) }} <br>
-                                        
-                                        <strong><span style="color:red; animation: blink 1s infinite;">{{ $article->last->status == 7 ? 
-                                "Returning Article" : (is_null($article->last->comment_id) ? "New Article" : "Modify Article") }}</span></strong> | Submission to:  <i
+
+                                        <strong><span style="color:red; animation: blink 1s infinite;">{{ $article->last && $article->last->status == 7 ?
+                                "Returning Article" : ($article->last && is_null($article->last->comment_id) ? "New Article" : "Modify Article") }}</span></strong> | Submission to:  <i
                                 class="fa-sharp fa-solid fa-folders"></i> <strong><span style="color:red;"> {{
                             $article->article_category->category_name ?? '' }}   </span></strong>>   {{$article->journal_category->category_name ?? '' }}
-                                        
-                                        
-                                    
-                                        
-                                        
+
+
+
+
+
                                         {{-- | <i
                                     class="fa-sharp fa-solid fa-bookmark"></i>
                                 ID:QWETH678 | <i

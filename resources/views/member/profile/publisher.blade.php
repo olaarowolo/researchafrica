@@ -111,26 +111,26 @@
                     @foreach ($newArticles as $article)
 
                     <div class="d-flex">
-                        
+
 
                         <p class="">
                             <i class="fa-sharp fa-solid fa-calendar-days"></i>
-                            {{date('M j, Y - H:i', strtotime($article->created_at ?? now()))}} 
-                            
+                            {{date('M j, Y - H:i', strtotime($article->created_at ?? now()))}}
+
                             |
-                            
-                            
+
+
                             {{-- <i
                                 class="fa-sharp fa-solid fa-folders"></i> Category: {{
                             $article->article_category->category_name ?? '' }} --}}
                             <p class="">
                                 {{-- <strong><span style="color:red; animation: blink 1s infinite;">{{ $article->last->status == 7 ? "Returning Article" : (is_null($article->last->comment_id) ? "New Article" : "Modify Article") }}</span></strong>  --}}
-                                | 
+                                |
                                 Submission to:  <i
                                 class="fa-sharp fa-solid fa-folders"></i> <strong><span style="color:red;"> {{
                             $article->article_category->category_name ?? '' }}   </span></strong>>   {{$article->journal_category->category_name ?? '' }}
                             |
-                            
+
                             <i class="fa-sharp fa-solid fa-bookmark"></i> {{ $article->volume ?? '' }} | <i
                                 class="fa-sharp fa-solid fa-book-bookmark"></i> ISSN : {{ $article->issue_no ?? '' }}
                         </p>
@@ -142,17 +142,17 @@
                                 (is_null($article->last->comment_id) ? "New Article: Ready to Publish" : "Modify Article") }}</strong>
                         </div> --}}
                         <div class="kb-shadow hover:kb-border-2 hover:kb-scale-105 kb-rounded-lg">
-                            <p><strong class="animate-blink-blue">{{ $article->last->status == 7 ? "Returning Article" : (is_null($article->last->comment_id) ? "New Article: Ready to Publish" : "Modify Article") }}</strong>
+                            <p><strong class="animate-blink-blue">{{ $article->last && $article->last->status == 7 ? "Returning Article" : ($article->last && is_null($article->last->comment_id) ? "New Article: Ready to Publish" : "Modify Article") }}</strong>
                             </p>
-                            
+
                             <p style="font-size: 20px;">   {{ $article->title ?? '' }} </p>
 
                             <strong>Corresponding Author</strong>: {{ $article->member->fullname ?? '' }}
- @if ($article->member->fullname)     
+ @if ($article->member->fullname)
                                             <sup>
                                                <a href="https://orcid.org/{{ $article->member?->first()?->orchid_id }}" style="display: inline;" target="_blank">
     <img src="https://orcid.org/assets/vectors/orcid.logo.icon.svg" alt="ORCID Logo" style="width: 13px; height: 13px; display: inline;">
-</a> 
+</a>
                                             </sup>
                                         @else
                                             <i>None</i>

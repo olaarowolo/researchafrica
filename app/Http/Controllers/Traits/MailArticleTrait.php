@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Traits;
 
+
 use App\Mail\ForwardedArticle;
 use App\Models\Member;
 use App\Mail\ArticleMail;
@@ -11,6 +12,7 @@ use App\Mail\NewArticle;
 use App\Mail\PublishArticle;
 use App\Models\EditorAccept;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 trait MailArticleTrait
 {
@@ -128,12 +130,17 @@ trait MailArticleTrait
         return true;
     }
 
-    public function articleMail($fullname)
+
+    public function articleMail($fullname, $memberEmail = null)
     {
         try {
-            Mail::to(auth('member')->user()->email_address)->send(new ArticleMail($fullname));
+            $email = $memberEmail ?? (auth('member')->check() ? auth('member')->user()->email_address : null);
+            if ($email) {
+                Mail::to($email)->send(new ArticleMail($fullname));
+            }
         } catch (\Throwable $th) {
-            throw $th;
+            // Log the error but don't throw - article creation shouldn't fail due to email issues
+            \Log::warning('Article mail sending failed: ' . $th->getMessage());
         }
 
         return true;

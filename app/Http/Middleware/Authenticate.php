@@ -21,6 +21,11 @@ class Authenticate extends Middleware
             return route('admin.login');
         }
 
+        // Redirect member routes to member login
+        if ($request->is('profile/*') || $request->routeIs('member.*')) {
+            return route('member.login');
+        }
+
         return route('home');
     }
 }

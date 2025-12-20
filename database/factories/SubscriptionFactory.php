@@ -24,11 +24,11 @@ class SubscriptionFactory extends Factory
         return [
             'name' => fake()->words(2, true) . ' Subscription',
             'description' => fake()->paragraph(),
-            'price' => fake()->randomFloat(2, 10, 500),
-            'duration_months' => fake()->randomElement([1, 3, 6, 12]),
-            'is_active' => true,
-            'max_articles' => fake()->numberBetween(5, 100),
-            'max_downloads' => fake()->numberBetween(10, 200),
+            'features' => fake()->paragraph(),
+            'plan_type' => fake()->randomElement(array_keys(Subscription::PLAN_TYPE_SELECT)),
+            'cycle_type' => fake()->randomElement(array_keys(Subscription::CYCLE_TYPE_SELECT)),
+            'cycle_number' => fake()->numberBetween(1, 12),
+            'status' => fake()->randomElement(array_keys(Subscription::STATUS_SELECT)),
         ];
     }
 
@@ -39,35 +39,7 @@ class SubscriptionFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'is_active' => false,
-            ];
-        });
-    }
-
-    /**
-     * Create a monthly subscription.
-     */
-    public function monthly()
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'name' => 'Monthly Subscription',
-                'duration_months' => 1,
-                'price' => fake()->randomFloat(2, 10, 50),
-            ];
-        });
-    }
-
-    /**
-     * Create an annual subscription.
-     */
-    public function annual()
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'name' => 'Annual Subscription',
-                'duration_months' => 12,
-                'price' => fake()->randomFloat(2, 50, 300),
+                'status' => '2',
             ];
         });
     }

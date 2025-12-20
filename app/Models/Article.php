@@ -42,6 +42,7 @@ class Article extends Model
     ];
 
     protected $fillable = [
+        'journal_id',
         'member_id',
         'access_type',
         'title',
@@ -64,6 +65,10 @@ class Article extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+    ];
+
+    protected $casts = [
+        'is_recommended' => 'boolean',
     ];
 
     protected function serializeDate(DateTimeInterface $date)
@@ -195,6 +200,148 @@ class Article extends Model
         return $this->belongsTo(ArticleCategory::class, 'article_sub_category_id');
     }
 
+    // ========================================
+    // SPRINT 2: JOURNAL CONTEXT RELATIONSHIPS
+    // ========================================
+
+    /**
+     * Get the journal this article belongs to
+     */
+    public function journal()
+    {
+        return $this->belongsTo(ArticleCategory::class, 'journal_id');
+    }
+
+    /**
+     * Get the editorial board for this article's journal
+     */
+    public function editorialBoard()
+    {
+        return $this->hasManyThrough(
+            JournalEditorialBoard::class,
+            ArticleCategory::class,
+            'id',           // article_categories.id
+            'journal_id',   // editorial_boards.journal_id
+            'journal_id',   // articles.journal_id
+            'id'            // article_categories.id
+        )->where('is_active', true);
+    }
+
+    /**
+     * Get journal memberships related to this article's journal
+     */
+    public function journalMemberships()
+    {
+        return $this->hasManyThrough(
+            JournalMembership::class,
+            ArticleCategory::class,
+            'id',           // article_categories.id
+            'journal_id',   // journal_memberships.journal_id
+            'journal_id',   // articles.journal_id
+            'id'            // article_categories.id
+        );
+    }
+
+    // ========================================
+    // SPRINT 2: JOURNAL SCOPES
+    // ========================================
+
+    /**
+     * Scope to filter articles by journal
+     */
+    public function scopeForJournal($query, $journalId)
+    {
+        return $query->where('journal_id', $journalId);
+    }
+
+    /**
+     * Scope to filter articles by journal slug
+     */
+    public function scopeForJournalSlug($query, $slug)
+    {
+        return $query->whereHas('journal', function ($q) use ($slug) {
+            $q->where('journal_slug', $slug);
+        });
+    }
+
+    /**
+     * Scope to filter articles by journal acronym
+     */
+    public function scopeForJournalAcronym($query, $acronym)
+    {
+        return $query->whereHas('journal', function ($q) use ($acronym) {
+            $q->where('journal_acronym', $acronym);
+        });
+    }
+
+    /**
+     * Scope to get articles without journal assignment
+     */
+    public function scopeWithoutJournal($query)
+    {
+        return $query->whereNull('journal_id');
+    }
+
+    /**
+     * Scope to get articles with journal assignment
+     */
+    public function scopeWithJournal($query)
+    {
+        return $query->whereNotNull('journal_id');
+    }
+
+    // ========================================
+    // SPRINT 2: JOURNAL HELPER METHODS
+    // ========================================
+
+    /**
+     * Check if article belongs to a specific journal
+     */
+    public function belongsToJournal($journalId): bool
+    {
+        return $this->journal_id == $journalId;
+    }
+
+    /**
+     * Check if article has a journal assigned
+     */
+    public function hasJournal(): bool
+    {
+        return !is_null($this->journal_id);
+    }
+
+    /**
+     * Get journal name
+     */
+    public function getJournalNameAttribute()
+    {
+        return $this->journal ? $this->journal->name : null;
+    }
+
+    /**
+     * Get journal acronym
+     */
+    public function getJournalAcronymAttribute()
+    {
+        return $this->journal ? $this->journal->journal_acronym : null;
+    }
+
+    /**
+     * Assign article to a journal
+     */
+    public function assignToJournal($journalId)
+    {
+        $this->update(['journal_id' => $journalId]);
+    }
+
+    /**
+     * Remove journal assignment
+     */
+    public function removeJournalAssignment()
+    {
+        $this->update(['journal_id' => null]);
+    }
+
     public function editor_accept()
     {
         return $this->hasOne(EditorAccept::class)->latest();
@@ -213,6 +360,26 @@ class Article extends Model
     public function reviewer_accept_final()
     {
         return $this->hasOne(ReviewerAcceptFinal::class)->latest();
+    }
+
+    // ========================================
+    // SPRINT 5: EDITORIAL WORKFLOW RELATIONSHIPS
+    // ========================================
+
+    /**
+     * Get the editorial progress for this article
+     */
+    public function editorialProgress()
+    {
+        return $this->hasOne(ArticleEditorialProgress::class);
+    }
+
+    /**
+     * Get the current editorial workflow
+     */
+    public function currentEditorialWorkflow()
+    {
+        return $this->belongsTo(EditorialWorkflow::class, 'editorial_workflow_id');
     }
 
     public function article_keywords(): BelongsToMany

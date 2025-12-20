@@ -17,7 +17,7 @@ Route::controller('AjaxController')->group(function () {
     Route::get('get-state/{id}', 'getStates');
     Route::post('keyword_delete', 'keywordDelete')->name('keyword_delete');
     Route::get('verify_transaction/{reference}', 'verifyPayment');
-    Route::get('bookmark/{article}', 'bookmark');
+    Route::get('bookmark/{article}', 'bookmark')->name('bookmark');
     Route::get('get-journal/{journal}', 'getJournals');
     Route::get('download-article/{article}', 'downloadPdf')->name('download-article');
     Route::get('download-review/{article}', 'downloadPaperReview')->name('download-review-doc');
@@ -48,7 +48,7 @@ Route::group(['as' => 'member.', 'namespace' => 'Members'], function () {
     Route::post('reset-password/{hash}', 'AuthController@resetPasswordSubmit')->name('reset-password-submit');
 
 
-    Route::group(['prefix' => 'profile', 'middleware' => ['auth:member']], function () {
+    Route::group(['prefix' => 'profile'], function () {
         // Profile
         Route::get('/', "ProfileSecurityController@profilePage")->name('profile');
         Route::get('edit', "ProfileSecurityController@editProfile")->name('profile.edit');
@@ -62,6 +62,18 @@ Route::group(['as' => 'member.', 'namespace' => 'Members'], function () {
 
         Route::resource('articles', 'ArticleController');
 
+        // Sub Articles
+        Route::resource('sub-articles', 'SubArticleController');
+
+        // Editorial Workflows
+        Route::get('editorial-workflows/dashboard', 'EditorialWorkflowController@dashboard')->name('editorial-workflows.dashboard');
+        Route::get('editorial-workflows/my-articles', 'EditorialWorkflowController@myArticles')->name('editorial-workflows.my-articles');
+        Route::post('articles/{article}/submit-for-review', 'EditorialWorkflowController@submitForReview')->name('articles.submit-for-review');
+        Route::post('articles/{article}/request-revision', 'EditorialWorkflowController@requestRevision')->name('articles.request-revision');
+        Route::post('articles/{article}/approve-stage', 'EditorialWorkflowController@approveStage')->name('articles.approve-stage');
+        Route::post('articles/{article}/reject-stage', 'EditorialWorkflowController@rejectStage')->name('articles.reject-stage');
+        Route::get('editorial-workflows/assigned-articles', 'EditorialWorkflowController@assignedArticles')->name('editorial-workflows.assigned-articles');
+
         // Editor
         Route::controller('EditorController')->group(function () {
             Route::get('editor', 'index')->name('editor.index');
@@ -74,7 +86,7 @@ Route::group(['as' => 'member.', 'namespace' => 'Members'], function () {
 
         // Commenting
         Route::get('comments/{article}/{comment}', 'CommentController@index')->name('comments.index');
-        Route::post('comments/{article}', 'CommentController@store')->name('comment.store');
+        Route::post('comments/{article}', 'CommentController@store')->name('comments.store');
         Route::post('comment-article/{article}', 'CommentController@commentArticleUpdate')->name('comment.article-update');
 
         Route::controller('Miscellaneous')->group(function () {

@@ -64,7 +64,7 @@
                                     {{ date('M j, Y - H:i', strtotime($article->created_at ?? now())) }}
                                     <br <p class="">
                                     <strong><span
-                                            style="color:red; animation: blink 1s infinite;">{{ $article->last->status == 7 ? 'Returning Article' : (is_null($article->last->comment_id) ? 'New Article' : 'Modify Article') }}</span></strong>
+                                            style="color:red; animation: blink 1s infinite;">{{ $article->last && $article->last->status == 7 ? 'Returning Article' : ($article->last && is_null($article->last->comment_id) ? 'New Article' : 'Modify Article') }}</span></strong>
                                     | Submission to: <i class="fa-sharp fa-solid fa-folders"></i> <strong><span
                                             style="color:red;"> {{ $article->article_category->category_name ?? '' }}
                                         </span></strong>> {{ $article->journal_category->category_name ?? '' }}

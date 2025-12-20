@@ -1,0 +1,91 @@
+I have analyzed the files and found that `MemberRoleSeeder.php` already has a duplicate prevention check using `firstOrCreate`. It seems there was a confusion with `MemberTypeSeeder.php`, which did not have this check.
+
+I have now updated `database/seeders/MemberTypeSeeder.php` to include a duplicate prevention check using `updateOrCreate`. This will prevent errors if you run the seeder multiple times.
+
+Here is the content of the updated `database/seeders/MemberTypeSeeder.php`:
+```php
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\MemberType;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+class MemberTypeSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $member_type = [
+            [
+                "id" => 1,
+                'name' => 'Author',
+                "status" => 1,
+            ],
+            [
+                "id" => 2,
+                'name' => 'Editor',
+                "status" => 1,
+            ],
+            [
+                "id" => 3,
+                'name' => 'Reviewer',
+                "status" => 1,
+            ],
+            [
+                "id" => 4,
+                'name' => 'User',
+                "status" => 1,
+            ],
+            [
+                "id" => 5,
+                'name' => 'Publisher',
+                "status" => 1,
+            ],
+            [
+                "id" => 6,
+                'name' => 'Reviewer 2',
+                "status" => 1,
+            ],
+        ];
+
+        foreach ($member_type as $type) {
+            MemberType::updateOrCreate(['id' => $type['id']], $type);
+        }
+    }
+}
+```
+
+The `MemberRoleSeeder.php` file remains unchanged as it already correctly handles duplicate entries. Here is its content for your reference:
+```php
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\MemberRole;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+class MemberRoleSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+
+        $memberRoles = [
+            ['title' => 'Student', 'status' => 1],
+            ['title' => 'Librarian', 'status' => 1],
+            ['title' => 'Professor', 'status' => 1],
+        ];
+
+        foreach ($memberRoles as $role) {
+            MemberRole::firstOrCreate($role);
+        }
+    }
+}
+```

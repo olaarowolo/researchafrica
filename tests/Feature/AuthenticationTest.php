@@ -2,9 +2,15 @@
 
 namespace Tests\Feature;
 
+
 use App\Models\User;
 use App\Models\Member;
+use App\Models\MemberRole;
+use App\Models\MemberType;
+use App\Models\Country;
+use App\Models\State;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
@@ -17,12 +23,12 @@ class AuthenticationTest extends TestCase
     public function test_admin_can_login()
     {
         $admin = User::factory()->admin()->create([
-            'email_address' => 'admin@test.com',
+            'email' => 'admin@test.com',
             'password' => bcrypt('password'),
         ]);
 
         $response = $this->post('/admin/login', [
-            'email_address' => 'admin@test.com',
+            'email' => 'admin@test.com',
             'password' => 'password',
         ]);
 
@@ -35,8 +41,8 @@ class AuthenticationTest extends TestCase
      */
     public function test_admin_login_with_wrong_credentials()
     {
-        $response = $this->post('/admin/login', [
-            'email_address' => 'wrong@test.com',
+        $response = $this->from('/admin/login')->post('/admin/login', [
+            'email' => 'wrong@test.com',
             'password' => 'wrongpassword',
         ]);
 
@@ -69,7 +75,7 @@ class AuthenticationTest extends TestCase
      */
     public function test_member_login_with_wrong_credentials()
     {
-        $response = $this->post('/login', [
+        $response = $this->from('/login')->post('/login', [
             'email_address' => 'wrong@test.com',
             'password' => 'wrongpassword',
         ]);
@@ -79,25 +85,31 @@ class AuthenticationTest extends TestCase
         $this->assertGuest('member');
     }
 
-    /**
-     * Test member can register.
-     */
     public function test_member_can_register()
     {
+        Mail::fake();
+
+        MemberRole::create(['id' => 1, 'title' => 'Test Role', 'status' => 1]);
+        MemberType::create(['id' => 1, 'name' => 'Test Type', 'status' => 1]);
+        Country::create(['id' => 1, 'name' => 'Test Country', 'short_code' => 'TC']);
+        State::create(['id' => 1, 'name' => 'Test State', 'country_id' => 1]);
+
         $memberData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email_address' => 'john.doe@test.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
-            'phone' => '1234567890',
+            'phone_number' => '1234567890',
             'country_id' => 1,
             'state_id' => 1,
+            'member_type_id' => 1,
+            'member_role_id' => 1,
         ];
 
         $response = $this->post('/register', $memberData);
 
-        $response->assertRedirect(route('member.login'));
+        $response->assertRedirect(route('email-verify'));
         $this->assertDatabaseHas('members', [
             'email_address' => 'john.doe@test.com',
         ]);
@@ -117,6 +129,7 @@ class AuthenticationTest extends TestCase
         $this->assertGuest('member');
     }
 
+
     /**
      * Test admin can logout.
      */
@@ -127,7 +140,7 @@ class AuthenticationTest extends TestCase
         $response = $this->actingAs($admin, 'web')
             ->post('/admin/logout');
 
-        $response->assertRedirect(route('home'));
+        $response->assertRedirect(route('admin.login'));
         $this->assertGuest('web');
     }
 
@@ -143,7 +156,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         $response->assertStatus(302);
-        $response->assertSessionHas('status');
+        $response->assertSessionHas('success');
     }
 
     /**

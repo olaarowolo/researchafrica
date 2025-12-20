@@ -28,6 +28,8 @@ class Kernel extends HttpKernel
         'throttle'         => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin'            => \App\Http\Middleware\AdminMiddleware::class,
+        'journal.access' => \App\Http\Middleware\EnsureJournalAccess::class,
+        'journal.context' => \App\Http\Middleware\SetJournalContext::class,
     ];
 
     protected $middlewareGroups = [
@@ -40,6 +42,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\AuthGates::class,
             \App\Http\Middleware\SetLocale::class,
+            // \App\Http\Middleware\SetJournalContext::class, // Temporarily disabled
         ],
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,

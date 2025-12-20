@@ -14,24 +14,14 @@ class MemberRoleSeeder extends Seeder
     public function run(): void
     {
 
-        $member_roles = [
-            [
-                'id' => 1,
-                'title' => 'Student',
-                'status' => 1
-            ],
-            [
-                'id' => 2,
-                'title' => 'Librarian',
-                'status' => 1
-            ],
-            [
-                'id' => 3,
-                'title' => 'Professor',
-                'status' => 1
-            ],
+        $memberRoles = [
+            ['title' => 'Student', 'status' => 1],
+            ['title' => 'Librarian', 'status' => 1],
+            ['title' => 'Professor', 'status' => 1],
         ];
 
-        MemberRole::insert($member_roles);
+        foreach ($memberRoles as $role) {
+            MemberRole::firstOrCreate($role);
+        }
     }
 }

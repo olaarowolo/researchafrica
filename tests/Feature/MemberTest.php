@@ -145,7 +145,7 @@ class MemberTest extends TestCase
         ];
 
         $response = $this->actingAs($this->member, 'member')
-            ->post(route('member.password'), $passwordData);
+            ->post(route('member.password.changePassword'), $passwordData);
 
         $response->assertRedirect();
         $response->assertSessionHas('success');

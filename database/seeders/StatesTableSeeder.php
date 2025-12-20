@@ -8,6 +8,11 @@ class StatesTableSeeder extends Seeder
     public function run()
     {
         $states = [
+            ['name' => "Kabul", 'country_id' => 1],
+            ['name' => "Nangarhar", 'country_id' => 1],
+            ['name' => "Herat", 'country_id' => 1],
+            ['name' => "Balkh", 'country_id' => 1],
+            ['name' => "Kandahar", 'country_id' => 1],
             ['name' => "Andaman and Nicobar Islands", 'country_id' => 101],
             ['name' => "Andhra Pradesh", 'country_id' => 101],
             ['name' => "Arunachal Pradesh", 'country_id' => 101],

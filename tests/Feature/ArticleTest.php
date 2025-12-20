@@ -32,10 +32,17 @@ class ArticleTest extends TestCase
         $category = ArticleCategory::factory()->create();
 
         $articleData = [
+            'member_id' => $this->member->id,
             'title' => 'Test Article',
-            'content' => 'This is a test article content.',
+            'abstract' => 'This is a test article content.',
             'article_category_id' => $category->id,
-            'status' => 'published',
+            'article_sub_category_id' => $category->id,
+            'article_status' => 3,
+            'access_type' => 1,
+            'volume' => '1',
+            'issue_no' => '1',
+            'upload_paper' => \Illuminate\Http\UploadedFile::fake()->create('test.docx', 100),
+            'pdf_doc' => \Illuminate\Http\UploadedFile::fake()->create('test.pdf', 100),
         ];
 
         $response = $this->actingAs($this->admin)
@@ -73,7 +80,7 @@ class ArticleTest extends TestCase
             'title' => 'Updated Article Title',
             'content' => 'Updated article content.',
             'article_category_id' => $category->id,
-            'status' => 'draft',
+            'article_status' => 1,
         ];
 
         $response = $this->actingAs($this->admin)
@@ -106,7 +113,7 @@ class ArticleTest extends TestCase
      */
     public function test_member_can_view_published_articles()
     {
-        $article = Article::factory()->create(['status' => 'published']);
+        $article = Article::factory()->create(['article_status' => 3]);
 
         $response = $this->actingAs($this->member, 'member')
             ->get(route('member.view-article', $article->id));
@@ -120,7 +127,7 @@ class ArticleTest extends TestCase
      */
     public function test_member_cannot_view_draft_articles()
     {
-        $article = Article::factory()->create(['status' => 'draft']);
+        $article = Article::factory()->create(['article_status' => 1]);
 
         $response = $this->actingAs($this->member, 'member')
             ->get(route('member.view-article', $article->id));
@@ -162,7 +169,7 @@ class ArticleTest extends TestCase
      */
     public function test_article_bookmark_functionality()
     {
-        $article = Article::factory()->create(['status' => 'published']);
+        $article = Article::factory()->create(['article_status' => 3]);
 
         $response = $this->actingAs($this->member, 'member')
             ->get(route('bookmark', $article->id));
@@ -179,7 +186,7 @@ class ArticleTest extends TestCase
      */
     public function test_article_download_functionality()
     {
-        $article = Article::factory()->create(['status' => 'published']);
+        $article = Article::factory()->create(['article_status' => 3]);
 
         $response = $this->actingAs($this->member, 'member')
             ->get(route('download-article', $article->id));
@@ -192,19 +199,18 @@ class ArticleTest extends TestCase
      */
     public function test_article_comment_functionality()
     {
-        $article = Article::factory()->create(['status' => 'published']);
+        $article = Article::factory()->create(['article_status' => 3]);
 
         $commentData = [
-            'content' => 'This is a test comment.',
-            'article_id' => $article->id,
+            'message' => 'This is a test comment.',
         ];
 
         $response = $this->actingAs($this->member, 'member')
-            ->post(route('comments.store'), $commentData);
+            ->post(route('member.comments.store', $article->id), $commentData);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('comments', [
-            'content' => 'This is a test comment.',
+            'message' => 'This is a test comment.',
         ]);
     }
 
@@ -226,7 +232,7 @@ class ArticleTest extends TestCase
     public function test_admin_can_create_article_category()
     {
         $categoryData = [
-            'name' => 'New Category',
+            'category_name' => 'New Category',
             'description' => 'New category description',
         ];
 
@@ -235,7 +241,7 @@ class ArticleTest extends TestCase
 
         $response->assertRedirect();
         $this->assertDatabaseHas('article_categories', [
-            'name' => 'New Category',
+            'category_name' => 'New Category',
         ]);
     }
 }

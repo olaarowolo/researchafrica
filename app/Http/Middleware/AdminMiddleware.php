@@ -15,11 +15,16 @@ class AdminMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
+
+
     public function handle(Request $request, Closure $next)
     {
         // Check if user is authenticated and has the 'Admin' role.
-        if (Auth::check() && Auth::user()->roles()->where('title', 'Admin')->exists()) {
-            return $next($request);
+        if (Auth::check()) {
+            $user = Auth::user();
+            if (method_exists($user, 'roles') && $user->roles()->where('title', 'Admin')->exists()) {
+                return $next($request);
+            }
         }
 
         // If the user is not an admin, handle the response.
@@ -27,8 +32,7 @@ class AdminMiddleware
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        // For web requests, redirect them to the admin home page.
-        // This prevents a redirect loop if they are already logged in but not an admin.
-        return redirect()->route('admin.home')->with('error', 'You do not have permission to access this page.');
+        // For web requests, redirect them to the admin login page.
+        return redirect()->route('admin.login')->with('error', 'You do not have permission to access this page.');
     }
 }

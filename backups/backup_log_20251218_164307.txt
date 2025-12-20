@@ -1,0 +1,3 @@
+[0;32m[2025-12-18 16:43:07] Starting database backup process...[0m
+[0;32m[2025-12-18 16:43:07] Backup will be saved to: ./backups/researchafrica_backup_20251218_164307.sql[0m
+[0;31m[ERROR] MySQL client not found. Please install MySQL client.[0m

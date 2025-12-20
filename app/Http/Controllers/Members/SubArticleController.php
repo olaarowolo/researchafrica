@@ -13,7 +13,8 @@ class SubArticleController extends Controller
      */
     public function index()
     {
-        //
+        $subArticles = SubArticle::paginate(10);
+        return response()->json(['subArticles' => $subArticles]);
     }
 
     /**
@@ -21,7 +22,7 @@ class SubArticleController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json(['message' => 'Create form']);
     }
 
     /**
@@ -29,7 +30,17 @@ class SubArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'article_id' => 'required|exists:articles,id',
+            'comment_id' => 'required|exists:comments,id',
+            'abstract' => 'required|string',
+        ]);
+
+        $data = $request->all();
+        $data['status'] = $data['status'] ?? '1'; // Default to pending status
+
+        $subArticle = SubArticle::create($data);
+        return response()->json(['message' => 'Sub Article created successfully.', 'subArticle' => $subArticle], 201);
     }
 
     /**
@@ -37,7 +48,7 @@ class SubArticleController extends Controller
      */
     public function show(SubArticle $subArticle)
     {
-        //
+        return response()->json(['subArticle' => $subArticle]);
     }
 
     /**
@@ -45,7 +56,7 @@ class SubArticleController extends Controller
      */
     public function edit(SubArticle $subArticle)
     {
-        //
+        return response()->json(['subArticle' => $subArticle, 'message' => 'Edit form']);
     }
 
     /**
@@ -53,7 +64,14 @@ class SubArticleController extends Controller
      */
     public function update(Request $request, SubArticle $subArticle)
     {
-        //
+        $request->validate([
+            'article_id' => 'required|exists:articles,id',
+            'comment_id' => 'required|exists:comments,id',
+            'abstract' => 'required|string',
+        ]);
+
+        $subArticle->update($request->all());
+        return response()->json(['message' => 'Sub Article updated successfully.', 'subArticle' => $subArticle]);
     }
 
     /**
@@ -61,6 +79,7 @@ class SubArticleController extends Controller
      */
     public function destroy(SubArticle $subArticle)
     {
-        //
+        $subArticle->delete();
+        return response()->json(['message' => 'Sub Article deleted successfully.']);
     }
 }

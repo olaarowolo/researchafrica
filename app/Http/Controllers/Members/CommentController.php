@@ -65,11 +65,9 @@ class CommentController extends Controller
         $correction_upload = $request->file('correction_upload');
 
         $input = $validated;
-        $input['member_id'] = auth('member')->id();
+        $input['member_id'] = auth('member')->user()->id;
         $input['article_id'] = $article->id;
         $input['status'] = 3;
-
-
 
         $comment = Comment::create($input);
 
@@ -77,8 +75,6 @@ class CommentController extends Controller
             $correction_upload = $this->manualStoreMedia($correction_upload)['name'];
             $comment->addMedia(storage_path('tmp/uploads/' . basename($correction_upload)))->toMediaCollection('correction_upload');
         }
-
-
 
         $article->last->update(['status' => $status]);
 

@@ -40,6 +40,112 @@
                             @endforeach
                         </div>
                     </div>
+
+                    <!-- Editorial Workflow Status -->
+                    @if ($article->editorialProgress)
+                        <div class="mt-3 p-3 bg-light rounded">
+                            <h6 class="mb-2">
+                                <i class="fas fa-project-diagram"></i> Editorial Workflow Status
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small class="text-muted">Workflow:</small>
+                                    <br>
+                                    <strong>{{ $article->editorialProgress->editorialWorkflow->name }}</strong>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted">Current Stage:</small>
+                                    <br>
+                                    <strong>{{ $article->editorialProgress->currentStage->name ?? 'N/A' }}</strong>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <small class="text-muted">Status:</small>
+                                    <br>
+                                    <span
+                                        class="badge badge-{{ $this->getWorkflowStatusBadgeClass($article->editorialProgress->status) }}">
+                                        {{ ucfirst(str_replace('_', ' ', $article->editorialProgress->status)) }}
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted">Deadline:</small>
+                                    <br>
+                                    <strong
+                                        class="{{ $article->editorialProgress->current_stage_deadline && $article->editorialProgress->current_stage_deadline->isPast() ? 'text-danger' : '' }}">
+                                        {{ $article->editorialProgress->current_stage_deadline ? $article->editorialProgress->current_stage_deadline->format('M d, Y') : 'N/A' }}
+                                        @if (
+                                            $article->editorialProgress->current_stage_deadline &&
+                                                $article->editorialProgress->current_stage_deadline->isPast())
+                                            <small class="text-danger">(Overdue)</small>
+                                        @endif
+                                    </strong>
+                                </div>
+                            </div>
+
+                            <!-- Workflow Actions -->
+                            @php
+                                $member = auth('member')->user();
+                                $canPerformActions =
+                                    $article->editorialProgress &&
+                                    app('App\Services\EditorialWorkflowService')->canPerformAction(
+                                        $article,
+                                        $member,
+                                        'approve',
+                                    );
+                            @endphp
+
+                            @if ($canPerformActions || $article->member_id === $member->id)
+                                <div class="mt-3">
+                                    <small class="text-muted">Available Actions:</small>
+                                    <div class="mt-1">
+                                        @if ($article->member_id === $member->id)
+                                            @if ($article->editorialProgress->status === 'draft')
+                                                <form method="POST"
+                                                    action="{{ route('member.articles.submit-for-review', $article->id) }}"
+                                                    class="d-inline">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-paper-plane"></i> Submit for Review
+                                                    </button>
+                                                </form>
+                                            @elseif($article->editorialProgress->status === 'revision_requested')
+                                                <button class="btn btn-sm btn-warning"
+                                                    onclick="showRevisionModal('{{ addslashes($article->editorialProgress->current_comments ?? '') }}')">
+                                                    <i class="fas fa-edit"></i> Address Revision Request
+                                                </button>
+                                            @endif
+                                        @else
+                                            @if (
+                                                $article->editorialProgress->currentStage &&
+                                                    in_array('approve', $article->editorialProgress->currentStage->allowed_actions ?? []))
+                                                <button class="btn btn-sm btn-success"
+                                                    onclick="showWorkflowActionModal('approve', '{{ $article->editorialProgress->currentStage->name }}')">
+                                                    <i class="fas fa-check"></i> Approve
+                                                </button>
+                                            @endif
+                                            @if (
+                                                $article->editorialProgress->currentStage &&
+                                                    in_array('reject', $article->editorialProgress->currentStage->allowed_actions ?? []))
+                                                <button class="btn btn-sm btn-danger"
+                                                    onclick="showWorkflowActionModal('reject', '{{ $article->editorialProgress->currentStage->name }}')">
+                                                    <i class="fas fa-times"></i> Reject
+                                                </button>
+                                            @endif
+                                            @if (
+                                                $article->editorialProgress->currentStage &&
+                                                    in_array('request_revision', $article->editorialProgress->currentStage->allowed_actions ?? []))
+                                                <button class="btn btn-sm btn-warning"
+                                                    onclick="showWorkflowActionModal('request_revision', '{{ $article->editorialProgress->currentStage->name }}')">
+                                                    <i class="fas fa-edit"></i> Request Revision
+                                                </button>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
                     <div class="">
                         <span class="kb-font-semibold">DOI Link:</span> <a href="{{ $article->doi_link }}" target="_blank"
                             class="text-dark">{{ $article->doi_link ?? '' }}</a>
@@ -119,7 +225,8 @@
 
                     @if (auth('member')->user()->member_type_id == 2 && $status == 8)
                         <div class="">
-                            <button type="button" class="em-btn bg-dark" data-toggle="modal" data-target="#exampleModal">
+                            <button type="button" class="em-btn bg-dark" data-toggle="modal"
+                                data-target="#exampleModal">
                                 Send to Final Reviewer
                             </button>
 
@@ -285,7 +392,8 @@
                                         @if ($comment->correction_upload)
                                             <div class="ml-2 text-success">
                                                 <small>
-                                                    <a href="{{ route('download-comment-doc', $comment) }}" class="text-success">
+                                                    <a href="{{ route('download-comment-doc', $comment) }}"
+                                                        class="text-success">
                                                         <i class="fa fa-file" aria-hidden="true"></i>
                                                         Click To Document Attached
                                                     </a>
@@ -393,7 +501,139 @@
             </div>
         </div>
 
+        <!-- Workflow Action Modal -->
+        <div class="modal fade" id="workflowActionModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="workflowActionModalTitle">Perform Action</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <form id="workflowActionForm" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="workflow_action_comments">Comments (Required for reject and request
+                                    revision):</label>
+                                <textarea class="form-control" name="comments" id="workflow_action_comments" rows="4"
+                                    placeholder="Provide detailed feedback..."></textarea>
+                            </div>
+                            <div id="workflowActionDescription" class="alert alert-info">
+                                You are about to perform an action on this article.
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn" id="workflowActionButton">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revision Modal -->
+        <div class="modal fade" id="revisionModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Address Revision Request</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="{{ route('member.articles.submit-for-review', $article->id) }}">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Revision Comments:</label>
+                                <div id="revisionComments" class="alert alert-info"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="revision_response">Your Response:</label>
+                                <textarea class="form-control" name="comments" id="revision_response" rows="4"
+                                    placeholder="Explain how you've addressed the revision request..." required></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-success">Submit Revision</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     @endsection
+
+    @section('scripts')
+        @parent
+        <script>
+            function showWorkflowActionModal(action, stageName) {
+                let title, description, buttonClass, buttonText, route;
+
+                switch (action) {
+                    case 'approve':
+                        title = 'Approve Article';
+                        description =
+                            `You are approving this article at the "${stageName}" stage. This will move it to the next stage in the workflow.`;
+                        buttonClass = 'btn-success';
+                        buttonText = 'Approve Article';
+                        route = '{{ route('member.articles.approve-stage', $article->id) }}';
+                        $('#workflow_action_comments').closest('.form-group').hide();
+                        break;
+                    case 'reject':
+                        title = 'Reject Article';
+                        description =
+                            `You are rejecting this article at the "${stageName}" stage. This will end the editorial process for this article.`;
+                        buttonClass = 'btn-danger';
+                        buttonText = 'Reject Article';
+                        route = '{{ route('member.articles.reject-stage', $article->id) }}';
+                        $('#workflow_action_comments').closest('.form-group').show();
+                        break;
+                    case 'request_revision':
+                        title = 'Request Revision';
+                        description =
+                            `You are requesting revisions for this article at the "${stageName}" stage. The author will need to address your feedback before proceeding.`;
+                        buttonClass = 'btn-warning';
+                        buttonText = 'Request Revision';
+                        route = '{{ route('member.articles.request-revision', $article->id) }}';
+                        $('#workflow_action_comments').closest('.form-group').show();
+                        break;
+                }
+
+                $('#workflowActionModalTitle').text(title);
+                $('#workflowActionDescription').text(description);
+                $('#workflowActionButton').removeClass().addClass('btn ' + buttonClass).text(buttonText);
+                $('#workflowActionForm').attr('action', route);
+                $('#workflow_action_comments').val('');
+
+                $('#workflowActionModal').modal('show');
+            }
+
+            function showRevisionModal(comments) {
+                $('#revisionComments').html(comments.replace(/\n/g, '<br>'));
+                $('#revisionModal').modal('show');
+            }
+        </script>
+    @endsection
+
+    @php
+        function getWorkflowStatusBadgeClass($status)
+        {
+            return match ($status) {
+                'draft' => 'secondary',
+                'submitted' => 'info',
+                'under_review' => 'warning',
+                'approved' => 'success',
+                'published' => 'success',
+                'rejected' => 'danger',
+                'revision_requested' => 'warning',
+                default => 'secondary',
+            };
+        }
+    @endphp
 
 
 

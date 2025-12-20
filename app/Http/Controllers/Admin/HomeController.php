@@ -60,12 +60,13 @@ class HomeController
     }
 
 
+
     public function logout(Request $request)
     {
         # code...
         Auth::logout();
         $request->session()->flush();
 
-        return to_route('admin.login');
+        return redirect()->route('admin.login');
     }
 }

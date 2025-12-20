@@ -25,7 +25,7 @@ class FaqQuestionFactory extends Factory
         return [
             'question' => fake()->sentence() . '?',
             'answer' => fake()->paragraphs(3, true),
-            'faq_category_id' => FaqCategory::factory(),
+            'category_id' => FaqCategory::factory(),
         ];
     }
 }

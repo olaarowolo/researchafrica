@@ -19,6 +19,8 @@ class MemberRoleFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+
     public function definition()
     {
         $roles = [
@@ -33,7 +35,7 @@ class MemberRoleFactory extends Factory
         ];
 
         return [
-            'title' => fake()->unique()->randomElement($roles),
+            'title' => fake()->randomElement($roles),
             'status' => 1, // 1 = Active, 2 = Inactive
         ];
     }
