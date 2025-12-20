@@ -9,6 +9,10 @@ class PermissionsTableSeeder extends Seeder
 {
     public function run()
     {
+        // Disable foreign key checks, truncate, then re-enable
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        \DB::table('permissions')->truncate();
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $permissions = [
             [
                 'id'    => 1,

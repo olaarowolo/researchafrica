@@ -374,7 +374,7 @@
                             <h2>Abstract</h2>
                         </div>
 
-                        {!! $article->last->abstract ?? '' !!}
+                        {!! $article->last?->abstract ?? '' !!}
 
                         {{-- <p class="text-dark"> Copyrights &copy; 1984 Optical Society of America</p> --}}
                     </div>

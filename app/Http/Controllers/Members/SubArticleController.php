@@ -46,24 +46,36 @@ class SubArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SubArticle $subArticle)
+
+    public function show(SubArticle $subArticle = null)
     {
+        if (!$subArticle) {
+            return response()->json(['message' => 'Sub Article not found.'], 404);
+        }
         return response()->json(['subArticle' => $subArticle]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SubArticle $subArticle)
+
+    public function edit(SubArticle $subArticle = null)
     {
+        if (!$subArticle) {
+            return response()->json(['message' => 'Sub Article not found.'], 404);
+        }
         return response()->json(['subArticle' => $subArticle, 'message' => 'Edit form']);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SubArticle $subArticle)
+
+    public function update(Request $request, SubArticle $subArticle = null)
     {
+        if (!$subArticle) {
+            return response()->json(['message' => 'Sub Article not found.'], 404);
+        }
         $request->validate([
             'article_id' => 'required|exists:articles,id',
             'comment_id' => 'required|exists:comments,id',
@@ -77,8 +89,12 @@ class SubArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SubArticle $subArticle)
+
+    public function destroy(SubArticle $subArticle = null)
     {
+        if (!$subArticle) {
+            return response()->json(['message' => 'Sub Article not found.'], 404);
+        }
         $subArticle->delete();
         return response()->json(['message' => 'Sub Article deleted successfully.']);
     }

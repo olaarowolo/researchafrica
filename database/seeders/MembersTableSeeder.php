@@ -9,6 +9,10 @@ class MembersTableSeeder extends Seeder
 {
     public function run()
     {
+        // Disable foreign key checks, truncate, then re-enable
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        \DB::table('members')->truncate();
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $members = [
             [
                 'id' => 1,

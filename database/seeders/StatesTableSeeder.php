@@ -7,6 +7,10 @@ class StatesTableSeeder extends Seeder
 {
     public function run()
     {
+        // Disable foreign key checks, truncate, then re-enable
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        \DB::table('states')->truncate();
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $states = [
             ['name' => "Kabul", 'country_id' => 1],
             ['name' => "Nangarhar", 'country_id' => 1],

@@ -13,14 +13,13 @@ class MemberTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $admin;
+    private $adminMember;
     private $member;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->admin = User::factory()->admin()->create();
+        $this->adminMember = Member::factory()->admin()->create();
         $this->member = Member::factory()->create();
     }
 
@@ -31,7 +30,7 @@ class MemberTest extends TestCase
     {
         Member::factory()->count(5)->create();
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->adminMember, 'member')
             ->get(route('admin.members.index'));
 
         $response->assertStatus(200);
@@ -53,7 +52,7 @@ class MemberTest extends TestCase
             'state_id' => 1,
         ];
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->adminMember, 'member')
             ->post(route('admin.members.store'), $memberData);
 
         $response->assertRedirect();
@@ -76,7 +75,7 @@ class MemberTest extends TestCase
             'phone' => '0987654321',
         ];
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->adminMember, 'member')
             ->put(route('admin.members.update', $member->id), $updatedData);
 
         $response->assertRedirect();
@@ -92,7 +91,7 @@ class MemberTest extends TestCase
     {
         $member = Member::factory()->create();
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->adminMember, 'member')
             ->delete(route('admin.members.destroy', $member->id));
 
         $response->assertRedirect();
@@ -228,7 +227,7 @@ class MemberTest extends TestCase
      */
     public function test_admin_can_manage_member_types()
     {
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->adminMember, 'member')
             ->get(route('admin.member-types.index'));
 
         $response->assertStatus(200);
@@ -245,7 +244,7 @@ class MemberTest extends TestCase
             'description' => 'Premium membership type',
         ];
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->adminMember, 'member')
             ->post(route('admin.member-types.store'), $memberTypeData);
 
         $response->assertRedirect();
@@ -259,7 +258,7 @@ class MemberTest extends TestCase
      */
     public function test_admin_can_manage_member_roles()
     {
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->adminMember, 'member')
             ->get(route('admin.member-roles.index'));
 
         $response->assertStatus(200);
@@ -273,7 +272,7 @@ class MemberTest extends TestCase
     {
         MemberSubscription::factory()->count(5)->create();
 
-        $response = $this->actingAs($this->admin)
+        $response = $this->actingAs($this->adminMember, 'member')
             ->get(route('admin.member-subscriptions.index'));
 
         $response->assertStatus(200);

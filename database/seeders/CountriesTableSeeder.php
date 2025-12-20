@@ -9,10 +9,11 @@ class CountriesTableSeeder extends Seeder
 {
     public function run()
     {
-        // Check if countries already exist to prevent duplicates
-        if (\App\Models\Country::count() > 0) {
-            return;
-        }
+
+        // Disable foreign key checks, truncate, then re-enable
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        \DB::table('countries')->truncate();
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $countries = [
             ['id' => 1, 'short_code' => 'AF', 'name' => "Afghanistan", 'phone_code' => 93],

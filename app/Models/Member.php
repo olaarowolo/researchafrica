@@ -16,6 +16,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Member extends User implements HasMedia
 {
+    // ...existing code...
+    public function roles()
+    {
+        // Use the correct pivot table name 'role_user' (user_id, role_id)
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+    }
+    // ...existing code...
     use SoftDeletes, InteractsWithMedia, HasFactory;
 
     public $table = 'members';
@@ -127,7 +134,7 @@ class Member extends User implements HasMedia
         return $this->bookmarks()->count();
     }
 
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')->fit('crop', 50, 50);
         $this->addMediaConversion('preview')->fit('crop', 120, 120);

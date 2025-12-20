@@ -13,6 +13,10 @@ class MemberTypeSeeder extends Seeder
      */
     public function run(): void
     {
+            // Disable foreign key checks, truncate, then re-enable
+            \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            \DB::table('member_types')->truncate();
+            \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $member_type = [
             [
                 "id" => 1,

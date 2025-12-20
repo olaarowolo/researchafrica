@@ -28,7 +28,7 @@
                             <p class="card-text">
                                 <small class="text-muted">By {{ $article->author_name }} on {{ $article->published_online->format('F d, Y') }}</small>
                             </p>
-                            <p class="card-text">{{ Str::limit($article->abstract, 150) }}</p>
+                            <p class="card-text">{{ Str::limit($article->last?->abstract ?? '', 150) }}</p>
                         </div>
                     </div>
                 @endforeach

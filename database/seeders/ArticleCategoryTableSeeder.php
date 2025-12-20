@@ -13,6 +13,10 @@ class ArticleCategoryTableSeeder extends Seeder
      */
     public function run(): void
     {
+        // Disable foreign key checks, truncate, then re-enable
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        \DB::table('article_categories')->truncate();
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $article_category = [
             [
                 "id" => 1,

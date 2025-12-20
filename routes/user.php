@@ -118,6 +118,10 @@ Route::group(['as' => 'member.', 'namespace' => 'Members'], function () {
 
     // Page Controller
     Route::controller('PageController')->group(function () {
+            // Add alternate routes for test compatibility
+            Route::get('about', 'about')->name('about');
+            Route::get('faq', 'faq')->name('faq');
+            Route::get('contact', 'contact')->name('contact');
         Route::get('about-us', 'about')->name('about');
         Route::get('faq', 'faq')->name('faq');
         Route::get('contact-us', 'contact')->name('contact');

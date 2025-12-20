@@ -18,7 +18,24 @@ trait MailArticleTrait
 {
     public function allEditor($article, $editor_id = "")
     {
-        $editors = $editor_id ? Member::where('member_type_id', 2)->where('id', $editor_id)->get() :  Member::where('member_type_id', 2)->get();
+        // Only notify editors of the relevant journal
+        $journalId = $article->journal_id;
+        if ($editor_id) {
+            $editors = Member::where('member_type_id', 2)
+                ->where('id', $editor_id)
+                ->whereHas('journalMemberships', function ($q) use ($journalId) {
+                    $q->where('journal_id', $journalId)
+                      ->where('status', 'active');
+                })
+                ->get();
+        } else {
+            $editors = Member::where('member_type_id', 2)
+                ->whereHas('journalMemberships', function ($q) use ($journalId) {
+                    $q->where('journal_id', $journalId)
+                      ->where('status', 'active');
+                })
+                ->get();
+        }
         $sender = auth('member')->user();
         foreach ($editors as $editor) {
             try {
@@ -30,8 +47,7 @@ trait MailArticleTrait
             } catch (\Throwable $th) {
                 throw $th;
             }
-        };
-
+        }
         return true;
     }
 

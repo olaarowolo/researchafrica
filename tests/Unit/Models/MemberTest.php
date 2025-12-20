@@ -39,9 +39,19 @@ class MemberTest extends TestCase
             'last_name' => 'Doe',
             'email_address' => 'john.doe@example.com',
             'password' => 'password123',
+            'phone_number' => '1234567890',
             'country_id' => Country::factory()->create()->id,
+            'state_id' => State::factory()->create()->id,
+            'address' => '123 Main St',
             'member_type_id' => MemberType::factory()->create()->id,
             'member_role_id' => MemberRole::factory()->create()->id,
+            'registration_via' => 'email',
+            'email_verified' => '1',
+            'email_verified_at' => now(),
+            'verified' => '1',
+            'profile_completed' => '1',
+            'gender' => 'Male',
+            'date_of_birth' => '1990-01-01',
         ];
 
         $member = Member::create($memberData);
@@ -302,139 +312,139 @@ class MemberTest extends TestCase
     public function it_checks_journal_access()
     {
         $member = Member::factory()->create();
-        $journalId = 1;
-        $memberTypeId = 2;
+        $memberType = MemberType::factory()->create();
+        $journal = \App\Models\ArticleCategory::factory()->journal()->create();
 
         // No access initially
-        $this->assertFalse($member->hasJournalAccess($journalId));
+        $this->assertFalse($member->hasJournalAccess($journal->id));
 
         // Grant access
         JournalMembership::factory()->create([
             'member_id' => $member->id,
-            'journal_id' => $journalId,
-            'member_type_id' => $memberTypeId,
+            'journal_id' => $journal->id,
+            'member_type_id' => $memberType->id,
             'status' => JournalMembership::STATUS_ACTIVE
         ]);
 
-        $this->assertTrue($member->hasJournalAccess($journalId));
-        $this->assertTrue($member->hasJournalAccess($journalId, $memberTypeId));
+        $this->assertTrue($member->hasJournalAccess($journal->id));
+        $this->assertTrue($member->hasJournalAccess($journal->id, $memberType->id));
     }
 
     /** @test */
     public function it_checks_editor_role_for_journal()
     {
         $member = Member::factory()->create();
-        $journalId = 1;
+        $journal = \App\Models\ArticleCategory::factory()->journal()->create();
 
         // Not editor initially
-        $this->assertFalse($member->isEditorFor($journalId));
+        $this->assertFalse($member->isEditorFor($journal->id));
 
-        // Grant editor access
+        // Grant editor access (member_type_id = 2 for Editor)
         JournalMembership::factory()->create([
             'member_id' => $member->id,
-            'journal_id' => $journalId,
-            'member_type_id' => 2, // Editor
+            'journal_id' => $journal->id,
+            'member_type_id' => 2,
             'status' => JournalMembership::STATUS_ACTIVE
         ]);
 
-        $this->assertTrue($member->isEditorFor($journalId));
+        $this->assertTrue($member->isEditorFor($journal->id));
     }
 
     /** @test */
     public function it_checks_reviewer_role_for_journal()
     {
         $member = Member::factory()->create();
-        $journalId = 1;
+        $journal = \App\Models\ArticleCategory::factory()->journal()->create();
 
-        // Grant reviewer access
+        // Grant reviewer access (member_type_id = 3 for Reviewer)
         JournalMembership::factory()->create([
             'member_id' => $member->id,
-            'journal_id' => $journalId,
-            'member_type_id' => 3, // Reviewer
+            'journal_id' => $journal->id,
+            'member_type_id' => 3,
             'status' => JournalMembership::STATUS_ACTIVE
         ]);
 
-        $this->assertTrue($member->isReviewerFor($journalId));
+        $this->assertTrue($member->isReviewerFor($journal->id));
     }
 
     /** @test */
     public function it_checks_author_role_for_journal()
     {
         $member = Member::factory()->create();
-        $journalId = 1;
+        $journal = \App\Models\ArticleCategory::factory()->journal()->create();
 
-        // Grant author access
+        // Grant author access (member_type_id = 1 for Author)
         JournalMembership::factory()->create([
             'member_id' => $member->id,
-            'journal_id' => $journalId,
-            'member_type_id' => 1, // Author
+            'journal_id' => $journal->id,
+            'member_type_id' => 1,
             'status' => JournalMembership::STATUS_ACTIVE
         ]);
 
-        $this->assertTrue($member->isAuthorFor($journalId));
+        $this->assertTrue($member->isAuthorFor($journal->id));
     }
 
     /** @test */
     public function it_can_assign_to_journal()
     {
         $member = Member::factory()->create();
-        $journalId = 1;
-        $memberTypeId = 2;
+        $memberType = MemberType::factory()->create();
+        $journal = \App\Models\ArticleCategory::factory()->journal()->create();
 
-        $membership = $member->assignToJournal($journalId, $memberTypeId);
+        $membership = $member->assignToJournal($journal->id, $memberType->id);
 
         $this->assertInstanceOf(JournalMembership::class, $membership);
-        $this->assertTrue($member->hasJournalAccess($journalId, $memberTypeId));
+        $this->assertTrue($member->hasJournalAccess($journal->id, $memberType->id));
     }
 
     /** @test */
     public function it_can_remove_from_journal()
     {
         $member = Member::factory()->create();
-        $journalId = 1;
-        $memberTypeId = 2;
+        $memberType = MemberType::factory()->create();
+        $journal = \App\Models\ArticleCategory::factory()->journal()->create();
 
         // First assign
-        $member->assignToJournal($journalId, $memberTypeId);
-        $this->assertTrue($member->hasJournalAccess($journalId));
+        $member->assignToJournal($journal->id, $memberType->id);
+        $this->assertTrue($member->hasJournalAccess($journal->id));
 
         // Then remove
-        $member->removeFromJournal($journalId, $memberTypeId);
-        $this->assertFalse($member->hasJournalAccess($journalId));
+        $member->removeFromJournal($journal->id, $memberType->id);
+        $this->assertFalse($member->hasJournalAccess($journal->id));
     }
 
     /** @test */
     public function it_checks_editorial_board_membership()
     {
         $member = Member::factory()->create();
-        $journalId = 1;
+        $journal = \App\Models\ArticleCategory::factory()->journal()->create();
 
         // Not on editorial board initially
-        $this->assertFalse($member->isOnEditorialBoard($journalId));
+        $this->assertFalse($member->isOnEditorialBoard($journal->id));
 
         // Add to editorial board
         JournalEditorialBoard::factory()->create([
             'member_id' => $member->id,
-            'journal_id' => $journalId,
+            'journal_id' => $journal->id,
             'is_active' => true
         ]);
 
-        $this->assertTrue($member->isOnEditorialBoard($journalId));
+        $this->assertTrue($member->isOnEditorialBoard($journal->id));
     }
 
     /** @test */
     public function it_gets_editorial_position_for_journal()
     {
         $member = Member::factory()->create();
-        $journalId = 1;
+        $journal = \App\Models\ArticleCategory::factory()->journal()->create();
 
         $position = JournalEditorialBoard::factory()->create([
             'member_id' => $member->id,
-            'journal_id' => $journalId,
+            'journal_id' => $journal->id,
             'is_active' => true
         ]);
 
-        $retrievedPosition = $member->getEditorialPositionFor($journalId);
+        $retrievedPosition = $member->getEditorialPositionFor($journal->id);
 
         $this->assertInstanceOf(JournalEditorialBoard::class, $retrievedPosition);
         $this->assertEquals($position->id, $retrievedPosition->id);
@@ -444,14 +454,20 @@ class MemberTest extends TestCase
     public function it_counts_accessible_journals()
     {
         $member = Member::factory()->create();
+        $memberType = MemberType::factory()->create();
+        $journals = \App\Models\ArticleCategory::factory()->count(3)->journal()->create();
 
         $this->assertEquals(0, $member->accessible_journals_count);
 
         // Add memberships
-        JournalMembership::factory()->count(3)->create([
-            'member_id' => $member->id,
-            'status' => JournalMembership::STATUS_ACTIVE
-        ]);
+        foreach ($journals as $journal) {
+            JournalMembership::factory()->create([
+                'member_id' => $member->id,
+                'journal_id' => $journal->id,
+                'member_type_id' => $memberType->id,
+                'status' => JournalMembership::STATUS_ACTIVE
+            ]);
+        }
 
         $this->assertEquals(3, $member->accessible_journals_count);
     }

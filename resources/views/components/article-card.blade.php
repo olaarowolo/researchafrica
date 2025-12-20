@@ -79,7 +79,7 @@
                                 @if ($article->author_name)
                                     {{ $article->author_name }};
                                 @endif
-                            
+
                                 @if ($article->other_authors)
                                     @if ($article->member->fullname !== '. .' || $article->author_name)
                                         ,
@@ -167,7 +167,7 @@
                     <div class="mt-2 p-md-4 p-2 rounded kb-prose kb-max-w-none" id="abstract{{ $article->id }}"
                         style="background-color: #7c7c7c49;display: none">
                         <h3>Abstract</h3>
-                        {!! $article->last->abstract !!}
+                        {!! $article->last ? $article->last->abstract : '' !!}
                     </div>
                 </div>
             </div>

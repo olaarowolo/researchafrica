@@ -13,6 +13,22 @@ use Illuminate\Support\Str;
 class MemberFactory extends Factory
 {
     /**
+     * Create an admin member with admin role.
+     */
+    public function admin()
+    {
+        return $this->afterCreating(function (\App\Models\Member $member) {
+            $adminRole = \App\Models\Role::firstOrCreate(
+                ['title' => 'Admin'],
+                ['title' => 'Admin']
+            );
+            // Attach using the related User's ID, not the Member's ID
+            if ($member->user) {
+                $member->roles()->attach($adminRole->id, ['user_id' => $member->user->id]);
+            }
+        });
+    }
+    /**
      * The name of the factory's corresponding model.
      *
      * @var string
@@ -26,14 +42,21 @@ class MemberFactory extends Factory
      */
     public function definition()
     {
+        $email = fake()->unique()->safeEmail();
+        $password = bcrypt('password');
+        // Create a User record for this Member
+        $user = \App\Models\User::factory()->create([
+            'email' => $email,
+            'password' => $password,
+        ]);
         return [
             'title' => fake()->randomElement(Member::TITLE_SELECT),
             'first_name' => fake()->firstName(),
             'middle_name' => fake()->optional()->firstName(),
             'last_name' => fake()->lastName(),
-            'email_address' => fake()->unique()->safeEmail(),
+            'email_address' => $email,
             'phone_number' => fake()->phoneNumber(),
-            'password' => 'password',
+            'password' => $password,
             'country_id' => Country::factory(),
             'state_id' => State::factory(),
             'address' => fake()->address(),
@@ -46,6 +69,8 @@ class MemberFactory extends Factory
             'profile_completed' => '1',
             'gender' => fake()->randomElement(['Male', 'Female']),
             'date_of_birth' => fake()->date(),
+            // Optionally, if Member has user_id foreign key:
+            // 'user_id' => $user->id,
         ];
     }
 

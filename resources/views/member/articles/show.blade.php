@@ -319,7 +319,7 @@
 
             <div class="card-body kb-prose kb-max-w-none">
                 <h3 class="card-title">Abstract</h3>
-                {!! $article->last->abstract ?? '' !!}
+                {!! $article->last?->abstract ?? '' !!}
                 <p></p>
                 <a class="em-btn bg-dark" href="{{ $article->last->upload_paper->getUrl() }}" target="_blank">Download
                     Uploaded Article</a>

@@ -10,13 +10,34 @@ use App\Models\JournalMembership;
 use App\Models\JournalEditorialBoard;
 use App\Models\EditorialWorkflow;
 use App\Models\EditorialWorkflowStage;
-use App\Models\ArticleEditorialProgress;
+use App\Models\MemberType;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\MemberRole;
+use App\Models\ArticleEditorialProgress;
+use App\Models\SubArticle;
 
 class SampleDataSeeder extends Seeder
 {
     public function run()
     {
+        // Create Country and State for members
+        $country = Country::firstOrCreate(['name' => 'USA'], ['short_code' => 'US']);
+        $state = State::firstOrCreate(['name' => 'California', 'country_id' => $country->id]);
+
+        // Create Member Roles
+        $memberRoles = [
+            ['title' => 'Author', 'status' => '1'],
+            ['title' => 'Editor', 'status' => '1'],
+            ['title' => 'Reviewer', 'status' => '1'],
+        ];
+
+        foreach ($memberRoles as $roleData) {
+            MemberRole::firstOrCreate(['title' => $roleData['title']], $roleData);
+        }
+
         // Create Sample Journals
         $journals = [
             [
@@ -63,9 +84,10 @@ class SampleDataSeeder extends Seeder
                 'title' => 'Dr',
                 'email_address' => 'john.smith@example.com',
                 'password' => Hash::make('password'),
-                'member_type_id' => 1, // Editor
-                'email_verified' => 1,
+                'member_role_id' => 2, // Editor
+                'email_verified_at' => Carbon::now(),
                 'phone_number' => '+1234567890',
+                'state_id' => $state->id,
             ],
             [
                 'first_name' => 'Jane',
@@ -73,9 +95,10 @@ class SampleDataSeeder extends Seeder
                 'title' => 'Dr',
                 'email_address' => 'jane.doe@example.com',
                 'password' => Hash::make('password'),
-                'member_type_id' => 2, // Reviewer
-                'email_verified' => 1,
+                'member_role_id' => 3, // Reviewer
+                'email_verified_at' => Carbon::now(),
                 'phone_number' => '+1234567891',
+                'state_id' => $state->id,
             ],
             [
                 'first_name' => 'Robert',
@@ -83,9 +106,10 @@ class SampleDataSeeder extends Seeder
                 'title' => 'Prof',
                 'email_address' => 'robert.johnson@example.com',
                 'password' => Hash::make('password'),
-                'member_type_id' => 3, // Author
-                'email_verified' => 1,
+                'member_role_id' => 1, // Author
+                'email_verified_at' => Carbon::now(),
                 'phone_number' => '+1234567892',
+                'state_id' => $state->id,
             ],
             [
                 'first_name' => 'Emily',
@@ -93,9 +117,10 @@ class SampleDataSeeder extends Seeder
                 'title' => 'Dr',
                 'email_address' => 'emily.davis@example.com',
                 'password' => Hash::make('password'),
-                'member_type_id' => 1, // Editor
-                'email_verified' => 1,
+                'member_role_id' => 2, // Editor
+                'email_verified_at' => Carbon::now(),
                 'phone_number' => '+1234567893',
+                'state_id' => $state->id,
             ],
         ];
 
@@ -106,7 +131,7 @@ class SampleDataSeeder extends Seeder
                     $memberData
                 );
             } catch (\Exception $e) {
-                // Skip if member creation fails due to constraints
+                $this->command->error('Failed to create member: ' . $e->getMessage());
                 continue;
             }
         }
@@ -193,44 +218,127 @@ class SampleDataSeeder extends Seeder
         // Create Sample Articles if journals and members exist
         $articles = [];
         if ($medicalJournal && $robert) {
+            $this->command->info('Creating articles for Medical Journal');
             $articles[] = [
                 'title' => 'Advances in Medical Imaging Technology',
-                'content' => 'This article explores the latest developments in medical imaging...',
                 'abstract' => 'Medical imaging has revolutionized diagnostics...',
                 'keywords' => 'medical imaging, technology, diagnostics',
                 'member_id' => $robert->id,
                 'article_category_id' => 1, // Assuming category exists
                 'journal_id' => $medicalJournal->id,
-                'status' => 'published',
+                'article_status' => '3', // Published
+                'access_type' => '1', // Open Access
+                'article_sub_category_id' => 0,
+            ];
+            $articles[] = [
+                'title' => 'Impact of Telemedicine on Rural Healthcare',
+                'abstract' => 'This study examines the effects of telemedicine implementation...',
+                'keywords' => 'telemedicine, rural healthcare, access',
+                'member_id' => $robert->id,
+                'article_category_id' => 1,
+                'journal_id' => $medicalJournal->id,
+                'article_status' => '2', // Reviewing
+                'access_type' => '1',
+                'article_sub_category_id' => 0,
+            ];
+            $articles[] = [
+                'title' => 'New Vaccine Development Strategies',
+                'abstract' => 'Exploring cutting-edge vaccine technologies...',
+                'keywords' => 'vaccines, immunology, development',
+                'member_id' => $robert->id,
+                'article_category_id' => 1,
+                'journal_id' => $medicalJournal->id,
+                'article_status' => '1', // Pending
+                'access_type' => '1',
+                'article_sub_category_id' => 0,
             ];
         }
         if ($engineeringJournal && $robert) {
             $articles[] = [
                 'title' => 'Sustainable Engineering Practices',
-                'content' => 'Engineering for sustainability is crucial...',
                 'abstract' => 'This paper discusses sustainable engineering approaches...',
                 'keywords' => 'sustainable engineering, environment, innovation',
                 'member_id' => $robert->id,
                 'article_category_id' => 2, // Assuming category exists
                 'journal_id' => $engineeringJournal->id,
-                'status' => 'under_review',
+                'article_status' => '3', // Published
+                'access_type' => '1',
+                'article_sub_category_id' => 0,
+            ];
+            $articles[] = [
+                'title' => 'AI Applications in Structural Engineering',
+                'abstract' => 'This article explores AI-driven structural engineering solutions...',
+                'keywords' => 'AI, structural engineering, design',
+                'member_id' => $robert->id,
+                'article_category_id' => 2,
+                'journal_id' => $engineeringJournal->id,
+                'article_status' => '2', // Reviewing
+                'access_type' => '1',
+                'article_sub_category_id' => 0,
+            ];
+            $articles[] = [
+                'title' => 'Renewable Energy Systems Design',
+                'abstract' => 'Comprehensive design principles for renewable energy...',
+                'keywords' => 'renewable energy, systems design, sustainability',
+                'member_id' => $robert->id,
+                'article_category_id' => 2,
+                'journal_id' => $engineeringJournal->id,
+                'article_status' => '1', // Pending
+                'access_type' => '1',
+                'article_sub_category_id' => 0,
             ];
         }
         if ($socialJournal && $robert) {
             $articles[] = [
                 'title' => 'Social Impact of Technology',
-                'content' => 'Technology influences society in profound ways...',
                 'abstract' => 'Examining the societal implications of technological advancement...',
                 'keywords' => 'technology, society, social impact',
                 'member_id' => $robert->id,
                 'article_category_id' => 3, // Assuming category exists
                 'journal_id' => $socialJournal->id,
-                'status' => 'draft',
+                'article_status' => '3', // Published
+                'access_type' => '1',
+                'article_sub_category_id' => 0,
+            ];
+            $articles[] = [
+                'title' => 'Cultural Changes in Digital Age',
+                'abstract' => 'An analysis of cultural transformations driven by digital innovation...',
+                'keywords' => 'digital culture, social change, technology',
+                'member_id' => $robert->id,
+                'article_category_id' => 3,
+                'journal_id' => $socialJournal->id,
+                'article_status' => '2', // Reviewing
+                'access_type' => '1',
+                'article_sub_category_id' => 0,
+            ];
+            $articles[] = [
+                'title' => 'Education Policy and Inequality',
+                'abstract' => 'This research investigates the relationship between education policies and inequality...',
+                'keywords' => 'education policy, inequality, social justice',
+                'member_id' => $robert->id,
+                'article_category_id' => 3,
+                'journal_id' => $socialJournal->id,
+                'article_status' => '1', // Pending
+                'access_type' => '1',
+                'article_sub_category_id' => 0,
             ];
         }
 
         foreach ($articles as $articleData) {
-            Article::create($articleData);
+            try {
+                $abstract = $articleData['abstract'] ?? '';
+                unset($articleData['abstract']);
+                $article = Article::create($articleData);
+                if ($article && $abstract) {
+                    SubArticle::create([
+                        'article_id' => $article->id,
+                        'abstract' => $abstract,
+                        'status' => '1', // Pending
+                    ]);
+                }
+            } catch (\Exception $e) {
+                $this->command->error('Failed to create article: ' . $e->getMessage());
+            }
         }
 
         // Create Editorial Workflow if medical journal exists
@@ -274,7 +382,7 @@ class SampleDataSeeder extends Seeder
                 ], [
                     'editorial_workflow_id' => $workflow->id,
                     'current_stage_id' => 1, // Submission
-                    'status' => 'in_progress',
+                    'status' => 'draft',
                 ]);
             }
         }
