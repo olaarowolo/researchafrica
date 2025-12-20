@@ -117,7 +117,9 @@ php artisan key:generate
 ```bash
 # Configure your database in .env file
 php artisan migrate
-php artisan db:seed
+# Seed all core and journal-specific users and roles
+php artisan db:seed --class=UserTypesSeeder
+php artisan db:seed --class=JournalUsersSeeder
 ```
 
 ### 5. Storage Setup
@@ -187,6 +189,16 @@ php artisan queue:work
 ```
 
 ## 📁 Project Structure
+## 📚 Documentation
+
+The following documentation is available in the `docs/` folder:
+
+- [ONBOARDING_NEW_JOURNAL.md](docs/ONBOARDING_NEW_JOURNAL.md): How to onboard new journals on Research Africa
+- [ASSIGNING_PEER_REVIEWERS.md](docs/ASSIGNING_PEER_REVIEWERS.md): How to assign peer reviewers to manuscripts
+- [USER_TYPES.md](docs/USER_TYPES.md): Types of users and roles on the platform
+- [JOURNAL_USER_LOGIN_AND_ROLES.md](docs/JOURNAL_USER_LOGIN_AND_ROLES.md): Creating logins and assigning roles for journal users
+
+Refer to these guides for step-by-step instructions on user management, onboarding, and peer review workflows.
 
 ```
 research-africa/
